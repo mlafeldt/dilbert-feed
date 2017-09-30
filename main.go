@@ -5,6 +5,7 @@ import (
 	"html/template"
 	"log"
 	"os"
+	"time"
 
 	"github.com/PuerkitoBio/goquery"
 )
@@ -67,7 +68,11 @@ const atomTemplate = `<?xml version="1.0" encoding="utf-8"?>
 
 func main() {
 	var comics []Comic
-	for _, date := range os.Args[1:] {
+	now := time.Now()
+
+	for i := 1; i <= 30; i++ {
+		t := now.AddDate(0, 0, -i)
+		date := fmt.Sprintf("%d-%02d-%02d", t.Year(), t.Month(), t.Day())
 		comic, err := comicForDate(date)
 		if err != nil {
 			log.Fatal(err)
