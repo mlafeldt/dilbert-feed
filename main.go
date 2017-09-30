@@ -19,7 +19,7 @@ const atomTemplate = `<?xml version="1.0" encoding="utf-8"?>
    <title>{{ .Title }}</title>
    <link href="{{ .Strip }}"/>
    <updated>{{ .Date }}</updated>
-   <content type="html"><p><img src="{{ .Image }}" title="{{ .Title }}"></p></content>
+   <content type="html"><p><img src="{{ .Image }}" title="{{ .Title }}"/></p></content>
  </entry>
  {{ end }}
 </feed>
@@ -32,7 +32,7 @@ func main() {
 	}
 	log.Printf("Listening on port %s", port)
 
-	http.HandleFunc("/atom.xml", handler)
+	http.HandleFunc("/v1/atom.xml", handler)
 	http.ListenAndServe(":"+port, nil)
 }
 
@@ -45,7 +45,8 @@ func handler(w http.ResponseWriter, r *http.Request) {
 		date := fmt.Sprintf("%d-%02d-%02d", t.Year(), t.Month(), t.Day())
 		comic, err := comicForDate(date)
 		if err != nil {
-			log.Fatal(err)
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
 		}
 		log.Printf("%+v\n", comic)
 		comics = append(comics, *comic)
@@ -55,7 +56,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
 
 	t, err := template.New("feed").Parse(atomTemplate)
 	if err != nil {
-		log.Fatal(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
 	t.Execute(w, comics)
 }
@@ -68,9 +69,22 @@ type Comic struct {
 }
 
 func comicForDate(date string) (*Comic, error) {
-	strip := "http://dilbert.com/strip/" + date
+	url := "http://dilbert.com/strip/" + date
 
-	doc, err := goquery.NewDocument(strip)
+	req, err := http.NewRequest("GET", url, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("User-Agent", "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)")
+
+	client := &http.Client{Timeout: 10 * time.Second}
+	resp, err := client.Do(req)
+	if err != nil {
+		return nil, err
+	}
+
+	doc, err := goquery.NewDocumentFromResponse(resp)
 	if err != nil {
 		return nil, err
 	}
@@ -98,6 +112,6 @@ func comicForDate(date string) (*Comic, error) {
 		Date:  date,
 		Title: title,
 		Image: image,
-		Strip: strip,
+		Strip: url,
 	}, nil
 }
