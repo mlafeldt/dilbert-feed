@@ -2,10 +2,10 @@ package main
 
 import (
 	"fmt"
-	"html/template"
 	"log"
 	"net/http"
 	"os"
+	"text/template"
 	"time"
 
 	"github.com/PuerkitoBio/goquery"
@@ -50,6 +50,8 @@ func handler(w http.ResponseWriter, r *http.Request) {
 		log.Printf("%+v\n", comic)
 		comics = append(comics, *comic)
 	}
+
+	w.Header().Set("Content-Type", "application/xml")
 
 	t, err := template.New("feed").Parse(atomTemplate)
 	if err != nil {
