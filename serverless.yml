@@ -21,8 +21,8 @@ package:
     - ./bin/**
 
 functions:
-  download:
-    handler: bin/download
+  feed:
+    handler: bin/feed
     events:
       - schedule:
           # Run at 00:15 (UTC) every day
