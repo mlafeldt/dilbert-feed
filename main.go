@@ -8,7 +8,7 @@ import (
 	"text/template"
 	"time"
 
-	"github.com/PuerkitoBio/goquery"
+	"github.com/mlafeldt/dilbert-feed/dilbert"
 )
 
 const atomTemplate = `<?xml version="1.0" encoding="utf-8"?>
@@ -37,13 +37,13 @@ func main() {
 }
 
 func handler(w http.ResponseWriter, r *http.Request) {
-	var comics []Comic
+	var comics []dilbert.Comic
 	now := time.Now()
 
 	for i := 1; i <= 30; i++ {
 		t := now.AddDate(0, 0, -i)
 		date := fmt.Sprintf("%d-%02d-%02d", t.Year(), t.Month(), t.Day())
-		comic, err := comicForDate(date)
+		comic, err := dilbert.ComicForDate(date)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
@@ -59,59 +59,4 @@ func handler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
 	t.Execute(w, comics)
-}
-
-type Comic struct {
-	Date  string
-	Title string
-	Image string
-	Strip string
-}
-
-func comicForDate(date string) (*Comic, error) {
-	url := "http://dilbert.com/strip/" + date
-
-	req, err := http.NewRequest("GET", url, nil)
-	if err != nil {
-		return nil, err
-	}
-
-	req.Header.Add("User-Agent", "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)")
-
-	client := &http.Client{Timeout: 10 * time.Second}
-	resp, err := client.Do(req)
-	if err != nil {
-		return nil, err
-	}
-
-	doc, err := goquery.NewDocumentFromResponse(resp)
-	if err != nil {
-		return nil, err
-	}
-
-	var title, image string
-
-	doc.Find(".img-comic-container").Each(func(i int, s *goquery.Selection) {
-		img := s.Find("img")
-		if v, ok := img.Attr("alt"); ok {
-			title = v
-		}
-		if v, ok := img.Attr("src"); ok {
-			image = v
-		}
-	})
-
-	if title == "" {
-		return nil, fmt.Errorf("title not found")
-	}
-	if image == "" {
-		return nil, fmt.Errorf("image not found")
-	}
-
-	return &Comic{
-		Date:  date,
-		Title: title,
-		Image: image,
-		Strip: url,
-	}, nil
 }
