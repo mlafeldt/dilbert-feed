@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"time"
 
 	"github.com/mlafeldt/dilbert-feed/dilbert"
 )
@@ -33,7 +34,13 @@ func downloadFile(filepath string, url string) error {
 	}
 	defer out.Close()
 
-	resp, err := http.Get(url)
+	req, err := http.NewRequest("GET", url, nil)
+	if err != nil {
+		return err
+	}
+
+	client := &http.Client{Timeout: 5 * time.Second}
+	resp, err := client.Do(req)
 	if err != nil {
 		return err
 	}

@@ -23,7 +23,7 @@ func ComicForDate(date string) (*Comic, error) {
 		return nil, err
 	}
 
-	client := &http.Client{Timeout: 10 * time.Second}
+	client := &http.Client{Timeout: 5 * time.Second}
 	resp, err := client.Do(req)
 	if err != nil {
 		return nil, err
