@@ -1,4 +1,4 @@
 *.gif
+/.serverless/
+/bin/
 /dilbert-dl
-/out.zip
-/server

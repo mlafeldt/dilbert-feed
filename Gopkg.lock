@@ -18,6 +18,18 @@
   version = "v1.0.0"
 
 [[projects]]
+  digest = "1:a53a4cb4e0a06b37c54224dbf87478050a7605e4e2c4f786e7e08d92d527c4bf"
+  name = "github.com/aws/aws-lambda-go"
+  packages = [
+    "lambda",
+    "lambda/messages",
+    "lambdacontext",
+  ]
+  pruneopts = "NUT"
+  revision = "e630af386f8aad6ec9fc899b951cf62d37cfe56f"
+  version = "v1.4.0"
+
+[[projects]]
   branch = "master"
   digest = "1:1ef52fe3c5134f18540c4ca5ee70c57f14a3c85b21e05867f0e793de006169a6"
   name = "golang.org/x/net"
@@ -31,6 +43,9 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  input-imports = ["github.com/PuerkitoBio/goquery"]
+  input-imports = [
+    "github.com/PuerkitoBio/goquery",
+    "github.com/aws/aws-lambda-go/lambda",
+  ]
   solver-name = "gps-cdcl"
   solver-version = 1
