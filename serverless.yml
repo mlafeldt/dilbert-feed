@@ -11,6 +11,8 @@ provider:
         - s3:PutObject
       Resource:
         - "arn:aws:s3:::dilbert-feed/*"
+  environment:
+    BUCKET_NAME: dilbert-feed
 
 package:
   exclude:

@@ -2,9 +2,9 @@
   name = "github.com/aws/aws-lambda-go"
   version = "v1.*"
 
-# [[constraint]]
-#   name = "github.com/aws/aws-sdk-go"
-#   version = "v1.*"
+[[constraint]]
+  name = "github.com/aws/aws-sdk-go"
+  version = "v1.*"
 
 [[constraint]]
   name = "github.com/PuerkitoBio/goquery"
