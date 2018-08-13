@@ -5,6 +5,8 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strconv"
+	"strings"
 	"time"
 
 	"github.com/aws/aws-lambda-go/lambda"
@@ -25,41 +27,52 @@ func main() {
 	lambda.Start(handler)
 }
 
-func handler() error {
+func handler(input interface{}) (*comicWithPath, error) {
 	now := time.Now()
-	date := fmt.Sprintf("%d-%02d-%02d", now.Year(), now.Month(), now.Day())
+	year := strconv.Itoa(now.Year())
+	month := fmt.Sprintf("%02d", now.Month())
+	day := fmt.Sprintf("%02d", now.Day())
+	date := strings.Join([]string{year, month, day}, "-")
+
+	if v, ok := input.(string); ok {
+		date = strings.TrimSpace(v)
+		if len(date) != 10 {
+			return nil, fmt.Errorf("input date %q has invalid length", date)
+		}
+		parts := strings.SplitN(date, "-", 3)
+		if len(parts) != 3 {
+			return nil, fmt.Errorf("input date %q has invalid format", date)
+		}
+		year, month, day = parts[0], parts[1], parts[2]
+	}
 
 	comic, err := dilbert.ComicForDate(date)
 	if err != nil {
-		log.Printf("ERROR: %s", err)
-		return err
+		return nil, err
 	}
 
 	log.Printf("DEBUG: %+v", comic)
 
 	bucket := os.Getenv("BUCKET_NAME")
-	path := fmt.Sprintf("strips/%d/%02d/%s.gif", now.Year(), now.Month(), date)
+	path := fmt.Sprintf("strips/%s/%s/%s.gif", year, month, date)
 
 	log.Printf("INFO: Copying strip %s to s3://%s/%s ...", comic.StripURL, bucket, path)
 
 	req, err := http.NewRequest("GET", comic.ImageURL, nil)
 	if err != nil {
-		log.Printf("ERROR: %s", err)
-		return err
+		return nil, err
 	}
 
 	client := &http.Client{Timeout: 5 * time.Second}
 	resp, err := client.Do(req)
 	if err != nil {
-		log.Printf("ERROR: %s", err)
-		return err
+		return nil, err
 	}
 	defer resp.Body.Close()
 
 	sess, err := session.NewSession()
 	if err != nil {
-		log.Printf("ERROR: %s", err)
-		return err
+		return nil, err
 	}
 
 	svc := s3manager.NewUploader(sess)
@@ -70,18 +83,18 @@ func handler() error {
 		ContentType: aws.String("image/gif"),
 	})
 	if err != nil {
-		log.Printf("ERROR: %s", err)
-		return err
+		return nil, err
 	}
 
 	table := os.Getenv("DYNAMODB_TABLE")
 
-	log.Printf("INFO: Writing comic data to DynamoDB table %q...", table)
+	result := &comicWithPath{comic, path}
 
-	av, err := dynamodbattribute.MarshalMap(comicWithPath{comic, path})
+	log.Printf("INFO: Writing data to DynamoDB table %q...", table)
+
+	av, err := dynamodbattribute.MarshalMap(result)
 	if err != nil {
-		log.Printf("ERROR: %s", err)
-		return err
+		return nil, err
 	}
 
 	dynamo := dynamodb.New(sess)
@@ -90,10 +103,10 @@ func handler() error {
 		Item:      av,
 	})
 	if err != nil {
-		log.Printf("ERROR: %s", err)
-		return err
+		return nil, err
 	}
 
 	log.Print("INFO: Done!")
-	return nil
+
+	return result, nil
 }
