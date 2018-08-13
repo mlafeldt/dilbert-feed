@@ -1,11 +1,8 @@
 package main
 
 import (
-	"io"
 	"log"
-	"net/http"
 	"os"
-	"time"
 
 	"github.com/mlafeldt/dilbert-feed/dilbert"
 )
@@ -21,31 +18,8 @@ func main() {
 
 		log.Printf("Downloading strip %s to %s\n", comic.StripURL, filepath)
 
-		if err := downloadFile(filepath, comic.ImageURL); err != nil {
+		if err := comic.DownloadImage(filepath); err != nil {
 			log.Fatal(err)
 		}
 	}
-}
-
-func downloadFile(filepath string, url string) error {
-	out, err := os.Create(filepath)
-	if err != nil {
-		return err
-	}
-	defer out.Close()
-
-	req, err := http.NewRequest("GET", url, nil)
-	if err != nil {
-		return err
-	}
-
-	client := &http.Client{Timeout: 5 * time.Second}
-	resp, err := client.Do(req)
-	if err != nil {
-		return err
-	}
-	defer resp.Body.Close()
-
-	_, err = io.Copy(out, resp.Body)
-	return err
 }

@@ -2,7 +2,9 @@ package dilbert
 
 import (
 	"fmt"
+	"io"
 	"net/http"
+	"os"
 	"time"
 
 	"github.com/PuerkitoBio/goquery"
@@ -59,4 +61,27 @@ func ComicForDate(date string) (*Comic, error) {
 		ImageURL: imageURL,
 		StripURL: stripURL,
 	}, nil
+}
+
+func (comic *Comic) DownloadImage(filepath string) error {
+	out, err := os.Create(filepath)
+	if err != nil {
+		return err
+	}
+	defer out.Close()
+
+	req, err := http.NewRequest("GET", comic.ImageURL, nil)
+	if err != nil {
+		return err
+	}
+
+	client := &http.Client{Timeout: 5 * time.Second}
+	resp, err := client.Do(req)
+	if err != nil {
+		return err
+	}
+	defer resp.Body.Close()
+
+	_, err = io.Copy(out, resp.Body)
+	return err
 }
