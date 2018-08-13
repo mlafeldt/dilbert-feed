@@ -1,0 +1,8 @@
+[[constraint]]
+  name = "github.com/PuerkitoBio/goquery"
+  version = "1.4.*"
+
+[prune]
+  go-tests = true
+  unused-packages = true
+  non-go = true
