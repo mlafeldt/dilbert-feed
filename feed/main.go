@@ -31,7 +31,7 @@ func handler() error {
 	log.Printf("DEBUG: %+v", comic)
 
 	bucket := os.Getenv("BUCKET_NAME")
-	path := fmt.Sprintf("strips/%d/%s.gif", now.Year(), date)
+	path := fmt.Sprintf("strips/%d/%02d/%s.gif", now.Year(), now.Month(), date)
 
 	log.Printf("INFO: Copying strip %s to s3://%s/%s ...", comic.StripURL, bucket, path)
 
