@@ -25,4 +25,5 @@ functions:
     handler: bin/download
     events:
       - schedule:
-          rate: "cron(0 0/1 * * ? *)"
+          # Run at 00:15 (UTC) every day
+          rate: "cron(15 0 * * ? *)"
