@@ -3,6 +3,7 @@ service: dilbert-feed
 provider:
   name: aws
   runtime: go1.x
+  memorySize: 256
   stage: ${opt:stage, 'staging'}
   region: ${env:AWS_REGION}
   iamRoleStatements:
