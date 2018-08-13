@@ -4,6 +4,7 @@ provider:
   name: aws
   runtime: go1.x
   memorySize: 256
+  timeout: 20
   stage: ${opt:stage, 'staging'}
   region: ${env:AWS_REGION}
   iamRoleStatements:
