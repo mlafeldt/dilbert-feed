@@ -30,7 +30,7 @@
   version = "v1.4.0"
 
 [[projects]]
-  digest = "1:e8d5037779b85ee1d7a616fdb0c9c009eb1781483286167c4c20b79a07a027ad"
+  digest = "1:85b7a40f0fa35ac50576dd4f5e41dbcf0f8553e0f00f0ec2fd2aa158096076e0"
   name = "github.com/aws/aws-sdk-go"
   packages = [
     "aws",
@@ -57,11 +57,15 @@
     "private/protocol",
     "private/protocol/eventstream",
     "private/protocol/eventstream/eventstreamapi",
+    "private/protocol/json/jsonutil",
+    "private/protocol/jsonrpc",
     "private/protocol/query",
     "private/protocol/query/queryutil",
     "private/protocol/rest",
     "private/protocol/restxml",
     "private/protocol/xml/xmlutil",
+    "service/dynamodb",
+    "service/dynamodb/dynamodbattribute",
     "service/s3",
     "service/s3/s3iface",
     "service/s3/s3manager",
@@ -105,6 +109,8 @@
     "github.com/aws/aws-lambda-go/lambda",
     "github.com/aws/aws-sdk-go/aws",
     "github.com/aws/aws-sdk-go/aws/session",
+    "github.com/aws/aws-sdk-go/service/dynamodb",
+    "github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute",
     "github.com/aws/aws-sdk-go/service/s3/s3manager",
   ]
   solver-name = "gps-cdcl"

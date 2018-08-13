@@ -10,9 +10,16 @@ import (
 	"github.com/aws/aws-lambda-go/lambda"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
+	"github.com/aws/aws-sdk-go/service/dynamodb"
+	"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
 	"github.com/aws/aws-sdk-go/service/s3/s3manager"
 	"github.com/mlafeldt/dilbert-feed/dilbert"
 )
+
+type comicWithPath struct {
+	*dilbert.Comic
+	BucketPath string `json:"bucket_path"`
+}
 
 func main() {
 	lambda.Start(handler)
@@ -49,14 +56,38 @@ func handler() error {
 	}
 	defer resp.Body.Close()
 
-	sess := session.New()
-	svc := s3manager.NewUploader(sess)
+	sess, err := session.NewSession()
+	if err != nil {
+		log.Printf("ERROR: %s", err)
+		return err
+	}
 
+	svc := s3manager.NewUploader(sess)
 	_, err = svc.Upload(&s3manager.UploadInput{
 		Bucket:      aws.String(bucket),
 		Key:         aws.String(path),
 		Body:        resp.Body,
 		ContentType: aws.String("image/gif"),
+	})
+	if err != nil {
+		log.Printf("ERROR: %s", err)
+		return err
+	}
+
+	table := os.Getenv("DYNAMODB_TABLE")
+
+	log.Printf("INFO: Writing comic data to DynamoDB table %q...", table)
+
+	av, err := dynamodbattribute.MarshalMap(comicWithPath{comic, path})
+	if err != nil {
+		log.Printf("ERROR: %s", err)
+		return err
+	}
+
+	dynamo := dynamodb.New(sess)
+	_, err = dynamo.PutItem(&dynamodb.PutItemInput{
+		TableName: aws.String(table),
+		Item:      av,
 	})
 	if err != nil {
 		log.Printf("ERROR: %s", err)

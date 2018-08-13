@@ -11,10 +11,10 @@ import (
 )
 
 type Comic struct {
-	Date     string
-	Title    string
-	ImageURL string
-	StripURL string
+	Date     string `json:"date"`
+	Title    string `json:"title"`
+	ImageURL string `json:"image_url"`
+	StripURL string `json:"strip_url"`
 }
 
 func ComicForDate(date string) (*Comic, error) {

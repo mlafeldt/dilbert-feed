@@ -12,8 +12,16 @@ provider:
         - s3:PutObject
       Resource:
         - "arn:aws:s3:::dilbert-feed/*"
+    - Effect: Allow
+      Action:
+        - dynamodb:PutItem
+      Resource:
+        - Fn::GetAtt:
+            - DynamoDBTable
+            - Arn
   environment:
     BUCKET_NAME: dilbert-feed
+    DYNAMODB_TABLE: ${self:service}-${self:provider.stage}
 
 package:
   exclude:
@@ -28,3 +36,19 @@ functions:
       - schedule:
           # Run at 00:15 (UTC) every day
           rate: "cron(15 0 * * ? *)"
+
+resources:
+  Resources:
+    DynamoDBTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:service}-${self:provider.stage}
+        AttributeDefinitions:
+          - AttributeName: date
+            AttributeType: S
+        KeySchema:
+          - AttributeName: date
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
