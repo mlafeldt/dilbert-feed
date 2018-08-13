@@ -53,9 +53,10 @@ func handler() error {
 	svc := s3manager.NewUploader(sess)
 
 	_, err = svc.Upload(&s3manager.UploadInput{
-		Bucket: aws.String(bucket),
-		Key:    aws.String(path),
-		Body:   resp.Body,
+		Bucket:      aws.String(bucket),
+		Key:         aws.String(path),
+		Body:        resp.Body,
+		ContentType: aws.String("image/gif"),
 	})
 	if err != nil {
 		log.Printf("ERROR: %s", err)
