@@ -3,6 +3,7 @@ package dilbert
 import (
 	"fmt"
 	"net/http"
+	"strings"
 	"time"
 
 	"github.com/PuerkitoBio/goquery"
@@ -16,7 +17,7 @@ type Comic struct {
 }
 
 func ComicForDate(date string) (*Comic, error) {
-	stripURL := "http://dilbert.com/strip/" + date
+	stripURL := "http://dilbert.com/strip/" + strings.TrimSpace(date)
 
 	req, err := http.NewRequest("GET", stripURL, nil)
 	if err != nil {
@@ -39,10 +40,10 @@ func ComicForDate(date string) (*Comic, error) {
 	doc.Find(".img-comic-container").Each(func(i int, s *goquery.Selection) {
 		img := s.Find("img")
 		if v, ok := img.Attr("alt"); ok {
-			title = v
+			title = strings.TrimSpace(v)
 		}
 		if v, ok := img.Attr("src"); ok {
-			imageURL = v
+			imageURL = strings.TrimSpace(v)
 		}
 	})
 
