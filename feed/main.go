@@ -25,7 +25,7 @@ type Input struct {
 
 type Comic struct {
 	*dilbert.Comic
-	BucketPath string `json:"bucket_path"`
+	UploadURL string `json:"upload_url"`
 }
 
 func main() {
@@ -81,7 +81,7 @@ func handler(input Input) (*Comic, error) {
 	}
 
 	svc := s3manager.NewUploader(sess)
-	_, err = svc.Upload(&s3manager.UploadInput{
+	uploadOutput, err := svc.Upload(&s3manager.UploadInput{
 		Bucket:      aws.String(bucket),
 		Key:         aws.String(path),
 		Body:        resp.Body,
@@ -92,8 +92,7 @@ func handler(input Input) (*Comic, error) {
 	}
 
 	table := os.Getenv("DYNAMODB_TABLE")
-
-	result := &Comic{comic, path}
+	result := &Comic{comic, uploadOutput.Location}
 
 	log.Printf("INFO: Writing data to DynamoDB table %q...", table)
 
