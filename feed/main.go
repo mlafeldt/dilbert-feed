@@ -19,7 +19,11 @@ import (
 	"github.com/mlafeldt/dilbert-feed/dilbert"
 )
 
-type comicWithPath struct {
+type Input struct {
+	Date string `json:"date"`
+}
+
+type Comic struct {
 	*dilbert.Comic
 	BucketPath string `json:"bucket_path"`
 }
@@ -28,15 +32,15 @@ func main() {
 	lambda.Start(handler)
 }
 
-func handler(input interface{}) (*comicWithPath, error) {
+func handler(input Input) (*Comic, error) {
 	now := time.Now()
 	year := strconv.Itoa(now.Year())
 	month := fmt.Sprintf("%02d", now.Month())
 	day := fmt.Sprintf("%02d", now.Day())
 	date := strings.Join([]string{year, month, day}, "-")
 
-	if v, ok := input.(string); ok {
-		date = strings.TrimSpace(v)
+	if input.Date != "" {
+		date = strings.TrimSpace(input.Date)
 		if len(date) != 10 {
 			return nil, fmt.Errorf("input date %q has invalid length", date)
 		}
@@ -89,7 +93,7 @@ func handler(input interface{}) (*comicWithPath, error) {
 
 	table := os.Getenv("DYNAMODB_TABLE")
 
-	result := &comicWithPath{comic, path}
+	result := &Comic{comic, path}
 
 	log.Printf("INFO: Writing data to DynamoDB table %q...", table)
 
