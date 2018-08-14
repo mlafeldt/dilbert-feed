@@ -5,14 +5,14 @@ provider:
   runtime: go1.x
   memorySize: 256
   timeout: 20
-  stage: ${opt:stage, 'staging'}
+  stage: ${opt:stage, 'production'}
   region: ${env:AWS_REGION}
   iamRoleStatements:
     - Effect: Allow
       Action:
         - s3:PutObject
       Resource:
-        - "arn:aws:s3:::dilbert-feed/*"
+        - "arn:aws:s3:::${self:service}/*"
     - Effect: Allow
       Action:
         - dynamodb:PutItem
@@ -21,8 +21,8 @@ provider:
             - DynamoDBTable
             - Arn
   environment:
-    BUCKET_NAME: dilbert-feed
-    DYNAMODB_TABLE: ${self:service}-${self:provider.stage}
+    BUCKET_NAME: ${self:service}
+    DYNAMODB_TABLE: ${self:service}
 
 package:
   exclude:
@@ -43,7 +43,7 @@ resources:
     DynamoDBTable:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: ${self:service}-${self:provider.stage}
+        TableName: ${self:service}
         AttributeDefinitions:
           - AttributeName: date
             AttributeType: S

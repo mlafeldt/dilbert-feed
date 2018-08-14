@@ -1,11 +1,7 @@
-ENV     = staging
+ENV     = production
 FUNCS   = $(subst /,,$(dir $(wildcard */main.go)))
 SERVICE = $(shell awk '/^service:/ {print $$2}' serverless.yml)
 
-staging: ENV=staging
-staging: deploy
-
-production: ENV=production
 production: deploy
 
 deploy: test build
@@ -23,11 +19,6 @@ logs_funcs = $(FUNCS:%=logs-%)
 
 $(logs_funcs):
 	serverless logs --function $(@:logs-%=%) --stage $(ENV) --tail --no-color
-
-url:
-	@aws cloudformation describe-stacks --stack-name $(SERVICE)-$(ENV) \
-		--query "Stacks[0].Outputs[?OutputKey == 'ServiceEndpoint'].OutputValue" \
-		--output text
 
 build_funcs = $(FUNCS:%=build-%)
 
