@@ -13,16 +13,8 @@ provider:
         - s3:PutObject
       Resource:
         - "arn:aws:s3:::${self:service}/*"
-    - Effect: Allow
-      Action:
-        - dynamodb:PutItem
-      Resource:
-        - Fn::GetAtt:
-            - DynamoDBTable
-            - Arn
   environment:
     BUCKET_NAME: ${self:service}
-    DYNAMODB_TABLE: ${self:service}
 
 package:
   exclude:
@@ -37,20 +29,3 @@ functions:
       - schedule:
           # Run at 08:00 (UTC) every day
           rate: "cron(0 8 * * ? *)"
-
-resources:
-  Resources:
-    DynamoDBTable:
-      Type: AWS::DynamoDB::Table
-      Properties:
-        TableName: ${self:service}
-        AttributeDefinitions:
-          - AttributeName: date
-            AttributeType: S
-        KeySchema:
-          - AttributeName: date
-            KeyType: HASH
-        ProvisionedThroughput:
-          ReadCapacityUnits: 1
-          WriteCapacityUnits: 1
-      DeletionPolicy: Retain

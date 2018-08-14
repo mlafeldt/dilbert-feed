@@ -12,8 +12,6 @@ import (
 	"github.com/aws/aws-lambda-go/lambda"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
-	"github.com/aws/aws-sdk-go/service/dynamodb"
-	"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
 	"github.com/aws/aws-sdk-go/service/s3/s3manager"
 
 	"github.com/mlafeldt/dilbert-feed/dilbert"
@@ -23,16 +21,15 @@ type Input struct {
 	Date string `json:"date"`
 }
 
-type Comic struct {
-	*dilbert.Comic
-	UploadURL string `json:"upload_url"`
+type Output struct {
+	ImageURL string `json:"image_url"`
 }
 
 func main() {
 	lambda.Start(handler)
 }
 
-func handler(input Input) (*Comic, error) {
+func handler(input Input) (*Output, error) {
 	now := time.Now()
 	year := strconv.Itoa(now.Year())
 	month := fmt.Sprintf("%02d", now.Month())
@@ -60,7 +57,7 @@ func handler(input Input) (*Comic, error) {
 
 	bucket := os.Getenv("BUCKET_NAME")
 
-	log.Printf("INFO: Uploading strip %q to bucket %q ...", comic.StripURL, bucket)
+	log.Printf("INFO: Uploading strip %s to bucket %q ...", comic.StripURL, bucket)
 
 	client := &http.Client{Timeout: 10 * time.Second}
 	resp, err := client.Get(comic.ImageURL)
@@ -84,26 +81,9 @@ func handler(input Input) (*Comic, error) {
 		return nil, err
 	}
 
-	table := os.Getenv("DYNAMODB_TABLE")
+	output := Output{ImageURL: uploadResult.Location}
 
-	log.Printf("INFO: Writing metadata to DynamoDB table %q ...", table)
+	log.Printf("INFO: Upload completed: %s", output.ImageURL)
 
-	result := &Comic{comic, uploadResult.Location}
-	av, err := dynamodbattribute.MarshalMap(result)
-	if err != nil {
-		return nil, err
-	}
-
-	_, err = dynamodb.New(sess).PutItem(&dynamodb.PutItemInput{
-		TableName: aws.String(table),
-		Item:      av,
-	})
-	if err != nil {
-		return nil, err
-	}
-
-	log.Printf("DEBUG: %+v", result)
-	log.Print("INFO: Done!")
-
-	return result, nil
+	return &output, nil
 }
