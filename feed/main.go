@@ -62,7 +62,7 @@ func handler(input Input) (*Comic, error) {
 
 	log.Printf("INFO: Uploading strip %q to bucket %q ...", comic.StripURL, bucket)
 
-	client := &http.Client{Timeout: 5 * time.Second}
+	client := &http.Client{Timeout: 10 * time.Second}
 	resp, err := client.Get(comic.ImageURL)
 	if err != nil {
 		return nil, err

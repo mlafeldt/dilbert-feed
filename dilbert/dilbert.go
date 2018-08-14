@@ -19,13 +19,8 @@ type Comic struct {
 func NewComic(date string) (*Comic, error) {
 	stripURL := "http://dilbert.com/strip/" + strings.TrimSpace(date)
 
-	req, err := http.NewRequest("GET", stripURL, nil)
-	if err != nil {
-		return nil, err
-	}
-
-	client := &http.Client{Timeout: 15 * time.Second}
-	resp, err := client.Do(req)
+	client := &http.Client{Timeout: 10 * time.Second}
+	resp, err := client.Get(stripURL)
 	if err != nil {
 		return nil, err
 	}
