@@ -1,12 +1,14 @@
 package main
 
 import (
+	"bytes"
 	"fmt"
 	"log"
 	"net/http"
 	"os"
 	"strconv"
 	"strings"
+	"text/template"
 	"time"
 
 	"github.com/aws/aws-lambda-go/lambda"
@@ -16,6 +18,27 @@ import (
 
 	"github.com/mlafeldt/dilbert-feed/dilbert"
 )
+
+const rssTemplate = `<rss version="2.0">
+  <channel>
+    <title>Dilbert</title>
+    <link>http://dilbert.com</link>
+    <description>Dilbert Daily Strip</description>
+    {{ range . }}
+    <item>
+      <title>Dilbert - {{ .Date }}</title>
+      <link>{{ .ImageURL }}</link>
+      <guid>{{ .ImageURL }}</guid>
+      <description>
+        <![CDATA[
+	  <img src="{{ .ImageURL }}">
+	]]>
+      </description>
+    </item>
+    {{ end }}
+  </channel>
+</rss>
+`
 
 type Input struct {
 	Date string `json:"date"`
@@ -84,6 +107,36 @@ func handler(input Input) (*Output, error) {
 	output := Output{ImageURL: uploadResult.Location}
 
 	log.Printf("INFO: Upload completed: %s", output.ImageURL)
+
+	var comics []dilbert.Comic
+
+	for i := 0; i < 10; i++ {
+		t := now.AddDate(0, 0, -i)
+		date := fmt.Sprintf("%d-%02d-%02d", t.Year(), t.Month(), t.Day())
+		comics = append(comics, dilbert.Comic{
+			Date: date,
+			ImageURL: fmt.Sprintf("https://dilbert-feed.s3.eu-central-1.amazonaws.com/strips/%d/%02d/%s.gif",
+				t.Year(), t.Month(), date),
+		})
+	}
+
+	templ, err := template.New("feed").Parse(rssTemplate)
+	if err != nil {
+		return nil, err
+	}
+
+	var buf bytes.Buffer
+	templ.Execute(&buf, comics)
+
+	_, err = s3manager.NewUploader(sess).Upload(&s3manager.UploadInput{
+		Bucket:      aws.String(bucket),
+		Key:         aws.String("rss_v6.xml"),
+		Body:        &buf,
+		ContentType: aws.String("text/xml; charset=utf-8"),
+	})
+	if err != nil {
+		return nil, err
+	}
 
 	return &output, nil
 }
