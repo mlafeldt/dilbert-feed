@@ -51,7 +51,7 @@ func handler(input Input) (*Comic, error) {
 		year, month, day = parts[0], parts[1], parts[2]
 	}
 
-	comic, err := dilbert.ComicForDate(date)
+	comic, err := dilbert.NewComic(date)
 	if err != nil {
 		return nil, err
 	}
@@ -59,17 +59,11 @@ func handler(input Input) (*Comic, error) {
 	log.Printf("DEBUG: %+v", comic)
 
 	bucket := os.Getenv("BUCKET_NAME")
-	path := fmt.Sprintf("strips/%s/%s/%s.gif", year, month, date)
 
-	log.Printf("INFO: Copying strip %s to s3://%s/%s ...", comic.StripURL, bucket, path)
-
-	req, err := http.NewRequest("GET", comic.ImageURL, nil)
-	if err != nil {
-		return nil, err
-	}
+	log.Printf("INFO: Uploading strip %q to bucket %q ...", comic.StripURL, bucket)
 
 	client := &http.Client{Timeout: 5 * time.Second}
-	resp, err := client.Do(req)
+	resp, err := client.Get(comic.ImageURL)
 	if err != nil {
 		return nil, err
 	}
@@ -80,10 +74,9 @@ func handler(input Input) (*Comic, error) {
 		return nil, err
 	}
 
-	svc := s3manager.NewUploader(sess)
-	uploadOutput, err := svc.Upload(&s3manager.UploadInput{
+	uploadResult, err := s3manager.NewUploader(sess).Upload(&s3manager.UploadInput{
 		Bucket:      aws.String(bucket),
-		Key:         aws.String(path),
+		Key:         aws.String(fmt.Sprintf("strips/%s/%s/%s.gif", year, month, date)),
 		Body:        resp.Body,
 		ContentType: aws.String("image/gif"),
 	})
@@ -92,17 +85,16 @@ func handler(input Input) (*Comic, error) {
 	}
 
 	table := os.Getenv("DYNAMODB_TABLE")
-	result := &Comic{comic, uploadOutput.Location}
 
-	log.Printf("INFO: Writing data to DynamoDB table %q...", table)
+	log.Printf("INFO: Writing metadata to DynamoDB table %q ...", table)
 
+	result := &Comic{comic, uploadResult.Location}
 	av, err := dynamodbattribute.MarshalMap(result)
 	if err != nil {
 		return nil, err
 	}
 
-	dynamo := dynamodb.New(sess)
-	_, err = dynamo.PutItem(&dynamodb.PutItemInput{
+	_, err = dynamodb.New(sess).PutItem(&dynamodb.PutItemInput{
 		TableName: aws.String(table),
 		Item:      av,
 	})
@@ -110,6 +102,7 @@ func handler(input Input) (*Comic, error) {
 		return nil, err
 	}
 
+	log.Printf("DEBUG: %+v", result)
 	log.Print("INFO: Done!")
 
 	return result, nil

@@ -16,7 +16,7 @@ type Comic struct {
 	StripURL string `json:"strip_url"`
 }
 
-func ComicForDate(date string) (*Comic, error) {
+func NewComic(date string) (*Comic, error) {
 	stripURL := "http://dilbert.com/strip/" + strings.TrimSpace(date)
 
 	req, err := http.NewRequest("GET", stripURL, nil)
