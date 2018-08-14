@@ -35,8 +35,8 @@ functions:
     handler: bin/feed
     events:
       - schedule:
-          # Run at 00:15 (UTC) every day
-          rate: "cron(15 0 * * ? *)"
+          # Run at 08:00 (UTC) every day
+          rate: "cron(0 8 * * ? *)"
 
 resources:
   Resources:
