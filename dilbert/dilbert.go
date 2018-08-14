@@ -9,6 +9,8 @@ import (
 	"github.com/PuerkitoBio/goquery"
 )
 
+const titleSuffix = "- Dilbert by Scott Adams"
+
 type Comic struct {
 	Date     string `json:"date"`
 	Title    string `json:"title"`
@@ -35,16 +37,13 @@ func NewComic(date string) (*Comic, error) {
 	doc.Find(".img-comic-container").Each(func(i int, s *goquery.Selection) {
 		img := s.Find("img")
 		if v, ok := img.Attr("alt"); ok {
-			title = strings.TrimSpace(v)
+			title = strings.TrimSpace(strings.TrimSuffix(v, titleSuffix))
 		}
 		if v, ok := img.Attr("src"); ok {
 			imageURL = strings.TrimSpace(v)
 		}
 	})
 
-	if title == "" {
-		return nil, fmt.Errorf("title not found")
-	}
 	if imageURL == "" {
 		return nil, fmt.Errorf("image URL not found")
 	}
