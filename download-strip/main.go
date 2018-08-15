@@ -50,6 +50,7 @@ func handler(input Input) (*Output, error) {
 	log.Printf("DEBUG: %+v", comic)
 
 	bucket := os.Getenv("BUCKET_NAME")
+	prefix := os.Getenv("BUCKET_PREFIX")
 
 	log.Printf("INFO: Uploading strip %s to bucket %q ...", comic.StripURL, bucket)
 
@@ -67,7 +68,7 @@ func handler(input Input) (*Output, error) {
 
 	uploadResult, err := s3manager.NewUploader(sess).Upload(&s3manager.UploadInput{
 		Bucket:      aws.String(bucket),
-		Key:         aws.String(fmt.Sprintf("strips/%s.gif", comic.Date)),
+		Key:         aws.String(fmt.Sprintf("%s/%s.gif", prefix, comic.Date)),
 		Body:        resp.Body,
 		ContentType: aws.String("image/gif"),
 	})

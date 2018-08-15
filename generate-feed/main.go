@@ -17,7 +17,10 @@ import (
 	"github.com/mlafeldt/dilbert-feed/dilbert"
 )
 
-const feedLength = 30
+const (
+	feedPath   = "v0/rss.xml"
+	feedLength = 30
+)
 
 const feedTemplate = `<rss version="2.0">
   <channel>
@@ -57,6 +60,8 @@ func handler(input Input) (*Output, error) {
 	}
 
 	bucket := os.Getenv("BUCKET_NAME")
+	prefix := os.Getenv("BUCKET_PREFIX")
+
 	bucketLocation, err := s3.New(sess).GetBucketLocation(&s3.GetBucketLocationInput{
 		Bucket: aws.String(bucket),
 	})
@@ -72,8 +77,9 @@ func handler(input Input) (*Output, error) {
 		day := now.AddDate(0, 0, -i)
 		date := fmt.Sprintf("%d-%02d-%02d", day.Year(), day.Month(), day.Day())
 		comics = append(comics, dilbert.Comic{
-			Date:     date,
-			ImageURL: fmt.Sprintf("https://%s.s3.%s.amazonaws.com/strips/%s.gif", bucket, bucketRegion, date),
+			Date: date,
+			ImageURL: fmt.Sprintf("https://%s.s3.%s.amazonaws.com/%s/%s.gif",
+				bucket, bucketRegion, prefix, date),
 		})
 	}
 
@@ -87,7 +93,7 @@ func handler(input Input) (*Output, error) {
 
 	uploadResult, err := s3manager.NewUploader(sess).Upload(&s3manager.UploadInput{
 		Bucket:      aws.String(bucket),
-		Key:         aws.String("v0/rss.xml"),
+		Key:         aws.String(feedPath),
 		Body:        &buf,
 		ContentType: aws.String("text/xml; charset=utf-8"),
 	})

@@ -17,6 +17,7 @@ provider:
         - arn:aws:s3:::${self:service}/*
   environment:
     BUCKET_NAME: ${self:service}
+    BUCKET_PREFIX: strips
 
 package:
   exclude:
