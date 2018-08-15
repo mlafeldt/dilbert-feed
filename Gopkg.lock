@@ -30,7 +30,7 @@
   version = "v1.4.0"
 
 [[projects]]
-  digest = "1:18f444eaaaa4aeff394e3012f1e223886bccda4b5be26816944abc4b0c75a14a"
+  digest = "1:895a6fb88e2ea2beefd4fe713be2774e3f4fbc10b108410dd9121153196c44f2"
   name = "github.com/aws/aws-sdk-go"
   packages = [
     "aws",
@@ -68,8 +68,8 @@
     "service/sts",
   ]
   pruneopts = "NUT"
-  revision = "f831d5a0822a1ad72420ab18c6269bca1ddaf490"
-  version = "v1.15.11"
+  revision = "daed0c76021ea9c4e659e3ec80bcd2d657297100"
+  version = "v1.15.12"
 
 [[projects]]
   digest = "1:f59266de09e138237bf9df9deb57b9ebbdb1e33b8399bb739c3745e7d3d2787b"
@@ -105,6 +105,7 @@
     "github.com/aws/aws-lambda-go/lambda",
     "github.com/aws/aws-sdk-go/aws",
     "github.com/aws/aws-sdk-go/aws/session",
+    "github.com/aws/aws-sdk-go/service/s3",
     "github.com/aws/aws-sdk-go/service/s3/s3manager",
   ]
   solver-name = "gps-cdcl"
