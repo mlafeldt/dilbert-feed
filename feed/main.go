@@ -19,7 +19,9 @@ import (
 	"github.com/mlafeldt/dilbert-feed/dilbert"
 )
 
-const rssTemplate = `<rss version="2.0">
+const feedLength = 30
+
+const feedTemplate = `<rss version="2.0">
   <channel>
     <title>Dilbert</title>
     <link>http://dilbert.com</link>
@@ -111,7 +113,7 @@ func handler(input Input) (*Output, error) {
 
 	var comics []dilbert.Comic
 
-	for i := 0; i < 10; i++ {
+	for i := 0; i < feedLength; i++ {
 		t := now.AddDate(0, 0, -i)
 		date := fmt.Sprintf("%d-%02d-%02d", t.Year(), t.Month(), t.Day())
 		comics = append(comics, dilbert.Comic{
@@ -121,7 +123,7 @@ func handler(input Input) (*Output, error) {
 		})
 	}
 
-	templ, err := template.New("feed").Parse(rssTemplate)
+	templ, err := template.New("feed").Parse(feedTemplate)
 	if err != nil {
 		return nil, err
 	}
