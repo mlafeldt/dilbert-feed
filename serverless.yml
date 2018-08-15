@@ -10,13 +10,15 @@ provider:
   iamRoleStatements:
     - Effect: Allow
       Action:
-        - s3:GetBucketLocation
         - s3:PutObject
       Resource:
-        - arn:aws:s3:::${self:service}
-        - arn:aws:s3:::${self:service}/*
+        - Fn::Join:
+            - "/"
+            - - Fn::GetAtt: [Bucket, Arn]
+              - "*"
   environment:
-    BUCKET_NAME: ${self:service}
+    BUCKET_NAME:
+      Ref: Bucket
     BUCKET_PREFIX: strips
 
 package:
@@ -34,7 +36,44 @@ functions:
           rate: "cron(45 7 * * ? *)"
   gen-feed:
     handler: bin/gen-feed
+    environment:
+      DOMAIN_NAME:
+        Fn::GetAtt: [Bucket, DomainName]
     events:
       - schedule:
           # Run at 08:00 (UTC) every day
           rate: "cron(0 8 * * ? *)"
+
+resources:
+  Resources:
+    Bucket:
+      Type: AWS::S3::Bucket
+      Properties:
+        AccessControl: BucketOwnerFullControl
+        BucketName: ${self:service}
+        BucketEncryption:
+          ServerSideEncryptionConfiguration:
+            - ServerSideEncryptionByDefault:
+                SSEAlgorithm: AES256
+        LifecycleConfiguration:
+          Rules:
+            - Id: DeleteStripsAfter30Days
+              Status: Enabled
+              Prefix: strips
+              ExpirationInDays: 30
+    BucketPolicy:
+      Type: AWS::S3::BucketPolicy
+      Properties:
+        Bucket:
+          Ref: Bucket
+        PolicyDocument:
+          Statement:
+            - Effect: Allow
+              Principal: "*"
+              Action:
+                - s3:GetObject
+              Resource:
+                - Fn::Join:
+                    - "/"
+                    - - Fn::GetAtt: [Bucket, Arn]
+                      - "*"
