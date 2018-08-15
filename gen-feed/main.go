@@ -34,8 +34,8 @@ const feedTemplate = `<rss version="2.0">
       <guid>{{ .ImageURL }}</guid>
       <description>
         <![CDATA[
-	  <img src="{{ .ImageURL }}">
-	]]>
+          <img src="{{ .ImageURL }}">
+        ]]>
       </description>
     </item>
     {{ end }}
