@@ -45,7 +45,8 @@ type Input struct {
 }
 
 type Output struct {
-	ImageURL string `json:"image_url"`
+	*dilbert.Comic
+	UploadURL string `json:"upload_url"`
 }
 
 func main() {
@@ -104,7 +105,7 @@ func handler(input Input) (*Output, error) {
 		return nil, err
 	}
 
-	output := Output{ImageURL: uploadResult.Location}
+	output := Output{comic, uploadResult.Location}
 
 	log.Printf("INFO: Upload completed: %s", output.ImageURL)
 
@@ -130,7 +131,7 @@ func handler(input Input) (*Output, error) {
 
 	_, err = s3manager.NewUploader(sess).Upload(&s3manager.UploadInput{
 		Bucket:      aws.String(bucket),
-		Key:         aws.String("rss_v6.xml"),
+		Key:         aws.String("v0/rss.xml"),
 		Body:        &buf,
 		ContentType: aws.String("text/xml; charset=utf-8"),
 	})
