@@ -18,6 +18,7 @@ provider:
   environment:
     BUCKET_NAME: ${self:service}
     BUCKET_PREFIX: strips
+    STRIP_SECRET: 4YHE2U8xEvkt9ADg3HaXWC4KzH5aJ63w
 
 package:
   exclude:

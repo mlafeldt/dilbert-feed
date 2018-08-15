@@ -1,6 +1,9 @@
 package main
 
 import (
+	"crypto/hmac"
+	"crypto/sha256"
+	"encoding/hex"
 	"fmt"
 	"log"
 	"net/http"
@@ -66,9 +69,11 @@ func handler(input Input) (*Output, error) {
 		return nil, err
 	}
 
+	path := fmt.Sprintf("%s/%s", prefix, hmacSHA256(comic.Date, os.Getenv("STRIP_SECRET")))
+
 	upload, err := s3manager.NewUploader(sess).Upload(&s3manager.UploadInput{
 		Bucket:      aws.String(bucket),
-		Key:         aws.String(fmt.Sprintf("%s/%s.gif", prefix, comic.Date)),
+		Key:         aws.String(path),
 		ContentType: aws.String("image/gif"),
 		Body:        resp.Body,
 	})
@@ -79,4 +84,10 @@ func handler(input Input) (*Output, error) {
 	log.Printf("INFO: Upload completed: %s", upload.Location)
 
 	return &Output{comic, upload.Location}, nil
+}
+
+func hmacSHA256(message string, secret string) string {
+	sig := hmac.New(sha256.New, []byte(secret))
+	sig.Write([]byte(message))
+	return hex.EncodeToString(sig.Sum(nil))
 }

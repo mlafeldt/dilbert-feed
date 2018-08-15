@@ -2,6 +2,9 @@ package main
 
 import (
 	"bytes"
+	"crypto/hmac"
+	"crypto/sha256"
+	"encoding/hex"
 	"fmt"
 	"log"
 	"os"
@@ -16,7 +19,7 @@ import (
 )
 
 const (
-	feedPath   = "v0/rss.xml"
+	feedPath   = "v1/rss.xml"
 	feedLength = 30
 )
 
@@ -80,7 +83,8 @@ func handler(input Input) (*Output, error) {
 	for i := 0; i < feedLength; i++ {
 		day := now.AddDate(0, 0, -i)
 		date := fmt.Sprintf("%d-%02d-%02d", day.Year(), day.Month(), day.Day())
-		url := fmt.Sprintf("https://%s.s3.%s.amazonaws.com/%s/%s.gif", bucket, bucketRegion, prefix, date)
+		path := fmt.Sprintf("%s/%s", prefix, hmacSHA256(date, os.Getenv("STRIP_SECRET")))
+		url := fmt.Sprintf("https://%s.s3.%s.amazonaws.com/%s", bucket, bucketRegion, path)
 		items = append(items, FeedItem{Date: date, ImageURL: url})
 	}
 
@@ -109,4 +113,10 @@ func handler(input Input) (*Output, error) {
 	log.Printf("INFO: Upload completed: %s", upload.Location)
 
 	return &Output{upload.Location}, nil
+}
+
+func hmacSHA256(message string, secret string) string {
+	sig := hmac.New(sha256.New, []byte(secret))
+	sig.Write([]byte(message))
+	return hex.EncodeToString(sig.Sum(nil))
 }
