@@ -13,8 +13,6 @@ import (
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/s3"
 	"github.com/aws/aws-sdk-go/service/s3/s3manager"
-
-	"github.com/mlafeldt/dilbert-feed/dilbert"
 )
 
 const (
@@ -43,6 +41,11 @@ const feedTemplate = `<rss version="2.0">
 </rss>
 `
 
+type FeedItem struct {
+	Date     string
+	ImageURL string
+}
+
 type Input struct{}
 
 type Output struct {
@@ -54,13 +57,13 @@ func main() {
 }
 
 func handler(input Input) (*Output, error) {
+	bucket := os.Getenv("BUCKET_NAME")
+	prefix := os.Getenv("BUCKET_PREFIX")
+
 	sess, err := session.NewSession()
 	if err != nil {
 		return nil, err
 	}
-
-	bucket := os.Getenv("BUCKET_NAME")
-	prefix := os.Getenv("BUCKET_PREFIX")
 
 	bucketLocation, err := s3.New(sess).GetBucketLocation(&s3.GetBucketLocationInput{
 		Bucket: aws.String(bucket),
@@ -69,29 +72,31 @@ func handler(input Input) (*Output, error) {
 		return nil, err
 	}
 	bucketRegion := aws.StringValue(bucketLocation.LocationConstraint)
-
-	var comics []dilbert.Comic
 	now := time.Now()
 
+	log.Printf("INFO: Generating feed for date %s ...", now.Format(time.RFC3339))
+
+	var items []FeedItem
 	for i := 0; i < feedLength; i++ {
 		day := now.AddDate(0, 0, -i)
 		date := fmt.Sprintf("%d-%02d-%02d", day.Year(), day.Month(), day.Day())
-		comics = append(comics, dilbert.Comic{
-			Date: date,
-			ImageURL: fmt.Sprintf("https://%s.s3.%s.amazonaws.com/%s/%s.gif",
-				bucket, bucketRegion, prefix, date),
-		})
+		url := fmt.Sprintf("https://%s.s3.%s.amazonaws.com/%s/%s.gif", bucket, bucketRegion, prefix, date)
+		items = append(items, FeedItem{Date: date, ImageURL: url})
 	}
 
-	templ, err := template.New("feed").Parse(feedTemplate)
+	t, err := template.New("feed").Parse(feedTemplate)
 	if err != nil {
 		return nil, err
 	}
 
 	var buf bytes.Buffer
-	templ.Execute(&buf, comics)
+	if err := t.Execute(&buf, items); err != nil {
+		return nil, err
+	}
 
-	uploadResult, err := s3manager.NewUploader(sess).Upload(&s3manager.UploadInput{
+	log.Printf("INFO: Uploading feed to bucket %q with path %q ...", bucket, feedPath)
+
+	upload, err := s3manager.NewUploader(sess).Upload(&s3manager.UploadInput{
 		Bucket:      aws.String(bucket),
 		Key:         aws.String(feedPath),
 		Body:        &buf,
@@ -101,7 +106,7 @@ func handler(input Input) (*Output, error) {
 		return nil, err
 	}
 
-	log.Printf("INFO: Upload completed: %s", uploadResult.Location)
+	log.Printf("INFO: Upload completed: %s", upload.Location)
 
-	return &Output{uploadResult.Location}, nil
+	return &Output{upload.Location}, nil
 }

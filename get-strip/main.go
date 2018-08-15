@@ -66,17 +66,17 @@ func handler(input Input) (*Output, error) {
 		return nil, err
 	}
 
-	uploadResult, err := s3manager.NewUploader(sess).Upload(&s3manager.UploadInput{
+	upload, err := s3manager.NewUploader(sess).Upload(&s3manager.UploadInput{
 		Bucket:      aws.String(bucket),
 		Key:         aws.String(fmt.Sprintf("%s/%s.gif", prefix, comic.Date)),
-		Body:        resp.Body,
 		ContentType: aws.String("image/gif"),
+		Body:        resp.Body,
 	})
 	if err != nil {
 		return nil, err
 	}
 
-	log.Printf("INFO: Upload completed: %s", uploadResult.Location)
+	log.Printf("INFO: Upload completed: %s", upload.Location)
 
-	return &Output{comic, uploadResult.Location}, nil
+	return &Output{comic, upload.Location}, nil
 }
