@@ -13,7 +13,7 @@ const titleSuffix = "- Dilbert by Scott Adams"
 
 type Comic struct {
 	Date     string `json:"date"`
-	Title    string `json:"title"`
+	Title    string `json:"title,omitempty"`
 	ImageURL string `json:"image_url"`
 	StripURL string `json:"strip_url"`
 }
