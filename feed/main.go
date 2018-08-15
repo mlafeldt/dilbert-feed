@@ -13,6 +13,7 @@ import (
 	"github.com/aws/aws-lambda-go/lambda"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
+	"github.com/aws/aws-sdk-go/service/s3"
 	"github.com/aws/aws-sdk-go/service/s3/s3manager"
 
 	"github.com/mlafeldt/dilbert-feed/dilbert"
@@ -102,7 +103,17 @@ func handler(input Input) (*Output, error) {
 
 	output := Output{comic, uploadResult.Location}
 
-	log.Printf("INFO: Upload completed: %s", output.ImageURL)
+	log.Printf("INFO: Upload completed: %s", output.UploadURL)
+
+	// TODO: move the following to a separate Lambda function
+
+	bucketLocation, err := s3.New(sess).GetBucketLocation(&s3.GetBucketLocationInput{
+		Bucket: aws.String(bucket),
+	})
+	if err != nil {
+		return nil, err
+	}
+	bucketRegion := aws.StringValue(bucketLocation.LocationConstraint)
 
 	var comics []dilbert.Comic
 	now := time.Now()
@@ -112,7 +123,7 @@ func handler(input Input) (*Output, error) {
 		date := fmt.Sprintf("%d-%02d-%02d", t.Year(), t.Month(), t.Day())
 		comics = append(comics, dilbert.Comic{
 			Date:     date,
-			ImageURL: fmt.Sprintf("https://dilbert-feed.s3.eu-central-1.amazonaws.com/strips/%s.gif", date),
+			ImageURL: fmt.Sprintf("https://%s.s3.%s.amazonaws.com/strips/%s.gif", bucket, bucketRegion, date),
 		})
 	}
 
@@ -124,7 +135,7 @@ func handler(input Input) (*Output, error) {
 	var buf bytes.Buffer
 	templ.Execute(&buf, comics)
 
-	_, err = s3manager.NewUploader(sess).Upload(&s3manager.UploadInput{
+	uploadResult, err = s3manager.NewUploader(sess).Upload(&s3manager.UploadInput{
 		Bucket:      aws.String(bucket),
 		Key:         aws.String("v0/rss.xml"),
 		Body:        &buf,
@@ -133,6 +144,8 @@ func handler(input Input) (*Output, error) {
 	if err != nil {
 		return nil, err
 	}
+
+	log.Printf("INFO: Upload completed: %s", uploadResult.Location)
 
 	return &output, nil
 }

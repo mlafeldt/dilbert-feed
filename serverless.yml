@@ -10,9 +10,11 @@ provider:
   iamRoleStatements:
     - Effect: Allow
       Action:
+        - s3:GetBucketLocation
         - s3:PutObject
       Resource:
-        - "arn:aws:s3:::${self:service}/*"
+        - arn:aws:s3:::${self:service}
+        - arn:aws:s3:::${self:service}/*
   environment:
     BUCKET_NAME: ${self:service}
 
