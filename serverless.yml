@@ -26,14 +26,14 @@ package:
     - ./bin/**
 
 functions:
-  download-strip:
-    handler: bin/download-strip
+  get-strip:
+    handler: bin/get-strip
     events:
       - schedule:
           # Run at 07:45 (UTC) every day
           rate: "cron(45 7 * * ? *)"
-  generate-feed:
-    handler: bin/generate-feed
+  gen-feed:
+    handler: bin/gen-feed
     events:
       - schedule:
           # Run at 08:00 (UTC) every day
