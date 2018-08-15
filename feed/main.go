@@ -6,7 +6,6 @@ import (
 	"log"
 	"net/http"
 	"os"
-	"strconv"
 	"strings"
 	"text/template"
 	"time"
@@ -56,22 +55,16 @@ func main() {
 }
 
 func handler(input Input) (*Output, error) {
-	now := time.Now()
-	year := strconv.Itoa(now.Year())
-	month := fmt.Sprintf("%02d", now.Month())
-	day := fmt.Sprintf("%02d", now.Day())
-	date := strings.Join([]string{year, month, day}, "-")
+	var date string
 
 	if input.Date != "" {
 		date = strings.TrimSpace(input.Date)
 		if len(date) != 10 {
 			return nil, fmt.Errorf("input date %q has invalid length", date)
 		}
-		parts := strings.SplitN(date, "-", 3)
-		if len(parts) != 3 {
+		if len(strings.Split(date, "-")) != 3 {
 			return nil, fmt.Errorf("input date %q has invalid format", date)
 		}
-		year, month, day = parts[0], parts[1], parts[2]
 	}
 
 	comic, err := dilbert.NewComic(date)
@@ -99,7 +92,7 @@ func handler(input Input) (*Output, error) {
 
 	uploadResult, err := s3manager.NewUploader(sess).Upload(&s3manager.UploadInput{
 		Bucket:      aws.String(bucket),
-		Key:         aws.String(fmt.Sprintf("strips/%s/%s/%s.gif", year, month, date)),
+		Key:         aws.String(fmt.Sprintf("strips/%s.gif", comic.Date)),
 		Body:        resp.Body,
 		ContentType: aws.String("image/gif"),
 	})
@@ -112,14 +105,14 @@ func handler(input Input) (*Output, error) {
 	log.Printf("INFO: Upload completed: %s", output.ImageURL)
 
 	var comics []dilbert.Comic
+	now := time.Now()
 
 	for i := 0; i < feedLength; i++ {
 		t := now.AddDate(0, 0, -i)
 		date := fmt.Sprintf("%d-%02d-%02d", t.Year(), t.Month(), t.Day())
 		comics = append(comics, dilbert.Comic{
-			Date: date,
-			ImageURL: fmt.Sprintf("https://dilbert-feed.s3.eu-central-1.amazonaws.com/strips/%d/%02d/%s.gif",
-				t.Year(), t.Month(), date),
+			Date:     date,
+			ImageURL: fmt.Sprintf("https://dilbert-feed.s3.eu-central-1.amazonaws.com/strips/%s.gif", date),
 		})
 	}
 

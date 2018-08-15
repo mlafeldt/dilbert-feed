@@ -19,6 +19,11 @@ type Comic struct {
 }
 
 func NewComic(date string) (*Comic, error) {
+	if date == "" {
+		now := time.Now()
+		date = fmt.Sprintf("%d-%02d-%02d", now.Year(), now.Month(), now.Day())
+	}
+
 	stripURL := "http://dilbert.com/strip/" + strings.TrimSpace(date)
 
 	client := &http.Client{Timeout: 10 * time.Second}
