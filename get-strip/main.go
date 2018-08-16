@@ -72,7 +72,7 @@ func handler(input Input) (*Output, error) {
 
 	upload, err := s3manager.NewUploader(sess).Upload(&s3manager.UploadInput{
 		Bucket:      aws.String(env.BucketName),
-		Key:         aws.String(fmt.Sprintf("%s/%s.gif", env.BucketPrefix, comic.Date)),
+		Key:         aws.String(fmt.Sprintf("%s%s.gif", env.BucketPrefix, comic.Date)),
 		ContentType: aws.String("image/gif"),
 		Body:        resp.Body,
 	})

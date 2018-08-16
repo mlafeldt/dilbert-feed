@@ -19,7 +19,7 @@ provider:
   environment:
     BUCKET_NAME:
       Ref: Bucket
-    BUCKET_PREFIX: strips
+    BUCKET_PREFIX: strips/
 
 package:
   exclude:
@@ -52,12 +52,12 @@ resources:
         AccessControl: LogDeliveryWrite
         BucketName: ${self:service}
         LoggingConfiguration:
-          LogFilePrefix: logs
+          LogFilePrefix: logs/
         LifecycleConfiguration:
           Rules:
             - Id: DeleteStripsAfter30Days
               Status: Enabled
-              Prefix: strips
+              Prefix: strips/
               ExpirationInDays: 30
     BucketPolicy:
       Type: AWS::S3::BucketPolicy

@@ -74,7 +74,7 @@ func handler(input Input) (*Output, error) {
 	for i := 0; i < feedLength; i++ {
 		day := now.AddDate(0, 0, -i)
 		date := fmt.Sprintf("%d-%02d-%02d", day.Year(), day.Month(), day.Day())
-		url := fmt.Sprintf("https://%s/%s/%s.gif", env.DomainName, env.BucketPrefix, date)
+		url := fmt.Sprintf("https://%s/%s%s.gif", env.DomainName, env.BucketPrefix, date)
 		items = append(items, FeedItem{Date: date, ImageURL: url})
 	}
 
