@@ -51,10 +51,6 @@ resources:
       Properties:
         AccessControl: BucketOwnerFullControl
         BucketName: ${self:service}
-        BucketEncryption:
-          ServerSideEncryptionConfiguration:
-            - ServerSideEncryptionByDefault:
-                SSEAlgorithm: AES256
         LifecycleConfiguration:
           Rules:
             - Id: DeleteStripsAfter30Days
