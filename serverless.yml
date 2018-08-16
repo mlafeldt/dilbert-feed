@@ -49,8 +49,10 @@ resources:
     Bucket:
       Type: AWS::S3::Bucket
       Properties:
-        AccessControl: BucketOwnerFullControl
+        AccessControl: LogDeliveryWrite
         BucketName: ${self:service}
+        LoggingConfiguration:
+          LogFilePrefix: logs
         LifecycleConfiguration:
           Rules:
             - Id: DeleteStripsAfter30Days
