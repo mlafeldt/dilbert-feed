@@ -8,6 +8,10 @@ Unfortunetly, Dilbert's official feed now forces you to go to the website:
 
 This serverless application provides a custom feed (updated every day) with direct access to Dilbert comics.
 
+## Architecture
+
+![](architecture.png)
+
 ## Usage
 
 Get the comic strip for today:
