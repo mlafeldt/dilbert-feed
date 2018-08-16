@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"os"
 	"strings"
 	"time"
 
@@ -12,6 +11,7 @@ import (
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/s3/s3manager"
+	"github.com/kelseyhightower/envconfig"
 
 	"github.com/mlafeldt/dilbert-feed/dilbert"
 )
@@ -30,8 +30,16 @@ func main() {
 }
 
 func handler(input Input) (*Output, error) {
-	var date string
+	var env struct {
+		BucketName   string `envconfig:"BUCKET_NAME" required:"true"`
+		BucketPrefix string `envconfig:"BUCKET_PREFIX" required:"true"`
+	}
+	if err := envconfig.Process("", &env); err != nil {
+		return nil, err
+	}
+	log.Printf("DEBUG: env = %+v", env)
 
+	var date string
 	if input.Date != "" {
 		date = strings.TrimSpace(input.Date)
 		if len(date) != 10 {
@@ -47,12 +55,8 @@ func handler(input Input) (*Output, error) {
 		return nil, err
 	}
 
-	log.Printf("DEBUG: %+v", comic)
-
-	bucket := os.Getenv("BUCKET_NAME")
-	prefix := os.Getenv("BUCKET_PREFIX")
-
-	log.Printf("INFO: Uploading strip %s to bucket %q ...", comic.StripURL, bucket)
+	log.Printf("DEBUG: comic = %+v", comic)
+	log.Printf("INFO: Uploading strip %s to bucket %q ...", comic.StripURL, env.BucketName)
 
 	client := &http.Client{Timeout: 10 * time.Second}
 	resp, err := client.Get(comic.ImageURL)
@@ -67,8 +71,8 @@ func handler(input Input) (*Output, error) {
 	}
 
 	upload, err := s3manager.NewUploader(sess).Upload(&s3manager.UploadInput{
-		Bucket:      aws.String(bucket),
-		Key:         aws.String(fmt.Sprintf("%s/%s.gif", prefix, comic.Date)),
+		Bucket:      aws.String(env.BucketName),
+		Key:         aws.String(fmt.Sprintf("%s/%s.gif", env.BucketPrefix, comic.Date)),
 		ContentType: aws.String("image/gif"),
 		Body:        resp.Body,
 	})

@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"fmt"
 	"log"
-	"os"
 	"text/template"
 	"time"
 
@@ -12,6 +11,7 @@ import (
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/s3/s3manager"
+	"github.com/kelseyhightower/envconfig"
 )
 
 const (
@@ -56,19 +56,25 @@ func main() {
 }
 
 func handler(input Input) (*Output, error) {
+	var env struct {
+		BucketName   string `envconfig:"BUCKET_NAME" required:"true"`
+		BucketPrefix string `envconfig:"BUCKET_PREFIX" required:"true"`
+		DomainName   string `envconfig:"DOMAIN_NAME" required:"true"`
+	}
+	if err := envconfig.Process("", &env); err != nil {
+		return nil, err
+	}
+	log.Printf("DEBUG: env = %+v", env)
+
 	now := time.Now()
 
 	log.Printf("INFO: Generating feed for date %s ...", now.Format(time.RFC3339))
-
-	bucket := os.Getenv("BUCKET_NAME")
-	prefix := os.Getenv("BUCKET_PREFIX")
-	domain := os.Getenv("DOMAIN_NAME")
 
 	var items []FeedItem
 	for i := 0; i < feedLength; i++ {
 		day := now.AddDate(0, 0, -i)
 		date := fmt.Sprintf("%d-%02d-%02d", day.Year(), day.Month(), day.Day())
-		url := fmt.Sprintf("https://%s/%s/%s.gif", domain, prefix, date)
+		url := fmt.Sprintf("https://%s/%s/%s.gif", env.DomainName, env.BucketPrefix, date)
 		items = append(items, FeedItem{Date: date, ImageURL: url})
 	}
 
@@ -82,7 +88,7 @@ func handler(input Input) (*Output, error) {
 		return nil, err
 	}
 
-	log.Printf("INFO: Uploading feed to bucket %q with path %q ...", bucket, feedPath)
+	log.Printf("INFO: Uploading feed to bucket %q with path %q ...", env.BucketName, feedPath)
 
 	sess, err := session.NewSession()
 	if err != nil {
@@ -90,7 +96,7 @@ func handler(input Input) (*Output, error) {
 	}
 
 	upload, err := s3manager.NewUploader(sess).Upload(&s3manager.UploadInput{
-		Bucket:      aws.String(bucket),
+		Bucket:      aws.String(env.BucketName),
 		Key:         aws.String(feedPath),
 		Body:        &buf,
 		ContentType: aws.String("text/xml; charset=utf-8"),

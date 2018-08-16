@@ -87,6 +87,14 @@
   revision = "0b12d6b5"
 
 [[projects]]
+  digest = "1:b8870bf2606dca65dc382f4cb8b7a434f17ff36a915451bda12788e9620be368"
+  name = "github.com/kelseyhightower/envconfig"
+  packages = ["."]
+  pruneopts = "NUT"
+  revision = "f611eb38b3875cc3bd991ca91c51d06446afa14c"
+  version = "v1.3.0"
+
+[[projects]]
   branch = "master"
   digest = "1:1ef52fe3c5134f18540c4ca5ee70c57f14a3c85b21e05867f0e793de006169a6"
   name = "golang.org/x/net"
@@ -106,6 +114,7 @@
     "github.com/aws/aws-sdk-go/aws",
     "github.com/aws/aws-sdk-go/aws/session",
     "github.com/aws/aws-sdk-go/service/s3/s3manager",
+    "github.com/kelseyhightower/envconfig",
   ]
   solver-name = "gps-cdcl"
   solver-version = 1

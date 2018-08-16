@@ -8,7 +8,11 @@
 
 [[constraint]]
   name = "github.com/PuerkitoBio/goquery"
-  version = "1.4.*"
+  version = "v1.*"
+
+[[constraint]]
+  name = "github.com/kelseyhightower/envconfig"
+  version = "v1.*"
 
 [prune]
   go-tests = true
