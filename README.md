@@ -1,6 +1,12 @@
 # dilbert-feed
 
-Enjoy the [Dilbert Feed](http://dilbert.com/) Without Ads!
+Enjoy [Dilbert](http://dilbert.com/) in your RSS feed reader without any ads!
+
+Unfortunetly, Dilbert's official feed now forces you to go to the website:
+
+> Dilbert readers - Please visit Dilbert.com to read this feature. Due to changes with our feeds, we are now making this RSS feed a link to Dilbert.com.
+
+This serverless application provides a custom feed (updated every day) with direct access to Dilbert comics.
 
 ## Usage
 
