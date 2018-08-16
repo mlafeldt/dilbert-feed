@@ -49,10 +49,15 @@ resources:
     Bucket:
       Type: AWS::S3::Bucket
       Properties:
-        AccessControl: LogDeliveryWrite
+        AccessControl: BucketOwnerFullControl
         BucketName: ${self:service}
+        BucketEncryption:
+          ServerSideEncryptionConfiguration:
+            - ServerSideEncryptionByDefault:
+                SSEAlgorithm: AES256
         LoggingConfiguration:
-          LogFilePrefix: logs/
+          DestinationBucketName:
+            Ref: LogBucket
         LifecycleConfiguration:
           Rules:
             - Id: DeleteStripsAfter30Days
@@ -75,3 +80,17 @@ resources:
                     - "/"
                     - - Fn::GetAtt: [Bucket, Arn]
                       - "*"
+    LogBucket:
+      Type: AWS::S3::Bucket
+      Properties:
+        AccessControl: LogDeliveryWrite
+        BucketName: ${self:service}-logs
+        BucketEncryption:
+          ServerSideEncryptionConfiguration:
+            - ServerSideEncryptionByDefault:
+                SSEAlgorithm: AES256
+        LifecycleConfiguration:
+          Rules:
+            - Id: DeleteLogsAfter90Days
+              Status: Enabled
+              ExpirationInDays: 90
