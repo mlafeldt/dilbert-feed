@@ -14,10 +14,7 @@ import (
 	"github.com/aws/aws-sdk-go/service/s3/s3manager"
 )
 
-const (
-	feedPath   = "v0/rss.xml"
-	feedLength = 30
-)
+const feedLength = 30
 
 const feedTemplate = `<rss version="2.0">
   <channel>
@@ -45,7 +42,9 @@ type FeedItem struct {
 	ImageURL string
 }
 
-type Input struct{}
+type Input struct {
+	Version int `json:"version"`
+}
 
 type Output struct {
 	FeedURL string `json:"feed_url"`
@@ -81,6 +80,8 @@ func handler(input Input) (*Output, error) {
 	if err := t.Execute(&buf, items); err != nil {
 		return nil, err
 	}
+
+	feedPath := fmt.Sprintf("v%d/rss.xml", input.Version)
 
 	log.Printf("INFO: Uploading feed to bucket %q with path %q ...", bucket, feedPath)
 
