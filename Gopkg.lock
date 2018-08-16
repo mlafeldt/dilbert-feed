@@ -30,7 +30,7 @@
   version = "v1.4.0"
 
 [[projects]]
-  digest = "1:895a6fb88e2ea2beefd4fe713be2774e3f4fbc10b108410dd9121153196c44f2"
+  digest = "1:3bfd66539341ebf9ee625e9644d0989d63aedbd297a5a84ccea2dcf2aeeb6d0c"
   name = "github.com/aws/aws-sdk-go"
   packages = [
     "aws",
@@ -68,8 +68,8 @@
     "service/sts",
   ]
   pruneopts = "NUT"
-  revision = "daed0c76021ea9c4e659e3ec80bcd2d657297100"
-  version = "v1.15.12"
+  revision = "2d51b5082ad9f540e68761c27522b0677b9a75c0"
+  version = "v1.15.13"
 
 [[projects]]
   digest = "1:f59266de09e138237bf9df9deb57b9ebbdb1e33b8399bb739c3745e7d3d2787b"
@@ -96,14 +96,14 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:1ef52fe3c5134f18540c4ca5ee70c57f14a3c85b21e05867f0e793de006169a6"
+  digest = "1:d4a222552c8c79ed76e1b234593c3eaaad2c40dfa55ab69bbdcaa3173c4b500f"
   name = "golang.org/x/net"
   packages = [
     "html",
     "html/atom",
   ]
   pruneopts = "NUT"
-  revision = "c39426892332e1bb5ec0a434a079bf82f5d30c54"
+  revision = "aaf60122140d3fcf75376d319f0554393160eb50"
 
 [solve-meta]
   analyzer-name = "dep"
