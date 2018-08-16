@@ -91,6 +91,6 @@ resources:
                 SSEAlgorithm: AES256
         LifecycleConfiguration:
           Rules:
-            - Id: DeleteLogsAfter90Days
+            - Id: DeleteLogsAfter30Days
               Status: Enabled
-              ExpirationInDays: 90
+              ExpirationInDays: 30
