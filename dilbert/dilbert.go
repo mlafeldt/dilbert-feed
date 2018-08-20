@@ -11,6 +11,7 @@ import (
 
 const titleSuffix = "- Dilbert by Scott Adams"
 
+// Comic describes a Dilbert comic strip.
 type Comic struct {
 	Date     string `json:"date"`
 	Title    string `json:"title,omitempty"`
@@ -18,6 +19,7 @@ type Comic struct {
 	StripURL string `json:"strip_url"`
 }
 
+// NewComic returns the Dilbert comic strip for the given date.
 func NewComic(date string) (*Comic, error) {
 	if date == "" {
 		now := time.Now()

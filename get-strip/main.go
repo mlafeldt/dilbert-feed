@@ -16,10 +16,12 @@ import (
 	"github.com/mlafeldt/dilbert-feed/dilbert"
 )
 
+// Input is the input passed to the Lambda function.
 type Input struct {
 	Date string `json:"date"`
 }
 
+// Output is the output returned by the Lambda function.
 type Output struct {
 	*dilbert.Comic
 	UploadURL string `json:"upload_url"`

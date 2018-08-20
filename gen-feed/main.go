@@ -40,13 +40,15 @@ const feedTemplate = `<rss version="2.0">
 </rss>
 `
 
-type FeedItem struct {
+type feedItem struct {
 	Date     string
 	ImageURL string
 }
 
+// Input is the input passed to the Lambda function.
 type Input struct{}
 
+// Output is the output returned by the Lambda function.
 type Output struct {
 	FeedURL string `json:"feed_url"`
 }
@@ -70,12 +72,12 @@ func handler(input Input) (*Output, error) {
 
 	log.Printf("INFO: Generating feed for date %s ...", now.Format(time.RFC3339))
 
-	var items []FeedItem
+	var items []feedItem
 	for i := 0; i < feedLength; i++ {
 		day := now.AddDate(0, 0, -i)
 		date := fmt.Sprintf("%d-%02d-%02d", day.Year(), day.Month(), day.Day())
 		url := fmt.Sprintf("https://%s/%s%s.gif", env.DomainName, env.BucketPrefix, date)
-		items = append(items, FeedItem{Date: date, ImageURL: url})
+		items = append(items, feedItem{Date: date, ImageURL: url})
 	}
 
 	t, err := template.New("feed").Parse(feedTemplate)
