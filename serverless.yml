@@ -5,6 +5,7 @@ provider:
   runtime: go1.x
   memorySize: 256
   timeout: 30
+  versionFunctions: false
   stage: ${opt:stage, 'production'}
   region: ${env:AWS_REGION}
   iamRoleStatements:
