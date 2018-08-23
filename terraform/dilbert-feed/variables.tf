@@ -3,3 +3,5 @@ variable "service" {
 }
 
 variable "stage" {}
+
+variable "update_schedule" {}

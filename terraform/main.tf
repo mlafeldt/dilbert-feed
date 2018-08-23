@@ -7,6 +7,7 @@ terraform {
 }
 
 module "dilbert_feed_production" {
-  source = "dilbert-feed"
-  stage  = "production"
+  source          = "dilbert-feed"
+  stage           = "production"
+  update_schedule = "cron(0 8 * * ? *)"
 }
