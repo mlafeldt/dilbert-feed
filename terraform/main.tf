@@ -5,3 +5,8 @@ terraform {
     region = "eu-central-1"
   }
 }
+
+module "dilbert_feed_production" {
+  source = "dilbert-feed"
+  stage  = "production"
+}
