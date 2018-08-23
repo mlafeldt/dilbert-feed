@@ -1,2 +1,6 @@
 /.serverless/
 /bin/
+
+**/.terraform/*
+*.tfstate
+*.tfstate.*
