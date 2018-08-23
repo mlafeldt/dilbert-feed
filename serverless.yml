@@ -29,21 +29,14 @@ package:
     - ./bin/**
 
 functions:
+  # These functions are invoked by a state machine managed by Terraform
   get-strip:
     handler: bin/get-strip
-    events:
-      - schedule:
-          # Run at 07:55 (UTC) every day
-          rate: "cron(55 7 * * ? *)"
   gen-feed:
     handler: bin/gen-feed
     environment:
       DOMAIN_NAME:
         Fn::GetAtt: [Bucket, DomainName]
-    events:
-      - schedule:
-          # Run at 08:00 (UTC) every day
-          rate: "cron(0 8 * * ? *)"
 
 resources:
   Resources:
