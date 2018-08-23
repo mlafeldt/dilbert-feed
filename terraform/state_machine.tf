@@ -1,5 +1,3 @@
-provider "aws" {}
-
 resource "aws_sfn_state_machine" "state_machine" {
   name     = "${var.service}-${var.stage}"
   role_arn = "${aws_iam_role.state_machine.arn}"
@@ -40,7 +38,8 @@ EOF
 }
 
 resource "aws_iam_role" "state_machine" {
-  name = "${var.service}-${var.stage}-state-machine-role"
+  name        = "${var.service}-${var.stage}-state-machine-role"
+  description = "Allow state machines to invoke Lambda functions"
 
   assume_role_policy = <<EOF
 {
@@ -79,12 +78,4 @@ resource "aws_iam_role_policy" "state_machine" {
   ]
 }
 EOF
-}
-
-data "aws_lambda_function" "get_strip" {
-  function_name = "${var.service}-${var.stage}-get-strip"
-}
-
-data "aws_lambda_function" "gen_feed" {
-  function_name = "${var.service}-${var.stage}-gen-feed"
 }
