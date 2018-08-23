@@ -54,3 +54,12 @@ $ sls invoke -f gen-feed
     "feed_url": "https://dilbert-feed.s3.eu-central-1.amazonaws.com/v0/rss.xml"
 }
 ```
+
+## Deployment
+
+```console
+make
+cd terraform/
+terraform init
+terraform apply
+```
