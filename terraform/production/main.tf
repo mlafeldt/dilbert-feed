@@ -1,13 +1,13 @@
 terraform {
   backend "s3" {
     bucket = "dilbert-feed-terraform"
-    key    = "terraform.tfstate"
+    key    = "production/terraform.tfstate"
     region = "eu-central-1"
   }
 }
 
-module "dilbert_feed_production" {
-  source          = "dilbert-feed"
+module "dilbert_feed" {
+  source          = "../dilbert-feed"
   stage           = "production"
   update_schedule = "cron(0 8 * * ? *)"
 }

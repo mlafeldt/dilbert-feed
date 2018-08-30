@@ -58,8 +58,8 @@ $ sls invoke -f gen-feed
 ## Deployment
 
 ```console
-make
-cd terraform/
+make production
+cd terraform/production
 terraform init
 terraform apply
 ```
