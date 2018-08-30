@@ -2,12 +2,12 @@ service: dilbert-feed
 
 provider:
   name: aws
+  region: ${env:AWS_REGION}
+  stage: ${opt:stage, 'production'}
   runtime: go1.x
   memorySize: 256
   timeout: 30
   versionFunctions: false
-  stage: ${opt:stage, 'production'}
-  region: ${env:AWS_REGION}
   iamRoleStatements:
     - Effect: Allow
       Action:
