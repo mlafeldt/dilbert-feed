@@ -23,20 +23,23 @@ provider:
     BUCKET_PREFIX: strips/
 
 package:
+  individually: true
   exclude:
     - ./**
-  include:
-    - ./bin/**
 
 functions:
   # These functions are invoked by a state machine managed by Terraform
   get-strip:
     handler: bin/get-strip
+    package:
+      include: [bin/get-strip]
   gen-feed:
     handler: bin/gen-feed
     environment:
       DOMAIN_NAME:
         Fn::GetAtt: [Bucket, DomainName]
+    package:
+      include: [bin/gen-feed]
 
 resources:
   Resources:
