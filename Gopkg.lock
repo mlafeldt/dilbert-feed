@@ -26,11 +26,11 @@
     "lambdacontext",
   ]
   pruneopts = "NUT"
-  revision = "e630af386f8aad6ec9fc899b951cf62d37cfe56f"
-  version = "v1.4.0"
+  revision = "2d482ef09017ae953b1e8d5a6ddac5b696663a3c"
+  version = "v1.6.0"
 
 [[projects]]
-  digest = "1:3bfd66539341ebf9ee625e9644d0989d63aedbd297a5a84ccea2dcf2aeeb6d0c"
+  digest = "1:b970f6a71e1db42bc80de6131b78dbe9546a4aa40b3e4965a4c62b75622caf73"
   name = "github.com/aws/aws-sdk-go"
   packages = [
     "aws",
@@ -68,16 +68,16 @@
     "service/sts",
   ]
   pruneopts = "NUT"
-  revision = "2d51b5082ad9f540e68761c27522b0677b9a75c0"
-  version = "v1.15.13"
+  revision = "87474c2d2bbdf6bd31275e435648aeb6c3d6815d"
+  version = "v1.15.35"
 
 [[projects]]
-  digest = "1:f59266de09e138237bf9df9deb57b9ebbdb1e33b8399bb739c3745e7d3d2787b"
+  digest = "1:74d9b0a7b4107b41e0ade759fac64502876f82d29fb23d77b3dd24b194ee3dd5"
   name = "github.com/go-ini/ini"
   packages = ["."]
   pruneopts = "NUT"
-  revision = "358ee7663966325963d4e8b2e1fbd570c5195153"
-  version = "v1.38.1"
+  revision = "5cf292cae48347c2490ac1a58fe36735fb78df7e"
+  version = "v1.38.2"
 
 [[projects]]
   digest = "1:ac6d01547ec4f7f673311b4663909269bfb8249952de3279799289467837c3cc"
@@ -96,14 +96,14 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:d4a222552c8c79ed76e1b234593c3eaaad2c40dfa55ab69bbdcaa3173c4b500f"
+  digest = "1:a5ae8f624991c4156ab2610befdbc78ea3a961473ce4846cc34342649cb81878"
   name = "golang.org/x/net"
   packages = [
     "html",
     "html/atom",
   ]
   pruneopts = "NUT"
-  revision = "aaf60122140d3fcf75376d319f0554393160eb50"
+  revision = "26e67e76b6c3f6ce91f7c52def5af501b4e0f3a2"
 
 [solve-meta]
   analyzer-name = "dep"
