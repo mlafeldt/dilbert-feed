@@ -6,7 +6,6 @@ import (
 	"log"
 	"net/http"
 	"strings"
-	"time"
 
 	"github.com/aws/aws-lambda-go/lambda"
 	"github.com/aws/aws-sdk-go/aws"
@@ -61,8 +60,7 @@ func handler(input Input) (*Output, error) {
 	log.Printf("[DEBUG] comic = %+v", comic)
 	log.Printf("[INFO] Uploading strip %s to bucket %q ...", comic.StripURL, env.BucketName)
 
-	client := &http.Client{Timeout: 10 * time.Second}
-	resp, err := client.Get(comic.ImageURL)
+	resp, err := http.Get(comic.ImageURL)
 	if err != nil {
 		return nil, err
 	}
