@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"io"
 	"log"
 	"net/http"
 	"strings"
@@ -67,22 +68,31 @@ func handler(input Input) (*Output, error) {
 	}
 	defer resp.Body.Close()
 
-	sess, err := session.NewSession()
+	stripPath := fmt.Sprintf("%s%s.gif", env.BucketPrefix, comic.Date)
+	stripURL, err := uploadStrip(resp.Body, env.BucketName, stripPath)
 	if err != nil {
 		return nil, err
+	}
+
+	log.Printf("[INFO] Upload completed: %s", stripURL)
+	return &Output{comic, stripURL}, nil
+}
+
+func uploadStrip(r io.Reader, bucketName, stripPath string) (string, error) {
+	sess, err := session.NewSession()
+	if err != nil {
+		return "", err
 	}
 
 	upload, err := s3manager.NewUploader(sess).Upload(&s3manager.UploadInput{
-		Bucket:      aws.String(env.BucketName),
-		Key:         aws.String(fmt.Sprintf("%s%s.gif", env.BucketPrefix, comic.Date)),
+		Bucket:      aws.String(bucketName),
+		Key:         aws.String(stripPath),
 		ContentType: aws.String("image/gif"),
-		Body:        resp.Body,
+		Body:        r,
 	})
 	if err != nil {
-		return nil, err
+		return "", err
 	}
 
-	log.Printf("[INFO] Upload completed: %s", upload.Location)
-
-	return &Output{comic, upload.Location}, nil
+	return upload.Location, nil
 }
