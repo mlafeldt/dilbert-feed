@@ -16,7 +16,7 @@ const feedTemplate = `<rss version="2.0">
     <title>Dilbert</title>
     <link>http://dilbert.com</link>
     <description>Dilbert Daily Strip</description>
-{{- range . }}
+    {{- range . }}
     <item>
       <title>Dilbert - {{ .Date }}</title>
       <link>{{ .ImageURL }}</link>
@@ -27,7 +27,7 @@ const feedTemplate = `<rss version="2.0">
         ]]>
       </description>
     </item>
-{{- end }}
+    {{- end }}
   </channel>
 </rss>
 `
