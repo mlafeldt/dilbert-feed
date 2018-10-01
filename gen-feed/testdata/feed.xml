@@ -3,7 +3,6 @@
     <title>Dilbert</title>
     <link>http://dilbert.com</link>
     <description>Dilbert Daily Strip</description>
-    
     <item>
       <title>Dilbert - 2018-10-01</title>
       <link>https://example.com/strips/2018-10-01.gif</link>
@@ -14,7 +13,6 @@
         ]]>
       </description>
     </item>
-    
     <item>
       <title>Dilbert - 2018-09-30</title>
       <link>https://example.com/strips/2018-09-30.gif</link>
@@ -25,7 +23,6 @@
         ]]>
       </description>
     </item>
-    
     <item>
       <title>Dilbert - 2018-09-29</title>
       <link>https://example.com/strips/2018-09-29.gif</link>
@@ -36,6 +33,5 @@
         ]]>
       </description>
     </item>
-    
   </channel>
 </rss>
