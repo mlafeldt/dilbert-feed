@@ -36,23 +36,23 @@ func handler(input Input) (*Output, error) {
 	if err := envconfig.Process("", &env); err != nil {
 		return nil, err
 	}
-	log.Printf("DEBUG: env = %+v", env)
+	log.Printf("[DEBUG] env = %+v", env)
 
 	now := time.Now()
 	baseURL := fmt.Sprintf("https://%s/%s", env.DomainName, env.BucketPrefix)
 	var buf bytes.Buffer
 
-	log.Printf("INFO: Generating feed for date %s ...", now.Format(time.RFC3339))
+	log.Printf("[INFO] Generating feed for date %s ...", now.Format(time.RFC3339))
 	if err := generateFeed(&buf, now, defaultFeedLength, baseURL); err != nil {
 		return nil, err
 	}
 
-	log.Printf("INFO: Uploading feed to bucket %q with path %q ...", env.BucketName, defaultFeedPath)
+	log.Printf("[INFO] Uploading feed to bucket %q with path %q ...", env.BucketName, defaultFeedPath)
 	feedURL, err := uploadFeed(&buf, env.BucketName, defaultFeedPath)
 	if err != nil {
 		return nil, err
 	}
 
-	log.Printf("INFO: Upload completed: %s", feedURL)
+	log.Printf("[INFO] Upload completed: %s", feedURL)
 	return &Output{feedURL}, nil
 }

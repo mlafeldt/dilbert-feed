@@ -39,7 +39,7 @@ func handler(input Input) (*Output, error) {
 	if err := envconfig.Process("", &env); err != nil {
 		return nil, err
 	}
-	log.Printf("DEBUG: env = %+v", env)
+	log.Printf("[DEBUG] env = %+v", env)
 
 	var date string
 	if input.Date != "" {
@@ -57,8 +57,8 @@ func handler(input Input) (*Output, error) {
 		return nil, err
 	}
 
-	log.Printf("DEBUG: comic = %+v", comic)
-	log.Printf("INFO: Uploading strip %s to bucket %q ...", comic.StripURL, env.BucketName)
+	log.Printf("[DEBUG] comic = %+v", comic)
+	log.Printf("[INFO] Uploading strip %s to bucket %q ...", comic.StripURL, env.BucketName)
 
 	client := &http.Client{Timeout: 10 * time.Second}
 	resp, err := client.Get(comic.ImageURL)
@@ -82,7 +82,7 @@ func handler(input Input) (*Output, error) {
 		return nil, err
 	}
 
-	log.Printf("INFO: Upload completed: %s", upload.Location)
+	log.Printf("[INFO] Upload completed: %s", upload.Location)
 
 	return &Output{comic, upload.Location}, nil
 }
