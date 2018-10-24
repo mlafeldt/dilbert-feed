@@ -9,7 +9,7 @@ resource "aws_sfn_state_machine" "state_machine" {
     "GetStrip": {
       "Type": "Task",
       "Resource": "${data.aws_lambda_function.get_strip.arn}",
-      "Next": "GenFeed",
+      "ResultPath": "$.strip",
       "Retry": [
         {
           "ErrorEquals": ["States.TaskFailed"],
@@ -17,11 +17,13 @@ resource "aws_sfn_state_machine" "state_machine" {
           "MaxAttempts": 2,
           "BackoffRate": 2.0
         }
-      ]
+      ],
+      "Next": "GenFeed"
     },
     "GenFeed": {
       "Type": "Task",
       "Resource": "${data.aws_lambda_function.gen_feed.arn}",
+      "ResultPath": "$.feed",
       "Retry": [
         {
           "ErrorEquals": ["States.TaskFailed"],
