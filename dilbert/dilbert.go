@@ -9,8 +9,6 @@ import (
 	"github.com/PuerkitoBio/goquery"
 )
 
-const titleSuffix = "- Dilbert by Scott Adams"
-
 // Comic describes a Dilbert comic strip.
 type Comic struct {
 	Date     string `json:"date"`
@@ -19,6 +17,10 @@ type Comic struct {
 	StripURL string `json:"strip_url"`
 }
 
+const titleSuffix = "- Dilbert by Scott Adams"
+
+var baseURL = "http://dilbert.com"
+
 // NewComic returns the Dilbert comic strip for the given date.
 func NewComic(date string) (*Comic, error) {
 	if date == "" {
@@ -26,7 +28,7 @@ func NewComic(date string) (*Comic, error) {
 		date = fmt.Sprintf("%d-%02d-%02d", now.Year(), now.Month(), now.Day())
 	}
 
-	stripURL := "http://dilbert.com/strip/" + strings.TrimSpace(date)
+	stripURL := fmt.Sprintf("%s/strip/%s", baseURL, strings.TrimSpace(date))
 
 	client := &http.Client{Timeout: 10 * time.Second}
 	resp, err := client.Get(stripURL)
