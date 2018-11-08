@@ -31,7 +31,7 @@
   version = "v1.6.0"
 
 [[projects]]
-  digest = "1:181c92c5f471513986103098c0a4abe882fb124f72b5161697554ec2103ef13f"
+  digest = "1:468b27caaff8214a083e185911d765a3d8e512867cdf23b0ed6b1878c5be066e"
   name = "github.com/aws/aws-sdk-go"
   packages = [
     "aws",
@@ -68,6 +68,7 @@
     "service/s3",
     "service/s3/s3iface",
     "service/s3/s3manager",
+    "service/sqs",
     "service/sts",
   ]
   pruneopts = "NUT"
@@ -76,11 +77,12 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:d6269d0ab0964892dea9cfbf48ecd38b3fa066588c8fa79f0663b670267331c6"
+  digest = "1:51d8fed08bcc72ce627899dc9f925a20fb413835856ba27d5410432c26a2cd43"
   name = "github.com/epsagon/epsagon-go"
   packages = [
     "epsagon",
     "protocol",
+    "wrappers/aws/aws-sdk-go/aws",
   ]
   pruneopts = "NUT"
   revision = "d6737babc1de4e4766887ea4f1d6d2efa7643353"
@@ -154,6 +156,7 @@
     "github.com/aws/aws-sdk-go/aws/session",
     "github.com/aws/aws-sdk-go/service/s3/s3manager",
     "github.com/epsagon/epsagon-go/epsagon",
+    "github.com/epsagon/epsagon-go/wrappers/aws/aws-sdk-go/aws",
     "github.com/google/go-cmp/cmp",
     "github.com/kelseyhightower/envconfig",
   ]
