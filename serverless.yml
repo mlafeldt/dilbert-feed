@@ -22,6 +22,7 @@ provider:
       Ref: Bucket
     BUCKET_PREFIX: strips/
     EPSAGON_TOKEN: ${ssm:/${self:service}/${self:provider.stage}/epsagon_token~true}
+    EPSAGON_DEBUG: ${env:EPSAGON_DEBUG, "FALSE"}
 
 package:
   individually: true
