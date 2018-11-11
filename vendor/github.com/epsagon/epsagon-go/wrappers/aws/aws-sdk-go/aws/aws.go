@@ -5,16 +5,17 @@ import (
 	"fmt"
 	"github.com/aws/aws-sdk-go/aws/request"
 	"github.com/aws/aws-sdk-go/aws/session"
-	"github.com/aws/aws-sdk-go/service/sqs"
 	"github.com/epsagon/epsagon-go/epsagon"
 	"github.com/epsagon/epsagon-go/protocol"
 	"log"
-	"strings"
 	"time"
 )
 
 // WrapSession wraps an aws session.Session with epsgaon traces
 func WrapSession(s *session.Session) *session.Session {
+	if s == nil {
+		return s
+	}
 	s.Handlers.Complete.PushFrontNamed(
 		request.NamedHandler{
 			Name: "github.com/epsagon/epsagon-go/wrappers/aws/aws-sdk-go/aws/aws.go",
@@ -28,6 +29,7 @@ func getTimeStampFromRequest(r *request.Request) float64 {
 }
 
 func completeEventData(r *request.Request) {
+	defer epsagon.GeneralEpsagonRecover("aws-sdk-go wrapper", "")
 	if epsagon.GetGlobalTracerConfig().Debug {
 		log.Printf("EPSAGON DEBUG OnComplete request response: %+v\n", r.HTTPResponse)
 		log.Printf("EPSAGON DEBUG OnComplete request Operation: %+v\n", r.Operation)
@@ -35,6 +37,7 @@ func completeEventData(r *request.Request) {
 		log.Printf("EPSAGON DEBUG OnComplete request Params: %+v\n", r.Params)
 		log.Printf("EPSAGON DEBUG OnComplete request Data: %+v\n", r.Data)
 	}
+
 	endTime := epsagon.GetTimestamp()
 	event := protocol.Event{
 		Id:        r.RequestID,
@@ -46,13 +49,17 @@ func completeEventData(r *request.Request) {
 	epsagon.AddEvent(&event)
 }
 
-type extractor func(*request.Request, *protocol.Resource)
+type factory func(*request.Request, *protocol.Resource, bool)
 
-var awsResourceDataExtractors = map[string]map[string]extractor{
-	"sqs": map[string]extractor{
-		"SendMessage": sqsSendMessageExtractor,
-		"GetQueueUrl": sqsGetQueueURLExtractor,
-	},
+var awsResourceEventFactories = map[string]factory{
+	"sqs":      sqsEventDataFactory,
+	"s3":       s3EventDataFactory,
+	"dynamodb": dynamodbEventDataFactory,
+	"kinesis":  kinesisEventDataFactory,
+	"ses":      sesEventDataFactory,
+	"sns":      snsEventDataFactory,
+	"lambda":   lambdaEventDataFactory,
+	"sfn":      sfnEventDataFactory,
 }
 
 func extractResourceInformation(r *request.Request) *protocol.Resource {
@@ -61,21 +68,23 @@ func extractResourceInformation(r *request.Request) *protocol.Resource {
 		Operation: r.Operation.Name,
 		Metadata:  make(map[string]string),
 	}
-	extractor := awsResourceDataExtractors[res.Type][res.Operation]
-	if extractor != nil {
-		extractor(r, &res)
+	factory := awsResourceEventFactories[res.Type]
+	if factory != nil {
+		factory(r, &res, epsagon.GetGlobalTracerConfig().MetadataOnly)
 	} else {
-		defaultExtractor(r, &res)
+		defaultFactory(r, &res, epsagon.GetGlobalTracerConfig().MetadataOnly)
 	}
 	return &res
 }
 
-func defaultExtractor(r *request.Request, res *protocol.Resource) {
+func defaultFactory(r *request.Request, res *protocol.Resource, metadataOnly bool) {
 	if epsagon.GetGlobalTracerConfig().Debug {
-		log.Println("EPSAGON DEBUG:: entering defaultExtractor")
+		log.Println("EPSAGON DEBUG:: entering defaultFactory")
 	}
-	extractInterfaceToMetadata(r.Data, res)
-	extractInterfaceToMetadata(r.Params, res)
+	if !metadataOnly {
+		extractInterfaceToMetadata(r.Data, res)
+		extractInterfaceToMetadata(r.Params, res)
+	}
 }
 
 func extractInterfaceToMetadata(input interface{}, res *protocol.Resource) {
@@ -93,33 +102,4 @@ func extractInterfaceToMetadata(input interface{}, res *protocol.Resource) {
 	for key, value := range data {
 		res.Metadata[key] = fmt.Sprintf("%v", value)
 	}
-}
-
-func sqsSendMessageExtractor(r *request.Request, res *protocol.Resource) {
-	input, ok := r.Params.(*sqs.SendMessageInput)
-	if !ok {
-		log.Printf("EPSAGON DEBUG: sqsSendMessageExtractor failed to unmarshal data: r.Params %+v", r.Params)
-		defaultExtractor(r, res)
-		return
-	}
-	urlParts := strings.Split(*input.QueueUrl, "/")
-	res.Name = urlParts[len(urlParts)-1]
-	output, ok := r.Data.(*sqs.SendMessageOutput)
-	if !ok {
-		log.Printf("EPSAGON DEBUG: sqsSendMessageExtractor failed to unmarshal data: r.Data %+v", r.Data)
-		defaultExtractor(r, res)
-		return
-	}
-	res.Metadata["Message ID"] = *output.MessageId
-	res.Metadata["MD5 Of Message Body"] = *output.MD5OfMessageBody
-}
-
-func sqsGetQueueURLExtractor(r *request.Request, res *protocol.Resource) {
-	input, ok := r.Params.(*sqs.GetQueueUrlInput)
-	if !ok {
-		log.Printf("EPSAGON DEBUG: sqsGetQueueURLExtractor failed to unmarshal data: r.Params %+v", r.Params)
-		defaultExtractor(r, res)
-		return
-	}
-	res.Name = *input.QueueName
 }

@@ -31,7 +31,7 @@
   version = "v1.6.0"
 
 [[projects]]
-  digest = "1:468b27caaff8214a083e185911d765a3d8e512867cdf23b0ed6b1878c5be066e"
+  digest = "1:e7d837dac780ffaf3904c1c32282eccb3b79af3b24254ee912f3b3e6fb40da3e"
   name = "github.com/aws/aws-sdk-go"
   packages = [
     "aws",
@@ -60,15 +60,17 @@
     "private/protocol",
     "private/protocol/eventstream",
     "private/protocol/eventstream/eventstreamapi",
+    "private/protocol/json/jsonutil",
+    "private/protocol/jsonrpc",
     "private/protocol/query",
     "private/protocol/query/queryutil",
     "private/protocol/rest",
     "private/protocol/restxml",
     "private/protocol/xml/xmlutil",
+    "service/dynamodb",
     "service/s3",
     "service/s3/s3iface",
     "service/s3/s3manager",
-    "service/sqs",
     "service/sts",
   ]
   pruneopts = "NUT"
@@ -77,7 +79,7 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:51d8fed08bcc72ce627899dc9f925a20fb413835856ba27d5410432c26a2cd43"
+  digest = "1:97c1f7a2a6f1fc81a7521809111e417e26d338e834508518d41165d5fa4c030c"
   name = "github.com/epsagon/epsagon-go"
   packages = [
     "epsagon",
@@ -85,7 +87,7 @@
     "wrappers/aws/aws-sdk-go/aws",
   ]
   pruneopts = "NUT"
-  revision = "d6737babc1de4e4766887ea4f1d6d2efa7643353"
+  revision = "e6e1761c773d9e5b9db9f42ea57b9ddc263ded6b"
 
 [[projects]]
   digest = "1:361a03699ec95efff8f30a314629d0d8b4646df8cafa1b9edbb3572db70e070d"

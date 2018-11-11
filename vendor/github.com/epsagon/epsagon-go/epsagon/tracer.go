@@ -3,7 +3,7 @@ package epsagon
 import (
 	"bytes"
 	"fmt"
-	protocol "github.com/epsagon/epsagon-go/protocol"
+	"github.com/epsagon/epsagon-go/protocol"
 	"github.com/golang/protobuf/jsonpb"
 	"io"
 	"log"
@@ -15,17 +15,20 @@ import (
 )
 
 var (
-	mutex        sync.Mutex
-	globalTracer tracer
+	mutex sync.Mutex
+	// GlobalTracer A global Tracer for all internal uses
+	GlobalTracer Tracer
 )
 
-type tracer interface {
+// Tracer is what a general program tracer had to provide
+type Tracer interface {
 	AddEvent(*protocol.Event)
 	AddException(*protocol.Exception)
 	Run()
 	Running() bool
 	Stop()
 	Stopped() bool
+	GetConfig() *Config
 }
 
 // Config is the configuration for Epsagon's tracer
@@ -147,12 +150,15 @@ func fillConfigDefaults(config *Config) {
 func CreateTracer(config *Config) {
 	mutex.Lock()
 	defer mutex.Unlock()
-	if globalTracer != nil && !globalTracer.Stopped() {
+	if GlobalTracer != nil && !GlobalTracer.Stopped() {
 		log.Println("The tracer is already created")
 		return
 	}
+	if config == nil {
+		config = &Config{}
+	}
 	fillConfigDefaults(config)
-	globalTracer = &epsagonTracer{
+	GlobalTracer = &epsagonTracer{
 		Config:         config,
 		eventsPipe:     make(chan *protocol.Event),
 		events:         make([]*protocol.Event, 0, 0),
@@ -165,7 +171,7 @@ func CreateTracer(config *Config) {
 	if config.Debug {
 		log.Println("EPSAGON DEBUG: Created a new tracer")
 	}
-	go globalTracer.Run()
+	go GlobalTracer.Run()
 }
 
 // AddException adds a tracing exception to the tracer
@@ -183,22 +189,22 @@ func (tracer *epsagonTracer) AddEvent(event *protocol.Event) {
 
 // AddEvent adds an event to the tracer
 func AddEvent(event *protocol.Event) {
-	if globalTracer == nil || globalTracer.Stopped() {
+	if GlobalTracer == nil || GlobalTracer.Stopped() {
 		// TODO
 		log.Println("The tracer is not initialized!")
 		return
 	}
-	globalTracer.AddEvent(event)
+	GlobalTracer.AddEvent(event)
 }
 
 // AddException adds an exception to the tracer
 func AddException(exception *protocol.Exception) {
-	if globalTracer == nil || globalTracer.Stopped() {
+	if GlobalTracer == nil || GlobalTracer.Stopped() {
 		// TODO
 		log.Println("The tracer is not initialized!")
 		return
 	}
-	globalTracer.AddException(exception)
+	GlobalTracer.AddException(exception)
 }
 
 // Stop stops the tracer running routine
@@ -214,12 +220,12 @@ func (tracer *epsagonTracer) Stop() {
 
 // StopTracer will close the tracer and send all the data to the collector
 func StopTracer() {
-	if globalTracer == nil || globalTracer.Stopped() {
+	if GlobalTracer == nil || GlobalTracer.Stopped() {
 		// TODO
 		log.Println("The tracer is not initialized!")
 		return
 	}
-	globalTracer.Stop()
+	GlobalTracer.Stop()
 }
 
 // Run starts the runner background routine that will
@@ -251,12 +257,14 @@ func (tracer *epsagonTracer) Run() {
 	}
 }
 
+func (tracer *epsagonTracer) GetConfig() *Config {
+	return tracer.Config
+}
+
 // GetGlobalTracerConfig returns the configuration of the global tracer
 func GetGlobalTracerConfig() *Config {
-	if globalTracer == nil || globalTracer.Stopped() {
-		// TODO
-		log.Println("The tracer is not initialized!")
-		return nil
+	if GlobalTracer == nil || GlobalTracer.Stopped() {
+		return &Config{}
 	}
-	return globalTracer.(*epsagonTracer).Config
+	return GlobalTracer.GetConfig()
 }
