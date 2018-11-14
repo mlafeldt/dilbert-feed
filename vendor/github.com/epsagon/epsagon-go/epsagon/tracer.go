@@ -24,7 +24,7 @@ var (
 type Tracer interface {
 	AddEvent(*protocol.Event)
 	AddException(*protocol.Exception)
-	Run()
+	Start()
 	Running() bool
 	Stop()
 	Stopped() bool
@@ -51,6 +51,19 @@ type epsagonTracer struct {
 	closeCmd chan struct{}
 	stopped  chan struct{}
 	running  chan struct{}
+}
+
+// Start starts running the tracer in another goroutine and returns
+// when it is ready, or after 1 second timeout
+func (tracer *epsagonTracer) Start() {
+	go tracer.Run()
+	timer := time.NewTimer(time.Second)
+	select {
+	case <-tracer.running:
+		return
+	case <-timer.C:
+		log.Println("Epsagon Tracer couldn't start after one second timeout")
+	}
 }
 
 func (tracer *epsagonTracer) sendTraces() {
@@ -171,7 +184,7 @@ func CreateTracer(config *Config) {
 	if config.Debug {
 		log.Println("EPSAGON DEBUG: Created a new tracer")
 	}
-	go GlobalTracer.Run()
+	GlobalTracer.Start()
 }
 
 // AddException adds a tracing exception to the tracer

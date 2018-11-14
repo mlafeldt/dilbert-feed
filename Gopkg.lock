@@ -79,7 +79,7 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:97c1f7a2a6f1fc81a7521809111e417e26d338e834508518d41165d5fa4c030c"
+  digest = "1:c336a318242560540085a73c03c2da266eb66ddfcfbadb25f98623a85829a3bc"
   name = "github.com/epsagon/epsagon-go"
   packages = [
     "epsagon",
@@ -87,7 +87,7 @@
     "wrappers/aws/aws-sdk-go/aws",
   ]
   pruneopts = "NUT"
-  revision = "e6e1761c773d9e5b9db9f42ea57b9ddc263ded6b"
+  revision = "57bcfa50514ffc6e85267f7ef98b5db55014325d"
 
 [[projects]]
   digest = "1:361a03699ec95efff8f30a314629d0d8b4646df8cafa1b9edbb3572db70e070d"
