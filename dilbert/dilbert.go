@@ -36,6 +36,10 @@ func NewComic(date string) (*Comic, error) {
 		return nil, err
 	}
 
+	if resp.StatusCode != http.StatusOK {
+		return nil, fmt.Errorf("HTTP error: %s", resp.Status)
+	}
+
 	doc, err := goquery.NewDocumentFromResponse(resp)
 	if err != nil {
 		return nil, err
