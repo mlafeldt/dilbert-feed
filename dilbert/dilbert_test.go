@@ -17,13 +17,13 @@ func TestNewComic(t *testing.T) {
 		&Comic{
 			Date:     "2000-01-01",
 			Title:    "",
-			ImageURL: "http://assets.amuniversal.com/bdc8a4d06d6401301d80001dd8b71c47",
+			ImageURL: "https://assets.amuniversal.com/bdc8a4d06d6401301d80001dd8b71c47",
 			StripURL: baseURL + "/strip/2000-01-01",
 		},
 		&Comic{
 			Date:     "2018-10-30",
 			Title:    "Intentionally Underbidding",
-			ImageURL: "http://assets.amuniversal.com/cda546d0a88c01365b26005056a9545d",
+			ImageURL: "https://assets.amuniversal.com/cda546d0a88c01365b26005056a9545d",
 			StripURL: baseURL + "/strip/2018-10-30",
 		},
 	}
