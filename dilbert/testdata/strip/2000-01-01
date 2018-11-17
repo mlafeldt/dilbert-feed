@@ -3,29 +3,29 @@
 <head>
   <title> Dilbert Comic Strip on 2000-01-01 | Dilbert by Scott Adams</title>
   <link href='https://fonts.googleapis.com/css?family=Raleway:800' rel='stylesheet' type='text/css'>
-  <link rel="apple-touch-icon" type="image/png" href="http://dilbert.com/assets/favicon/apple-touch-icon-57x57-e8da3768e1534934c4b5760e6e5de064.png" sizes="57x57" />
-<link rel="apple-touch-icon" type="image/png" href="http://dilbert.com/assets/favicon/apple-touch-icon-114x114-96d5c6ffa1417cd31561914f4b017aeb.png" sizes="114x114" />
-<link rel="apple-touch-icon" type="image/png" href="http://dilbert.com/assets/favicon/apple-touch-icon-72x72-4036422ba920494bb97d0364e90e2bb8.png" sizes="72x72" />
-<link rel="apple-touch-icon" type="image/png" href="http://dilbert.com/assets/favicon/apple-touch-icon-144x144-629cc8f4393afb2324767053dfba02f4.png" sizes="144x144" />
-<link rel="apple-touch-icon" type="image/png" href="http://dilbert.com/assets/favicon/apple-touch-icon-60x60-e2eb26af9c582fb02552557691328d8d.png" sizes="60x60" />
-<link rel="apple-touch-icon" type="image/png" href="http://dilbert.com/assets/favicon/apple-touch-icon-120x120-17b4144a9c942f7509076229361b6525.png" sizes="120x120" />
-<link rel="apple-touch-icon" type="image/png" href="http://dilbert.com/assets/favicon/apple-touch-icon-76x76-5dcf319407267ea5c39ec2bed017d2d0.png" sizes="76x76" />
-<link rel="apple-touch-icon" type="image/png" href="http://dilbert.com/assets/favicon/apple-touch-icon-152x152-e0de5390986dae2f59218a00307458b0.png" sizes="152x152" />
-<link rel="icon" type="image/png" href="http://dilbert.com/assets/favicon/favicon-196x196-9b727177c002558011b39378b7002cf5.png" sizes="196x196" />
-<link rel="icon" type="image/png" href="http://dilbert.com/assets/favicon/favicon-160x160-7d355fdd1a7b8405d90af6162139ec10.png" sizes="160x160" />
-<link rel="icon" type="image/png" href="http://dilbert.com/assets/favicon/favicon-96x96-96d3be590cfd10ef824019f7133b7197.png" sizes="96x96" />
-<link rel="icon" type="image/png" href="http://dilbert.com/assets/favicon/favicon-32x32-a0f2c0c0681530e64cf3ca67e281d7e4.png" sizes="32x32" />
-<link rel="icon" type="image/png" href="http://dilbert.com/assets/favicon/favicon-16x16-0a83790605f2e88b114c081ea6940eed.png" sizes="16x16" />
-<link rel="shortcut icon" type="image/x-icon" href="http://dilbert.com/assets/favicon/favicon-9486c8e39a305662fe53ec940f3bd7bd.ico" />
+  <link rel="apple-touch-icon" type="image/png" href="https://dilbert.com/assets/favicon/apple-touch-icon-57x57-c8a82ec11003cff2b23067ada3fc94e9.png" sizes="57x57" />
+<link rel="apple-touch-icon" type="image/png" href="https://dilbert.com/assets/favicon/apple-touch-icon-114x114-0e9c6fff89f6948e014781d73e4d5bdc.png" sizes="114x114" />
+<link rel="apple-touch-icon" type="image/png" href="https://dilbert.com/assets/favicon/apple-touch-icon-72x72-156b62011cfa52ca91a3dc0b79bc1df0.png" sizes="72x72" />
+<link rel="apple-touch-icon" type="image/png" href="https://dilbert.com/assets/favicon/apple-touch-icon-144x144-9bd29c49fdef0a89e9c9a5689e185919.png" sizes="144x144" />
+<link rel="apple-touch-icon" type="image/png" href="https://dilbert.com/assets/favicon/apple-touch-icon-60x60-e8767886266c2842516e0ca6a7e7d10a.png" sizes="60x60" />
+<link rel="apple-touch-icon" type="image/png" href="https://dilbert.com/assets/favicon/apple-touch-icon-120x120-dec4bf2913cc96e11281e820f3a62357.png" sizes="120x120" />
+<link rel="apple-touch-icon" type="image/png" href="https://dilbert.com/assets/favicon/apple-touch-icon-76x76-3ffb0e13a900498f5a53de66bb9cc686.png" sizes="76x76" />
+<link rel="apple-touch-icon" type="image/png" href="https://dilbert.com/assets/favicon/apple-touch-icon-152x152-5c92898a334bfd3c6d7b3df0abb54e0f.png" sizes="152x152" />
+<link rel="icon" type="image/png" href="https://dilbert.com/assets/favicon/favicon-196x196-cabd919e3d8b2663b92ec11b574ac2df.png" sizes="196x196" />
+<link rel="icon" type="image/png" href="https://dilbert.com/assets/favicon/favicon-160x160-eeacc28582cb8434b49d4d2f695a4ab8.png" sizes="160x160" />
+<link rel="icon" type="image/png" href="https://dilbert.com/assets/favicon/favicon-96x96-140f6702fa3470cc3503ea7d1bb521db.png" sizes="96x96" />
+<link rel="icon" type="image/png" href="https://dilbert.com/assets/favicon/favicon-32x32-ec17ae6a29f8b1145da7b6370063d7e1.png" sizes="32x32" />
+<link rel="icon" type="image/png" href="https://dilbert.com/assets/favicon/favicon-16x16-99cf7f415bfa7e291f9ecbe043477890.png" sizes="16x16" />
+<link rel="shortcut icon" type="image/x-icon" href="https://dilbert.com/assets/favicon/favicon-4cbadb8bcbd9c9a26a708b8d860c8070.ico" />
 <meta name="msapplication-TileColor" content="#ffffff" />
-<meta name="msapplication-TileImage" content="http://dilbert.com/assets/favicon/mstile-144x144-a8368db0d1705d752bf1daf4c473f8eb.png" />
+<meta name="msapplication-TileImage" content="https://dilbert.com/assets/favicon/mstile-144x144-20d2b6bb615bcffd6114e934c5cfe859.png" />
   <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="keywords" content="official dilbert website, dilbert comic strip, scott adams, Dilbert, Dogbert, Wally, The Pointy Haired Boss, Alice, Asok, Dogberts New Ruling Class, catbert, ratbert, mashups, animation, comics">
 <meta name="description" content="The Official Dilbert Website featuring Scott Adams Dilbert strips, animation, mashups and more starring Dilbert, Dogbert, Wally, The Pointy Haired Boss, Alice, Asok, Dogberts New Ruling Class and more.">
 <meta name="twitter:creator" content="Dilbert_Daily">
 <meta name="csrf-param" content="authenticity_token" />
-<meta name="csrf-token" content="qYTKaeLUbUZJiTWnhX0X6I49R4K+9091BSDN2m252zF3G04v6WJMJPjH4i4S8ED9WJkjv3UdQbYvxQWY4evzGg==" />
+<meta name="csrf-token" content="VJ/KtaqBMN15v5yOpC4wVvaF6wxmwDGLFZEH5zbC8Di4U/H+FkNZfUUnkI6Z4OvU898bh+IvJjGNXz1PvNC9XQ==" />
     <!-- Feature Item Sharing -->
     <!-- Facebook Open Graph Tags -->
     <meta property="og:url" content="http://dilbert.com/strip/2000-01-01"/>
@@ -44,22 +44,22 @@
     <meta name="twitter:card" content="photo">
     <meta name="twitter:site" content="@Dilbert">
     <meta name="twitter:title" content="">
-    <meta name="twitter:domain" content="http://dilbert.com/">
+    <meta name="twitter:domain" content="https://dilbert.com/">
     <meta name="twitter:description" content="The boss, Wally, Dilbert and a new consultant are in a meeting. The boss says: &quot;I hired the &quot;Bait and Switch&quot; consulting group because they&#39;re so smart.&quot;   The consultant says to the boss while introducing him to a very messy looking man: &quot;I&#39;m assigning Eddie to work on your account. You will never see me again.&quot;   Eddie sits in front of the boss and says: &quot;So, what is it that you do here?&quot;   ">
     <meta name="twitter:image" content="http://assets.amuniversal.com/bdc8a4d06d6401301d80001dd8b71c47">
 
 <!-- Webmaster Tools Verification -->
 <meta name="google-site-verification" content="iMe_GbOppnxshIHn7KwTW8Eey9Lfzflvc9NrzGPoewI" />
-  <link rel="stylesheet" media="all" href="/assets/global-icons-727fcd3f2547c03c25d8489c83d3f410.css" /> 
-  <link rel="stylesheet" media="all" href="/assets/application-05b48d4cda7ee2ddf5e3abd18b828731.css" />
+  <link rel="stylesheet" media="all" href="https://dilbert.com/assets/global-icons-2abee59963ce44310efb8533eb0c9ade.css" /> 
+  <link rel="stylesheet" media="all" href="https://dilbert.com/assets/application-6dede5e7ef318bcb02b10df53f928854.css" />
 
   <!--[if lt IE 9]>
-  <link rel="stylesheet" media="all" href="/assets/application-ie-b19be6311cc86eccd58218b4a2cc2461.css" />
+  <link rel="stylesheet" media="all" href="https://dilbert.com/assets/application-ie-eca762be6cbd211efa0204755743f29f.css" />
   <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
   <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
   <![endif]-->
 
-  <script src="/assets/cookies-674b54a8df2e39d7a2b5cad6b0c963fb.js"></script>
+  <script src="https://dilbert.com/assets/cookies-9c14412d4dcf92f1dcc4a15b66c761d0.js"></script>
 
   <!-- Venatus Market Ad-Manager (dilbert.com) -->
 <script>
@@ -70,7 +70,7 @@
 <script async="async" src="https://www.googletagservices.com/tag/js/gpt.js"></script>
 
 <!-- Prebid Wrapper -->
-<script src="/assets/prebid-5fd50d2481154223aa2dff89f8dcf5f3.js" async="async"></script>
+<script src="https://dilbert.com/assets/prebid-9097d35ecd244a565a7029f5741213e7.js" async="async"></script>
 
 <!-- Amazon -->
 <script>
@@ -1063,6 +1063,25 @@
     ]
   };
   dilbert_ads.adSlotConfig['tynt'].breakpoint = findBreakpoint(dilbert_ads.adSlotConfig['tynt'].breakpoints);
+
+
+
+  dilbert_ads.adSlotConfig['venatus'] = {
+      name: 'ventatus',
+      targeting: {
+          'pos': 'venatus',
+          'pv': dilbert_ads.adPageview
+      },
+      breakpoints: [
+          {
+              minWidth: 0,
+              minHeight: 0,
+              sizes: [[1, 1]],
+              bids: []
+          }
+      ]
+  };
+  dilbert_ads.adSlotConfig['venatus'].breakpoint = findBreakpoint(dilbert_ads.adSlotConfig['venatus'].breakpoints);
 </script>
 
 <script>
@@ -1537,7 +1556,7 @@
 <!-- Sharethrough -->
 <script type="text/javascript" src="https://native.sharethrough.com/assets/sfp.js"></script>
 
-  <script src="/assets/application-62aa0c8c69672ba372d3c4de819fc699.js"></script>
+  <script src="https://dilbert.com/assets/application-2a4d1a71eb9e671e29403b0bf84b389b.js"></script>
 
   <!-- Content Experiment JavaScript API client -->
 <script src="//www.google-analytics.com/cx/api.js?experiment=of4I6R6WTsCKu6PXpqZ_7w"></script>
@@ -1615,7 +1634,7 @@ window.cookieconsent_options = {
   readystate: 'interactive'
 };
 </script>
-  <script src="/assets/uu-cookieconsent-4c2e5caf476b47f16c33b7493d1c49ab.js"></script>
+  <script src="https://dilbert.com/assets/uu-cookieconsent-0ed09c0864ee3df9dcdae13db42bc68b.js"></script>
 </head>
 
 <body class="strips" role="document">
@@ -1708,15 +1727,15 @@ window.cookieconsent_options = {
       <a href="" class="btn btn-link pull-right site-header-mobile-link js-toggle-link" data-target=".site-header-mobile-search"><i class="fa fa-search fa-lg" aria-hidden="true"></i><i class="fa fa-times fa-lg" aria-hidden="true"></i> <span class="sr-only">Search</span></a>
     </div>
     <div class="site-header-branding">
-      <span class="logo-container"><a class="logo" title="Dilbert Logo" href="http://dilbert.com/"><img src="/assets/dilbert-logo-4152bd0c31f7de7443b4bc90abd818da.png" alt="Dilbert logo" width="144" height="127" /></a></span>
-      <span class="hidden-xs"><img class="characters-top" alt="" src="/assets/dilbert_character_top-fc9d6f0400f6291f372728c3162ca835.png" width="169" height="107" /></span>
+      <span class="logo-container"><a class="logo" title="Dilbert Logo" href="https://dilbert.com/"><img src="https://dilbert.com/assets/dilbert-logo-a26e5162b32fce74f5806edbd3641d3e.png" alt="Dilbert logo" width="144" height="127" /></a></span>
+      <span class="hidden-xs"><img class="characters-top" alt="" src="https://dilbert.com/assets/dilbert_character_top-d02b7ae50d1faed0320cfe8786ae29b1.png" width="169" height="107" /></span>
     </div>
     <!-- /.site-header-branding -->
     <div class="site-header-nav hidden-xs">
       <nav role="navigation">
         <ul class="nav-main" role="menubar">
           <li role="menuitem" class="nav-main-item active">
-            <a class="nav-main-link" href="http://dilbert.com/">Comics</a>
+            <a class="nav-main-link" href="https://dilbert.com/">Comics</a>
           </li>
           <li role="menuitem" class="nav-main-item ">
             <a class="nav-main-link" href="http://blog.dilbert.com?utm_source=dilbert.com&amp;utm_medium=site&amp;utm_campaign=brand-engagement&amp;utm_content=navigation">Blog</a>
@@ -1796,14 +1815,14 @@ window.cookieconsent_options = {
 
 <div id="out-of-page-slot"></div>
 
-<div class="comic-item-container js_comic_container_2000-01-01" itemType="http://schema.org/CreativeWork" accountablePerson="Andrews McMeel Syndication" creator="Scott Adams" data-itemtype="" data-id="2000-01-01" data-url="http://dilbert.com/strip/2000-01-01" data-image="http://assets.amuniversal.com/bdc8a4d06d6401301d80001dd8b71c47" data-date="January 01, 2000" data-creator="Scott Adams" data-title="Dilbert Comic for 2000-01-01" data-tags="bait and switch,assisting eddie,never see again" data-description="The boss, Wally, Dilbert and a new consultant are in a meeting. The boss says: &quot;I hired the &quot;Bait and Switch&quot; consulting group because they&#39;re so smart.&quot;   The consultant says to the boss while introducing him to a very messy looking man: &quot;I&#39;m assigning Eddie to work on your account. You will never see me again.&quot;   Eddie sits in front of the boss and says: &quot;So, what is it that you do here?&quot;   ">
+<div class="comic-item-container js_comic_container_2000-01-01" itemType="http://schema.org/CreativeWork" accountablePerson="Andrews McMeel Syndication" creator="Scott Adams" data-itemtype="" data-id="2000-01-01" data-url="https://dilbert.com/strip/2000-01-01" data-image="//assets.amuniversal.com/bdc8a4d06d6401301d80001dd8b71c47" data-date="January 01, 2000" data-creator="Scott Adams" data-title="Dilbert Comic for 2000-01-01" data-tags="bait and switch,assisting eddie,never see again" data-description="The boss, Wally, Dilbert and a new consultant are in a meeting. The boss says: &quot;I hired the &quot;Bait and Switch&quot; consulting group because they&#39;re so smart.&quot;   The consultant says to the boss while introducing him to a very messy looking man: &quot;I&#39;m assigning Eddie to work on your account. You will never see me again.&quot;   Eddie sits in front of the boss and says: &quot;So, what is it that you do here?&quot;   ">
   <div class="meta-info-container">
 
 
     <section class="comic-item">
 
       <h1 class="comic-title">
-        <a class="comic-title-link" href="http://dilbert.com/strip/2000-01-01">
+        <a class="comic-title-link" href="https://dilbert.com/strip/2000-01-01">
         <span itemprop="name" class="comic-date-wrapper">
           <date class="comic-title-date" itemProp="datePublished">
             <span>Saturday January 01,</span>
@@ -1821,14 +1840,14 @@ window.cookieconsent_options = {
       </div>
 
       <div class="img-comic-container">
-        <a itemprop="image" class="img-comic-link" href="http://dilbert.com/strip/2000-01-01" title="Click to see the comic strip ">
-          <img class="img-responsive img-comic" width="900" height="266" alt=" - Dilbert by Scott Adams" src="http://assets.amuniversal.com/bdc8a4d06d6401301d80001dd8b71c47" />
+        <a itemprop="image" class="img-comic-link" href="https://dilbert.com/strip/2000-01-01" title="Click to see the comic strip ">
+          <img class="img-responsive img-comic" width="900" height="266" alt=" - Dilbert by Scott Adams" src="//assets.amuniversal.com/bdc8a4d06d6401301d80001dd8b71c47" />
         </a>
         <meta itemprop="isFamilyFriendly" content="true"/>
 
         <div data-src=".js_comic_container_2000-01-01" class="js-amu-social-section">
           <ul class="amu-section-social" role="toolbar">
-            <li class="amu-social-item"><a name="email" class="social-btn social-btn-link js-email" href="mailto:?body=Check%20out%20this%20Dilbert%20Comic.%0D%0A%0D%0Ahttp%3A%2F%2Fwww.dilbert.com%2Fstrip%2F2000-01-01%3Futm_source%3Ddilbert.com%2Fshare-email%26utm_medium%3Demail%26utm_campaign%3Dbrand-loyalty&amp;subject=Dilbert%20by%20Scott%20Adams%2C%202000-01-01">
+            <li class="amu-social-item"><a name="email" class="social-btn social-btn-link js-email" href="mailto:?body=Check%20out%20this%20Dilbert%20Comic.%0D%0A%0D%0A%2F%2Fwww.dilbert.com%2Fstrip%2F2000-01-01%3Futm_source%3Ddilbert.com%2Fshare-email%26utm_medium%3Demail%26utm_campaign%3Dbrand-loyalty&amp;subject=Dilbert%20by%20Scott%20Adams%2C%202000-01-01">
                 <i class="fa fa-envelope fa-fw fa-lg"></i> <span class="sr-only">Email Comic</span>
               </a></li>
             <li class="amu-social-item"><a name="facebook" class="social-btn social-btn-facebook js-facebook share-btn" href="#">
@@ -1838,7 +1857,7 @@ window.cookieconsent_options = {
                 <i class="fa fa-twitter fa-fw fa-lg"></i><span class="sr-only"> Tweet</span>
               </a></li>
             <li class="amu-social-item">
-              <a href="http://dilbert.com/strip/2000-01-01#comments" class="social-link" title="Join the discussion on  Dilbert Comic Strip">
+              <a href="https://dilbert.com/strip/2000-01-01#comments" class="social-link" title="Join the discussion on  Dilbert Comic Strip">
                 <span class="social-link-icon"><i class="fa fa-comments fa-lg fa-fw"></i></span>
                 <span class="social-label-stacked">
                 <span class="social-label-top">Comments</span>
@@ -1866,7 +1885,7 @@ window.cookieconsent_options = {
 	<hr>
 	<form class="form form-inline">
 		<label class="control-label" for="link-2000-01-01">Grab the link:</label>
-		<input class="form-control js-copy-link input-share-link" name="link-2000-01-01" value="http://dilbert.com/strip/2000-01-01">
+		<input class="form-control js-copy-link input-share-link" name="link-2000-01-01" value="https://dilbert.com/strip/2000-01-01">
 	</form>
 </div>
 
@@ -1875,7 +1894,7 @@ window.cookieconsent_options = {
 <div id="js-toggle-element-2000-01-01-variation" data-id="2000-01-01"  class="alert alert-info alert-share js-track-share-toggle">	
 	<form class="form form-inline">
 		<label class="control-label" for="link-2000-01-01">Grab the link:</label>
-		<input class="form-control js-copy-link input-share-link" name="link-2000-01-01" value="http://dilbert.com/strip/2000-01-01">
+		<input class="form-control js-copy-link input-share-link" name="link-2000-01-01" value="https://dilbert.com/strip/2000-01-01">
 	</form>
 </div>
         <div class="meta-info-container">
@@ -1962,12 +1981,12 @@ window.cookieconsent_options = {
     <h3 class="blog-hdr-top"><a href="http://blog.dilbert.com?utm_source=dilbert.com&amp;utm_medium=site&amp;utm_campaign=brand-engagement&amp;utm_content=shelf-space-2-blog">From Scott Adams&#39; Blog</a></h3>
     <div class="blog-item-multiple">
       <div class="media">
-        <a class="link-blended" href="http://blog.dilbert.com/2018/10/28/episode-278-scott-adams-how-the-latest-news-will-influence-the-midterms/?utm_source=dilbert.com&amp;utm_medium=site&amp;utm_campaign=brand-engagement&amp;utm_content=shelf-space-0-blog-title" title="Episode 278 Scott Adams: How the Latest News Will Influence the Midterms by Scott Adams">
+        <a class="link-blended" href="https://blog.dilbert.com/2018/11/16/episode-303-scott-adams-talking-about-robots-and-ai-because-it-must-be-420-somewhere/?utm_source=dilbert.com&amp;utm_medium=site&amp;utm_campaign=brand-engagement&amp;utm_content=shelf-space-0-blog-title" title="Episode 303 Scott Adams: Talking About Robots and AI Because it Must be 4:20 Somewhere by Scott Adams">
           <div class="media-left">
-              <img class="media-object" alt="" src="/assets/avatar_scottadams_128-cb771b677d2b7283b91246aaf3d472e2.png" width="64" height="64" />
+              <img class="media-object" alt="" src="https://dilbert.com/assets/avatar_scottadams_128-9871f105b8fd2f8a28a782b8194564cd.png" width="64" height="64" />
           </div>
           <div class="media-body">
-            <h4 class="media-heading">Episode 278 Scott Adams: How the Latest News Will Influence the Midterms</h4>
+            <h4 class="media-heading">Episode 303 Scott Adams: Talking About Robots and AI Because it Must be 4:20 Somewhere</h4>
             <span class="blog-author">by Scott Adams</span>
           </div>
         </a>
@@ -1975,12 +1994,12 @@ window.cookieconsent_options = {
 
 
       <div class="media">
-        <a class="link-blended" href="http://blog.dilbert.com/2018/10/27/episode-277-scott-adams-cnns-clever-persuasion-that-is-working/?utm_source=dilbert.com&amp;utm_medium=site&amp;utm_campaign=brand-engagement&amp;utm_content=shelf-space-0-blog-title" title="Episode 277 Scott Adams: CNN’s Clever Persuasion That is Working by Scott Adams">
+        <a class="link-blended" href="https://blog.dilbert.com/2018/11/15/episode-302-scott-adams-bipartisanship-blooming-facebook-monkey-attacks-much-more/?utm_source=dilbert.com&amp;utm_medium=site&amp;utm_campaign=brand-engagement&amp;utm_content=shelf-space-0-blog-title" title="Episode 302 Scott Adams: Bipartisanship Blooming, Facebook, Monkey Attacks, Much More by Scott Adams">
           <div class="media-left">
-              <img class="media-object" alt="" src="/assets/avatar_scottadams_128-cb771b677d2b7283b91246aaf3d472e2.png" width="64" height="64" />
+              <img class="media-object" alt="" src="https://dilbert.com/assets/avatar_scottadams_128-9871f105b8fd2f8a28a782b8194564cd.png" width="64" height="64" />
           </div>
           <div class="media-body">
-            <h4 class="media-heading">Episode 277 Scott Adams: CNN’s Clever Persuasion That is Working</h4>
+            <h4 class="media-heading">Episode 302 Scott Adams: Bipartisanship Blooming, Facebook, Monkey Attacks, Much More</h4>
             <span class="blog-author">by Scott Adams</span>
           </div>
         </a>
@@ -1988,12 +2007,12 @@ window.cookieconsent_options = {
 
       
       <div class="media">
-        <a class="link-blended" href="http://blog.dilbert.com/2018/10/27/episode-276-scott-adams-the-nutty-bomber-megyn-kelly-and-midterms/?utm_source=dilbert.com&amp;utm_medium=site&amp;utm_campaign=brand-engagement&amp;utm_content=shelf-space-0-blog-title" title="Episode 276 Scott Adams: The Nutty Bomber, Megyn Kelly, and Midterms by Scott Adams">
+        <a class="link-blended" href="https://blog.dilbert.com/2018/11/14/episode-301-scott-adams-foxnews-supporting-cnn-on-acosta-lawsuit-is-brilliant-but-looks-stupid-to-you/?utm_source=dilbert.com&amp;utm_medium=site&amp;utm_campaign=brand-engagement&amp;utm_content=shelf-space-0-blog-title" title="Episode 301 Scott Adams: FOXNews Supporting CNN on Acosta Lawsuit is Brilliant But Looks Stupid to You by Scott Adams">
           <div class="media-left">
-              <img class="media-object" alt="" src="/assets/avatar_scottadams_128-cb771b677d2b7283b91246aaf3d472e2.png" width="64" height="64" />
+              <img class="media-object" alt="" src="https://dilbert.com/assets/avatar_scottadams_128-9871f105b8fd2f8a28a782b8194564cd.png" width="64" height="64" />
           </div>
           <div class="media-body">
-            <h4 class="media-heading">Episode 276 Scott Adams: The Nutty Bomber, Megyn Kelly, and Midterms</h4>
+            <h4 class="media-heading">Episode 301 Scott Adams: FOXNews Supporting CNN on Acosta Lawsuit is Brilliant But Looks Stupid to You</h4>
             <span class="blog-author">by Scott Adams</span>
           </div>
         </a>
@@ -2056,16 +2075,16 @@ window.cookieconsent_options = {
 
 
 
-<script src="/assets/disqus-fc395c861c8b105ac3a21f4dc49e27e0.js"></script>
+<script src="https://dilbert.com/assets/disqus-bc5c4cd5760ccda50d866b76cd1a3078.js"></script>
 
         </div>
           <footer class="site-footer" role="contentinfo">
 	<ul class="list-inline">
 		<li>Dilbert &copy; 2018, Andrews McMeel Syndication</li>
 		<li> | </li>
-		<li><a href="http://dilbert.com/">Comics</a></li>
+		<li><a href="https://dilbert.com/">Comics</a></li>
 		<li><a href="http://blog.dilbert.com?utm_source=dilbert.com&amp;utm_medium=site&amp;utm_campaign=brand-engagement&amp;utm_content=footer">Blog</a></li>
-		<li><a href="http://dilbert.com/search">Search</a></li>
+		<li><a href="https://dilbert.com/search">Search</a></li>
 		<li><a href="http://blog.dilbert.com/about">About Dilbert</a></li>
 		<li><a href="http://blog.dilbert.com/advertising">Advertising</a></li>
 		<li><a href="http://blog.dilbert.com/contact">Contact</a></li>
@@ -2075,8 +2094,8 @@ window.cookieconsent_options = {
         <li><a class="link-blended" href="http://feed.dilbert.com/dilbert/blog"><i class='fa fa-rss'></i> Blog</a></li>
 		<li><a class="link-blended" target="_blank" href="//www.andrewsmcmeel.com/privacy-policy">Privacy</a></li>
         <li><a class="link-blended" target="_blank" href="//www.andrewsmcmeel.com/privacy-policy">Cookies</a></li>
-		<li><a class="link-blended" href="http://dilbert.com/terms">Terms</a></li>
-		<li><a class="link-blended" href="http://dilbert.com/infringements">Infringements</a></li>
+		<li><a class="link-blended" href="https://dilbert.com/terms">Terms</a></li>
+		<li><a class="link-blended" href="https://dilbert.com/infringements">Infringements</a></li>
 	</ul>
 </footer>
     </div>
@@ -2095,6 +2114,10 @@ window.cookieconsent_options = {
 </script>
     <div class="ad-locked" aria-hidden="true">
   <div id="tynt" class="js-ad" data-ad-type="tynt">
+  </div>
+</div>
+    <div class="ad-venatus" aria-hidden="true">
+  <div id="venatus" class="js-ad" data-ad-type="venatus">
   </div>
 </div>
     <!-- Quantcast Tag -->
@@ -2122,10 +2145,6 @@ window.cookieconsent_options = {
 </noscript>
 <!-- End Quantcast tag -->
 
-    <!-- Beginning of AMU Marketing Silverpop Tracking -->
-    <script src="http://contentz.mkt922.com/lp/static/js/iMAWebCookie.js?4c864741-1542ec78d7c-df4cba773885eb54dfcebd294a039c37&h=www.pages02.net" type="text/javascript"></script>
-    <!-- End of AMU Marketing Silverpop Tracking -->
-
-    <script src="http://dilbert.com/assets/apollo-c5e8f25294103b34cfe9dc32eea36a4a.js?sampling=2&tracker=trackerUU47"></script>
+    <script src="https://dilbert.com/assets/apollo-87e20d4b805344ffb2fbe0adcee1906d.js?sampling=2&tracker=trackerUU47"></script>
 </body>
 </html>
