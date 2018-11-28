@@ -2,6 +2,7 @@ package epsagonawswrapper
 
 import (
 	"crypto/md5"
+	"encoding/hex"
 	"encoding/json"
 	"fmt"
 	"github.com/aws/aws-sdk-go/aws/request"
@@ -14,7 +15,7 @@ import (
 func dynamodbEventDataFactory(r *request.Request, res *protocol.Resource, metadataOnly bool) {
 	inputValue := reflect.ValueOf(r.Params).Elem()
 	tableName, ok := getFieldStringPtr(inputValue, "TableName")
-	if !ok {
+	if ok {
 		res.Name = tableName
 	}
 	handleSpecificOperations := map[string]specificOperationHandler{
@@ -70,7 +71,7 @@ func handleDynamoDBPutItem(r *request.Request, res *protocol.Resource, metadataO
 	}
 	h := md5.New()
 	h.Write(formattedItemStream)
-	res.Metadata["item_hash"] = string(h.Sum(nil))
+	res.Metadata["item_hash"] = hex.EncodeToString(h.Sum(nil))
 }
 
 func handleDynamoDBGetItem(r *request.Request, res *protocol.Resource, metadataOnly bool) {

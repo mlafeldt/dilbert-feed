@@ -7,6 +7,7 @@ import (
 	"github.com/aws/aws-lambda-go/lambdacontext"
 	"github.com/epsagon/epsagon-go/protocol"
 	"os"
+	"runtime/debug"
 	"strconv"
 	"strings"
 )
@@ -38,6 +39,14 @@ type preInvokeData struct {
 	StartTime          float64
 }
 
+type invocationData struct {
+	ExceptionInfo *protocol.Exception
+	errorStatus protocol.ErrorCode
+	result interface{}
+	err error
+	thrownError interface{}
+}
+
 func getAWSAccount(lc *lambdacontext.LambdaContext) string {
 	arnParts := strings.Split(lc.InvokedFunctionArn, ":")
 	if len(arnParts) >= 4 {
@@ -49,6 +58,7 @@ func getAWSAccount(lc *lambdacontext.LambdaContext) string {
 func (handler *epsagonLambdaWrapper) preInvokeOps(
 	ctx context.Context, payload json.RawMessage) (info *preInvokeData) {
 	startTime := GetTimestamp()
+	metadata := map[string]string{}
 	lc, ok := lambdacontext.FromContext(ctx)
 	if !ok {
 		lc = &lambdacontext.LambdaContext{}
@@ -57,17 +67,15 @@ func (handler *epsagonLambdaWrapper) preInvokeOps(
 		if r := recover(); r != nil {
 			AddExceptionTypeAndMessage("LambdaWrapper",
 				fmt.Sprintf("preInvokeOps:%+v", r))
-		}
-		info = &preInvokeData{
-			LambdaContext:      lc,
-			StartTime:          startTime,
-			InvocationMetadata: map[string]string{},
+			info = &preInvokeData{
+				LambdaContext:      lc,
+				StartTime:          startTime,
+				InvocationMetadata: metadata,
+			}
 		}
 	}()
 
-	addLambdaTrigger(payload, handler.config.MetadataOnly, triggerFactories)
-
-	metadata := map[string]string{
+	metadata = map[string]string{
 		"log_stream_name":  lambdacontext.LogStreamName,
 		"log_group_name":   lambdacontext.LogGroupName,
 		"function_version": lambdacontext.FunctionVersion,
@@ -78,6 +86,8 @@ func (handler *epsagonLambdaWrapper) preInvokeOps(
 	}
 	coldStart = false
 
+	addLambdaTrigger(payload, handler.config.MetadataOnly, triggerFactories)
+
 	return &preInvokeData{
 		InvocationMetadata: metadata,
 		LambdaContext:      lc,
@@ -85,7 +95,9 @@ func (handler *epsagonLambdaWrapper) preInvokeOps(
 	}
 }
 
-func (handler *epsagonLambdaWrapper) postInvokeOps(errorStatus protocol.ErrorCode, preInvokeInfo *preInvokeData) {
+func (handler *epsagonLambdaWrapper) postInvokeOps(
+	preInvokeInfo *preInvokeData,
+	invokeInfo *invocationData) {
 	defer func() {
 		if r := recover(); r != nil {
 			AddExceptionTypeAndMessage("LambdaWrapper", fmt.Sprintf("postInvokeOps:%+v", r))
@@ -94,7 +106,8 @@ func (handler *epsagonLambdaWrapper) postInvokeOps(errorStatus protocol.ErrorCod
 
 	endTime := GetTimestamp()
 	duration := endTime - preInvokeInfo.StartTime
-	AddEvent(&protocol.Event{
+
+	lambdaEvent := &protocol.Event{
 		Id:        preInvokeInfo.LambdaContext.AwsRequestID,
 		StartTime: preInvokeInfo.StartTime,
 		Resource: &protocol.Resource{
@@ -105,12 +118,20 @@ func (handler *epsagonLambdaWrapper) postInvokeOps(errorStatus protocol.ErrorCod
 		},
 		Origin:    "runner",
 		Duration:  duration,
-		ErrorCode: errorStatus,
-	})
+		ErrorCode: invokeInfo.errorStatus,
+		Exception: invokeInfo.ExceptionInfo,
+	}
+
+	if !handler.config.MetadataOnly {
+		lambdaEvent.Resource.Metadata["return_value"] = fmt.Sprintf("%+v", invokeInfo.result)
+	}
+
+	AddEvent(lambdaEvent)
 }
 
 // Invoke calls the handler, and creates a tracer for that duration.
 func (handler *epsagonLambdaWrapper) Invoke(ctx context.Context, payload json.RawMessage) (result interface{}, err error) {
+	invokeInfo := &invocationData {}
 	handler.invoked = false
 	handler.invoking = false
 	defer func() {
@@ -121,25 +142,47 @@ func (handler *epsagonLambdaWrapper) Invoke(ctx context.Context, payload json.Ra
 		if !handler.invoked {
 			result, err = handler.handler(ctx, payload)
 		}
+		if invokeInfo.thrownError != nil {
+			panic(invokeInfo.thrownError)
+		}
 	}()
 
 	handler.createTracer()
 	defer StopTracer()
-	preInvokeInfo := handler.preInvokeOps(ctx, payload)
 
-	errorStatus := protocol.ErrorCode_OK
+	preInvokeInfo := handler.preInvokeOps(ctx, payload)
+	handler.InvokeClientLambda(ctx, payload, invokeInfo)
+	handler.postInvokeOps(preInvokeInfo, invokeInfo)
+
+	return invokeInfo.result, invokeInfo.err
+}
+
+func (handler *epsagonLambdaWrapper) InvokeClientLambda(
+	ctx context.Context, payload json.RawMessage, invokeInfo *invocationData) {
+	defer func() {
+		invokeInfo.thrownError = recover()
+		if invokeInfo.thrownError != nil {
+			invokeInfo.ExceptionInfo = &protocol.Exception{
+				Type: "Runtime Error",
+				Message: fmt.Sprintf("%v", invokeInfo.thrownError),
+				Traceback: string(debug.Stack()),
+				Time:      GetTimestamp(),
+			}
+			invokeInfo.errorStatus = protocol.ErrorCode_EXCEPTION
+		}
+	}()
+
+	invokeInfo.errorStatus = protocol.ErrorCode_OK
 	// calling the actual function:
 	handler.invoked = true
 	handler.invoking = true
-	result, err = handler.handler(ctx, payload)
+	result, err := handler.handler(ctx, payload)
 	handler.invoking = false
 	if err != nil {
-		errorStatus = protocol.ErrorCode_ERROR
+		invokeInfo.errorStatus = protocol.ErrorCode_ERROR
 	}
-
-	handler.postInvokeOps(errorStatus, preInvokeInfo)
-
-	return result, err
+	invokeInfo.result = result
+	invokeInfo.err = err
 }
 
 // WrapLambdaHandler wraps a generic handler for lambda function with epsagon tracing

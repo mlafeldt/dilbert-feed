@@ -85,13 +85,13 @@ func (tracer *epsagonTracer) sendTraces() {
 }
 
 func (tracer *epsagonTracer) getTraceReader() (io.Reader, error) {
-	version := runtime.Version()
+	version := "go " + runtime.Version()
 	trace := protocol.Trace{
 		AppName:    tracer.Config.ApplicationName,
 		Token:      tracer.Config.Token,
 		Events:     tracer.events,
 		Exceptions: tracer.exceptions,
-		Version:    "0.0.1",
+		Version:    "1.0.0",
 		Platform:   version,
 	}
 	if tracer.Config.Debug {
@@ -212,6 +212,11 @@ func AddEvent(event *protocol.Event) {
 
 // AddException adds an exception to the tracer
 func AddException(exception *protocol.Exception) {
+	defer func() {
+		if r := recover(); r != nil {
+			log.Println("Epsagon: Failed to add exception")
+		}
+	}()
 	if GlobalTracer == nil || GlobalTracer.Stopped() {
 		// TODO
 		log.Println("The tracer is not initialized!")

@@ -12,7 +12,7 @@ import (
 func s3EventDataFactory(r *request.Request, res *protocol.Resource, metadataOnly bool) {
 	inputValue := reflect.ValueOf(r.Params).Elem()
 	bucketName, ok := getFieldStringPtr(inputValue, "Bucket")
-	if !ok {
+	if ok {
 		res.Name = bucketName
 	}
 	handleSpecificOperations := map[string]specificOperationHandler{

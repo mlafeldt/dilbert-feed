@@ -18,7 +18,7 @@
   version = "v1.0.0"
 
 [[projects]]
-  digest = "1:c73c6437450db99ac8dce9d975f9981aafa2018d5611741157466d04306be02e"
+  digest = "1:f205c28751705b41c626b0c2640e2ca6bb4eb299a9fe9b9548a907f2e2bf9c98"
   name = "github.com/aws/aws-lambda-go"
   packages = [
     "events",
@@ -27,11 +27,11 @@
     "lambdacontext",
   ]
   pruneopts = "NUT"
-  revision = "2d482ef09017ae953b1e8d5a6ddac5b696663a3c"
-  version = "v1.6.0"
+  revision = "fb8f88d824489a878aee1e0badde7d8e129f8767"
+  version = "v1.7.0"
 
 [[projects]]
-  digest = "1:e7d837dac780ffaf3904c1c32282eccb3b79af3b24254ee912f3b3e6fb40da3e"
+  digest = "1:d585f34ce6de08f50d6fc40b3e6e667c512d471d20625ff976e943e0688f716b"
   name = "github.com/aws/aws-sdk-go"
   packages = [
     "aws",
@@ -44,6 +44,7 @@
     "aws/credentials/ec2rolecreds",
     "aws/credentials/endpointcreds",
     "aws/credentials/stscreds",
+    "aws/crr",
     "aws/csm",
     "aws/defaults",
     "aws/ec2metadata",
@@ -74,12 +75,12 @@
     "service/sts",
   ]
   pruneopts = "NUT"
-  revision = "5ebc7a404e942062fd3aa7ff50975498716eb990"
-  version = "v1.15.78"
+  revision = "08df30d135d32f1eb21bb7754eb042aeca521a4b"
+  version = "v1.15.84"
 
 [[projects]]
   branch = "master"
-  digest = "1:c336a318242560540085a73c03c2da266eb66ddfcfbadb25f98623a85829a3bc"
+  digest = "1:d746a329ecb25da88325590342b0d374952856b0a749f1918c8a444e99122837"
   name = "github.com/epsagon/epsagon-go"
   packages = [
     "epsagon",
@@ -87,7 +88,7 @@
     "wrappers/aws/aws-sdk-go/aws",
   ]
   pruneopts = "NUT"
-  revision = "57bcfa50514ffc6e85267f7ef98b5db55014325d"
+  revision = "ac67348ba2336473ce9e2c7dfa2d7fb110c29d63"
 
 [[projects]]
   digest = "1:361a03699ec95efff8f30a314629d0d8b4646df8cafa1b9edbb3572db70e070d"

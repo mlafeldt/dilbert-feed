@@ -15,8 +15,8 @@
   version = "v1.*"
 
 [[constraint]]
-  branch = "master"
   name = "github.com/epsagon/epsagon-go"
+  branch = "master"
 
 [prune]
   go-tests = true

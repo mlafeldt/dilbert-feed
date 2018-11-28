@@ -2,10 +2,13 @@ package epsagon
 
 import (
 	"bytes"
+	"crypto/md5"
+	"encoding/hex"
 	"encoding/json"
 	"fmt"
 	lambdaEvents "github.com/aws/aws-lambda-go/events"
 	lambdaContext "github.com/aws/aws-lambda-go/lambdacontext"
+	"github.com/aws/aws-sdk-go/service/dynamodb"
 	"github.com/epsagon/epsagon-go/protocol"
 	"github.com/satori/go.uuid"
 	"reflect"
@@ -233,6 +236,78 @@ func triggerSQSEvent(rawEvent interface{}, metadataOnly bool) *protocol.Event {
 	return triggerEvent
 }
 
+func unmarshalToStringMap(dav map[string]lambdaEvents.DynamoDBAttributeValue) (map[string]string, error) {
+	dbAttrMap := make(map[string]*dynamodb.AttributeValue)
+	for k, v := range dav {
+		var dbAttr dynamodb.AttributeValue
+		bytes, marshalErr := v.MarshalJSON(); if marshalErr != nil {
+			return nil, marshalErr
+		}
+		json.Unmarshal(bytes, &dbAttr)
+		dbAttrMap[k] = &dbAttr
+	}
+	serializedItems := make(map[string]string)
+	for k, v := range dbAttrMap {
+		serializedItems[k] = v.String()
+	}
+	return serializedItems, nil
+}
+
+func triggerDynamoDBEvent(rawEvent interface{}, metadataOnly bool) *protocol.Event {
+	event, ok := rawEvent.(lambdaEvents.DynamoDBEvent)
+	if !ok {
+		AddException(&protocol.Exception{
+			Type: "trigger-creation",
+			Message: fmt.Sprintf(
+				"failed to convert rawEvent to lambdaEvents.DynamoDBEvent %v",
+				rawEvent),
+			Time: GetTimestamp(),
+		})
+		return nil
+	}
+
+	eventSourceArnSlice := strings.Split(event.Records[0].EventSourceArn, "/")
+
+	triggerEvent := &protocol.Event{
+		Id:         event.Records[0].EventID,
+		Origin:    "trigger",
+		StartTime: GetTimestamp(),
+		Resource: &protocol.Resource{
+			Name:      eventSourceArnSlice[len(eventSourceArnSlice)-3],
+			Type:      "dynamodb",
+			Operation: event.Records[0].EventName,
+			Metadata: map[string]string{
+				"region": event.Records[0].AWSRegion,
+				"sequence_number": event.Records[0].Change.SequenceNumber,
+				"item_hash": "",
+			},
+		},
+	}
+
+	itemMap, err := unmarshalToStringMap(event.Records[0].Change.NewImage)
+
+	if err != nil {
+		return triggerEvent
+	}
+
+	itemBytes, jsonError := json.Marshal(itemMap)
+
+	if jsonError != nil {
+		return triggerEvent
+	}
+
+	h := md5.New()
+	h.Write(itemBytes)
+	triggerEvent.Resource.Metadata["item_hash"] = hex.EncodeToString(h.Sum(nil))
+
+	if !metadataOnly {
+		triggerEvent.Resource.Metadata["New Image"] = string(itemBytes)
+	}
+
+
+	return triggerEvent
+}
+
 func triggerJSONEvent(rawEvent json.RawMessage, metadataOnly bool) *protocol.Event {
 	triggerEvent := &protocol.Event{
 		Id: uuid.NewV4().String(),
@@ -280,6 +355,10 @@ var (
 		"aws:sqs": {
 			EventType: reflect.TypeOf(lambdaEvents.SQSEvent{}),
 			Factory:   triggerSQSEvent,
+		},
+		"aws:dynamodb": {
+			EventType: 	reflect.TypeOf(lambdaEvents.DynamoDBEvent{}),
+			Factory:	triggerDynamoDBEvent,
 		},
 	}
 )
@@ -344,7 +423,6 @@ func addLambdaTrigger(
 	metadataOnly bool,
 	triggerFactories map[string]factoryAndType,
 	) {
-
 	var triggerEvent *protocol.Event
 
 	triggerSource := guessTriggerSource(payload)
