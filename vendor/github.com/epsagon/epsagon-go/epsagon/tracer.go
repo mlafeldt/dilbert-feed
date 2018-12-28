@@ -148,9 +148,9 @@ func fillConfigDefaults(config *Config) {
 		} else {
 			region := os.Getenv("AWS_REGION")
 			if len(region) != 0 {
-				config.CollectorURL = fmt.Sprintf("http://%s.tc.epsagon.com", region)
+				config.CollectorURL = fmt.Sprintf("https://%s.tc.epsagon.com", region)
 			} else {
-				config.CollectorURL = "http://us-east-1.tc.epsagon.com"
+				config.CollectorURL = "https://us-east-1.tc.epsagon.com"
 			}
 		}
 		if config.Debug {

@@ -18,7 +18,7 @@
   version = "v1.0.0"
 
 [[projects]]
-  digest = "1:f205c28751705b41c626b0c2640e2ca6bb4eb299a9fe9b9548a907f2e2bf9c98"
+  digest = "1:f2660136497661639434a708dcdc0aee0b5961b05863e750ac311b1292608a4d"
   name = "github.com/aws/aws-lambda-go"
   packages = [
     "events",
@@ -27,11 +27,11 @@
     "lambdacontext",
   ]
   pruneopts = "NUT"
-  revision = "fb8f88d824489a878aee1e0badde7d8e129f8767"
-  version = "v1.7.0"
+  revision = "9e3676ee8ca83aee500682f382e10b9d03660093"
+  version = "v1.8.0"
 
 [[projects]]
-  digest = "1:d585f34ce6de08f50d6fc40b3e6e667c512d471d20625ff976e943e0688f716b"
+  digest = "1:a24ef973ae97549b29ee42cb7b356e652a97df216c3d07df993a3ec8c1da4dcf"
   name = "github.com/aws/aws-sdk-go"
   packages = [
     "aws",
@@ -43,6 +43,7 @@
     "aws/credentials",
     "aws/credentials/ec2rolecreds",
     "aws/credentials/endpointcreds",
+    "aws/credentials/processcreds",
     "aws/credentials/stscreds",
     "aws/crr",
     "aws/csm",
@@ -75,12 +76,12 @@
     "service/sts",
   ]
   pruneopts = "NUT"
-  revision = "08df30d135d32f1eb21bb7754eb042aeca521a4b"
-  version = "v1.15.84"
+  revision = "3991042237b45cf58c9d5f34295942d5533c28c6"
+  version = "v1.16.11"
 
 [[projects]]
   branch = "master"
-  digest = "1:d746a329ecb25da88325590342b0d374952856b0a749f1918c8a444e99122837"
+  digest = "1:9315e39462195600d3ae291fbf34aacddc4793c609421885de908e912719ba13"
   name = "github.com/epsagon/epsagon-go"
   packages = [
     "epsagon",
@@ -88,7 +89,7 @@
     "wrappers/aws/aws-sdk-go/aws",
   ]
   pruneopts = "NUT"
-  revision = "ac67348ba2336473ce9e2c7dfa2d7fb110c29d63"
+  revision = "696231cfc5c402b93e3b4d2d1395af096b0209e6"
 
 [[projects]]
   digest = "1:361a03699ec95efff8f30a314629d0d8b4646df8cafa1b9edbb3572db70e070d"
@@ -116,11 +117,11 @@
   version = "v0.2.0"
 
 [[projects]]
-  digest = "1:ac6d01547ec4f7f673311b4663909269bfb8249952de3279799289467837c3cc"
+  digest = "1:1f2aebae7e7c856562355ec0198d8ca2fa222fb05e5b1b66632a1fce39631885"
   name = "github.com/jmespath/go-jmespath"
   packages = ["."]
   pruneopts = "NUT"
-  revision = "0b12d6b5"
+  revision = "c2b33e84"
 
 [[projects]]
   digest = "1:b8870bf2606dca65dc382f4cb8b7a434f17ff36a915451bda12788e9620be368"
@@ -147,7 +148,7 @@
     "html/atom",
   ]
   pruneopts = "NUT"
-  revision = "adae6a3d119ae4890b46832a2e88a95adc62b8e7"
+  revision = "927f97764cc334a6575f4b7a1584a147864d5723"
 
 [solve-meta]
   analyzer-name = "dep"
