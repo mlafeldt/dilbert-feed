@@ -42,6 +42,12 @@ functions:
         Fn::GetAtt: [Bucket, DomainName]
     package:
       include: [bin/gen-feed]
+  heartbeat:
+    handler: bin/heartbeat
+    environment:
+      HEARTBEAT_ENDPOINT: https://hc-ping.com/22916110-70c7-4071-bf02-919e210da7c4
+    package:
+      include: [bin/heartbeat]
 
 resources:
   Resources:

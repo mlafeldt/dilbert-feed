@@ -32,6 +32,12 @@ resource "aws_sfn_state_machine" "state_machine" {
           "BackoffRate": 2.0
         }
       ],
+      "Next": "Heartbeat"
+    },
+    "Heartbeat": {
+      "Type": "Task",
+      "Resource": "${data.aws_lambda_function.heartbeat.arn}",
+      "ResultPath": "$.heartbeat",
       "End": true
     }
   }
@@ -74,7 +80,8 @@ resource "aws_iam_role_policy" "state_machine" {
       ],
       "Resource": [
         "${data.aws_lambda_function.get_strip.arn}",
-        "${data.aws_lambda_function.gen_feed.arn}"
+        "${data.aws_lambda_function.gen_feed.arn}",
+        "${data.aws_lambda_function.heartbeat.arn}"
       ]
     }
   ]
