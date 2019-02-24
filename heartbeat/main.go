@@ -3,6 +3,7 @@ package main
 import (
 	"net/http"
 	"os"
+	"time"
 
 	"github.com/aws/aws-lambda-go/lambda"
 )
@@ -19,22 +20,24 @@ func main() {
 }
 
 func handler(input Input) (*Output, error) {
-	url := os.Getenv("HEARTBEAT_ENDPOINT")
+	endpoint := os.Getenv("HEARTBEAT_ENDPOINT")
 
-	req, err := http.NewRequest("GET", url, nil)
+	req, err := http.NewRequest("GET", endpoint, nil)
 	if err != nil {
 		return nil, err
 	}
 	req.Header.Add("User-Agent", "dilbert-feed")
 
-	resp, err := http.DefaultClient.Do(req)
+	client := http.Client{Timeout: 5 * time.Second}
+
+	resp, err := client.Do(req)
 	if err != nil {
 		return nil, err
 	}
 	defer resp.Body.Close()
 
 	return &Output{
-		Endpoint: url,
+		Endpoint: endpoint,
 		Status:   resp.Status,
 	}, nil
 }
