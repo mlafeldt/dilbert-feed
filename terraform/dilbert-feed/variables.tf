@@ -2,6 +2,12 @@ variable "service" {
   default = "dilbert-feed"
 }
 
-variable "stage" {}
+variable "update_schedule" {
+  default = "cron(0 6 * * ? *)"
+}
 
-variable "update_schedule" {}
+variable "heartbeat_schedule" {
+  default = "0 6 * * *"
+}
+
+variable "stage" {}
