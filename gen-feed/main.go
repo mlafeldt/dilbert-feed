@@ -7,7 +7,6 @@ import (
 	"time"
 
 	"github.com/aws/aws-lambda-go/lambda"
-	"github.com/epsagon/epsagon-go/epsagon"
 	"github.com/kelseyhightower/envconfig"
 )
 
@@ -25,8 +24,7 @@ type Output struct {
 }
 
 func main() {
-	lambda.Start(epsagon.WrapLambdaHandler(
-		&epsagon.Config{ApplicationName: "dilbert-feed"}, handler))
+	lambda.Start(handler)
 }
 
 func handler(input Input) (*Output, error) {

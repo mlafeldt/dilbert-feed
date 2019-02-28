@@ -9,7 +9,6 @@ import (
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/s3/s3manager"
-	epsagonaws "github.com/epsagon/epsagon-go/wrappers/aws/aws-sdk-go/aws"
 )
 
 const feedTemplate = `<rss version="2.0">
@@ -60,7 +59,6 @@ func uploadFeed(r io.Reader, bucketName, feedPath string) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	sess = epsagonaws.WrapSession(sess)
 
 	upload, err := s3manager.NewUploader(sess).Upload(&s3manager.UploadInput{
 		Bucket:      aws.String(bucketName),
