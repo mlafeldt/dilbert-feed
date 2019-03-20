@@ -21,6 +21,11 @@ const titleSuffix = "- Dilbert by Scott Adams"
 
 var baseURL = "http://dilbert.com"
 
+// SetBaseURL overrides the base URL for testing.
+func SetBaseURL(url string) {
+	baseURL = url
+}
+
 // NewComic returns the Dilbert comic strip for the given date.
 func NewComic(date string) (*Comic, error) {
 	if date == "" {
