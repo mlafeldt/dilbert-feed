@@ -14,13 +14,13 @@ func TestNewComic(t *testing.T) {
 	baseURL = ts.URL
 
 	testdata := []*Comic{
-		&Comic{
+		{
 			Date:     "2000-01-01",
 			Title:    "",
 			ImageURL: "https://assets.amuniversal.com/bdc8a4d06d6401301d80001dd8b71c47",
 			StripURL: baseURL + "/strip/2000-01-01",
 		},
-		&Comic{
+		{
 			Date:     "2018-10-30",
 			Title:    "Intentionally Underbidding",
 			ImageURL: "https://assets.amuniversal.com/cda546d0a88c01365b26005056a9545d",
