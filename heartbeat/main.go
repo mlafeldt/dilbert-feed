@@ -8,8 +8,10 @@ import (
 	"github.com/aws/aws-lambda-go/lambda"
 )
 
+// Input is the input passed to the Lambda function.
 type Input struct{}
 
+// Output is the output returned by the Lambda function.
 type Output struct {
 	Endpoint string `json:"endpoint"`
 	Status   string `json:"status"`
