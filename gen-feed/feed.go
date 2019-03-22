@@ -3,55 +3,36 @@ package main
 import (
 	"fmt"
 	"io"
-	"text/template"
 	"time"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/s3/s3manager"
+	"github.com/gorilla/feeds"
 )
 
-const feedTemplate = `<rss version="2.0">
-  <channel>
-    <title>Dilbert</title>
-    <link>http://dilbert.com</link>
-    <description>Dilbert Daily Strip</description>
-    {{- range . }}
-    <item>
-      <title>Dilbert - {{ .Date }}</title>
-      <link>{{ .ImageURL }}</link>
-      <guid>{{ .ImageURL }}</guid>
-      <description>
-        <![CDATA[
-          <img src="{{ .ImageURL }}">
-        ]]>
-      </description>
-    </item>
-    {{- end }}
-  </channel>
-</rss>
-`
-
-type feedItem struct {
-	Date     string
-	ImageURL string
-}
-
 func generateFeed(w io.Writer, startDate time.Time, feedLength int, baseURL string) error {
-	var items []feedItem
+	feed := &feeds.Feed{
+		Title:       "Dilbert",
+		Link:        &feeds.Link{Href: "http://dilbert.com"},
+		Description: "Dilbert Daily Strip",
+	}
+
 	for i := 0; i < feedLength; i++ {
 		day := startDate.AddDate(0, 0, -i)
 		date := fmt.Sprintf("%d-%02d-%02d", day.Year(), day.Month(), day.Day())
 		url := fmt.Sprintf("%s%s.gif", baseURL, date)
-		items = append(items, feedItem{Date: date, ImageURL: url})
+
+		feed.Add(&feeds.Item{
+			Title:       fmt.Sprintf("Dilbert - %s", date),
+			Link:        &feeds.Link{Href: url},
+			Description: fmt.Sprintf(`<img src="%s">`, url),
+			Id:          url,
+			Created:     day,
+		})
 	}
 
-	t, err := template.New("feed").Parse(feedTemplate)
-	if err != nil {
-		return err
-	}
-
-	return t.Execute(w, items)
+	return feed.WriteRss(w)
 }
 
 func uploadFeed(r io.Reader, bucketName, feedPath string) (string, error) {
