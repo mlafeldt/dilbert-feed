@@ -11,7 +11,7 @@ import (
 )
 
 const (
-	defaultFeedPath   = "v0/rss.xml"
+	defaultFeedPath   = "v1/rss.xml"
 	defaultFeedLength = 30
 )
 
