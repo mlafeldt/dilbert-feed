@@ -19,7 +19,7 @@ func generateFeed(w io.Writer, startDate time.Time, feedLength int, baseURL stri
 	}
 
 	for i := 0; i < feedLength; i++ {
-		day := startDate.AddDate(0, 0, -i)
+		day := startDate.AddDate(0, 0, -i).Truncate(24 * time.Hour)
 		date := fmt.Sprintf("%d-%02d-%02d", day.Year(), day.Month(), day.Day())
 		url := fmt.Sprintf("%s%s.gif", baseURL, date)
 
