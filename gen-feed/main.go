@@ -38,9 +38,11 @@ func handler(input Input) (*Output, error) {
 	}
 	log.Printf("[DEBUG] env = %+v", env)
 
-	now := time.Now()
-	baseURL := fmt.Sprintf("https://%s/%s", env.DomainName, env.BucketPrefix)
-	var buf bytes.Buffer
+	var (
+		now     = time.Now()
+		baseURL = fmt.Sprintf("https://%s/%s", env.DomainName, env.BucketPrefix)
+		buf     bytes.Buffer
+	)
 
 	log.Printf("[INFO] Generating feed for date %s ...", now.Format(time.RFC3339))
 	if err := generateFeed(&buf, now, defaultFeedLength, baseURL); err != nil {
