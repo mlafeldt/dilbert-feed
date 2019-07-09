@@ -68,6 +68,10 @@ func handler(input Input) (*Output, error) {
 	}
 	defer resp.Body.Close()
 
+	if resp.StatusCode != http.StatusOK {
+		return nil, fmt.Errorf("HTTP error: %s", resp.Status)
+	}
+
 	stripPath := fmt.Sprintf("%s%s.gif", env.BucketPrefix, comic.Date)
 	stripURL, err := uploadStrip(resp.Body, env.BucketName, stripPath)
 	if err != nil {
