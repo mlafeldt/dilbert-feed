@@ -3,7 +3,7 @@ service: dilbert-feed
 provider:
   name: aws
   region: ${env:AWS_REGION}
-  stage: production
+  stage: ${opt:stage, 'dev'}
   runtime: go1.x
   memorySize: 128
   timeout: 30
@@ -43,7 +43,7 @@ functions:
   heartbeat:
     handler: bin/heartbeat
     environment:
-      HEARTBEAT_ENDPOINT: https://hc-ping.com/22916110-70c7-4071-bf02-919e210da7c4
+      HEARTBEAT_ENDPOINT: ${file(${self:provider.stage}.yml):heartbeat_endpoint}
     package:
       include: [bin/heartbeat]
 
@@ -53,7 +53,7 @@ resources:
       Type: AWS::S3::Bucket
       Properties:
         AccessControl: BucketOwnerFullControl
-        BucketName: ${self:service}
+        BucketName: ${file(${self:provider.stage}.yml):bucket_name}
         BucketEncryption:
           ServerSideEncryptionConfiguration:
             - ServerSideEncryptionByDefault:
@@ -87,7 +87,7 @@ resources:
       Type: AWS::S3::Bucket
       Properties:
         AccessControl: LogDeliveryWrite
-        BucketName: ${self:service}-logs
+        BucketName: ${file(${self:provider.stage}.yml):log_bucket_name}
         BucketEncryption:
           ServerSideEncryptionConfiguration:
             - ServerSideEncryptionByDefault:

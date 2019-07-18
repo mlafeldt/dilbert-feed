@@ -1,8 +1,12 @@
-ENV     = production
+ENV     = dev
 FUNCS   = $(subst /,,$(dir $(wildcard */main.go)))
 SERVICE = $(shell awk '/^service:/ {print $$2}' serverless.yml)
 
-production: deploy
+dev: ENV=dev
+dev: deploy
+
+prod: ENV=prod
+prod: deploy
 
 deploy: test build
 	serverless deploy --stage $(ENV) --verbose

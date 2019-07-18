@@ -1,0 +1,3 @@
+bucket_name: dilbert-feed-dev
+log_bucket_name: dilbert-feed-dev-logs
+heartbeat_endpoint: https://hc-ping.com/07321d8b-251b-4cf8-aaec-73e152eee601
