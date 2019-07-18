@@ -36,6 +36,9 @@ resource "aws_sfn_state_machine" "state_machine" {
     },
     "Heartbeat": {
       "Type": "Task",
+      "Parameters": {
+        "endpoint": "https://hc-ping.com/${healthchecksio_check.heartbeat.id}"
+      },
       "Resource": "${data.aws_lambda_function.heartbeat.arn}",
       "ResultPath": "$.heartbeat",
       "End": true

@@ -42,8 +42,6 @@ functions:
       include: [bin/gen-feed]
   heartbeat:
     handler: bin/heartbeat
-    environment:
-      HEARTBEAT_ENDPOINT: ${file(${self:provider.stage}.yml):heartbeat_endpoint}
     package:
       include: [bin/heartbeat]
 

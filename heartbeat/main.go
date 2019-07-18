@@ -1,15 +1,17 @@
 package main
 
 import (
+	"errors"
 	"net/http"
-	"os"
 	"time"
 
 	"github.com/aws/aws-lambda-go/lambda"
 )
 
 // Input is the input passed to the Lambda function.
-type Input struct{}
+type Input struct {
+	Endpoint string `json:"endpoint"`
+}
 
 // Output is the output returned by the Lambda function.
 type Output struct {
@@ -22,9 +24,11 @@ func main() {
 }
 
 func handler(input Input) (*Output, error) {
-	endpoint := os.Getenv("HEARTBEAT_ENDPOINT")
+	if input.Endpoint == "" {
+		return nil, errors.New("endpoint must be set")
+	}
 
-	req, err := http.NewRequest("GET", endpoint, nil)
+	req, err := http.NewRequest("GET", input.Endpoint, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -39,7 +43,7 @@ func handler(input Input) (*Output, error) {
 	defer resp.Body.Close()
 
 	return &Output{
-		Endpoint: endpoint,
+		Endpoint: input.Endpoint,
 		Status:   resp.Status,
 	}, nil
 }
