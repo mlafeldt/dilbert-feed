@@ -8,7 +8,7 @@ resource "aws_sfn_state_machine" "state_machine" {
   "States": {
     "GetStrip": {
       "Type": "Task",
-      "Resource": "${data.aws_lambda_function.get_strip.arn}",
+      "Resource": "${local.get_strip_func}",
       "ResultPath": "$.strip",
       "Retry": [
         {
@@ -22,7 +22,7 @@ resource "aws_sfn_state_machine" "state_machine" {
     },
     "GenFeed": {
       "Type": "Task",
-      "Resource": "${data.aws_lambda_function.gen_feed.arn}",
+      "Resource": "${local.gen_feed_func}",
       "ResultPath": "$.feed",
       "Retry": [
         {
@@ -67,7 +67,7 @@ resource "aws_sfn_state_machine" "state_machine" {
       "Parameters": {
         "endpoint": "https://hc-ping.com/${healthchecksio_check.heartbeat.id}"
       },
-      "Resource": "${data.aws_lambda_function.heartbeat.arn}",
+      "Resource": "${local.heartbeat_func}",
       "ResultPath": "$.heartbeat",
       "Retry": [
         {
@@ -118,9 +118,9 @@ resource "aws_iam_role_policy" "state_machine" {
         "lambda:InvokeFunction"
       ],
       "Resource": [
-        "${data.aws_lambda_function.get_strip.arn}",
-        "${data.aws_lambda_function.gen_feed.arn}",
-        "${data.aws_lambda_function.heartbeat.arn}"
+        "${local.get_strip_func}",
+        "${local.gen_feed_func}",
+        "${local.heartbeat_func}"
       ]
     },
     {

@@ -1,14 +1,9 @@
-data "aws_lambda_function" "get_strip" {
-  function_name = "${var.service}-${var.stage}-get-strip"
-  qualifier     = ""
-}
+data "aws_region" "current" {}
+data "aws_caller_identity" "current" {}
 
-data "aws_lambda_function" "gen_feed" {
-  function_name = "${var.service}-${var.stage}-gen-feed"
-  qualifier     = ""
-}
-
-data "aws_lambda_function" "heartbeat" {
-  function_name = "${var.service}-${var.stage}-heartbeat"
-  qualifier     = ""
+locals {
+  func_prefix    = "arn:aws:lambda:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:function:${var.service}-${var.stage}-"
+  get_strip_func = "${local.func_prefix}get-strip"
+  gen_feed_func  = "${local.func_prefix}gen-feed"
+  heartbeat_func = "${local.func_prefix}heartbeat"
 }
