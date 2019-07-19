@@ -1,6 +1,6 @@
 resource "aws_cloudwatch_event_rule" "cron" {
   name                = "${var.service}-${var.stage}-cron"
-  description         = "Update Dilbert feed every morning"
+  description         = "Update Dilbert feed"
   schedule_expression = "${var.update_schedule}"
 }
 
