@@ -27,7 +27,7 @@ resource "aws_sfn_state_machine" "state_machine" {
       "Retry": [
         {
           "ErrorEquals": ["States.TaskFailed"],
-          "IntervalSeconds": 60,
+          "IntervalSeconds": 10,
           "MaxAttempts": 2,
           "BackoffRate": 2.0
         }
@@ -52,6 +52,14 @@ resource "aws_sfn_state_machine" "state_machine" {
         }
       },
       "ResultPath": "$.dynamodb",
+      "Retry": [
+        {
+          "ErrorEquals": ["States.TaskFailed"],
+          "IntervalSeconds": 10,
+          "MaxAttempts": 2,
+          "BackoffRate": 2.0
+        }
+      ],
       "Next": "SendHeartbeat"
     },
     "SendHeartbeat": {
@@ -64,7 +72,7 @@ resource "aws_sfn_state_machine" "state_machine" {
       "Retry": [
         {
           "ErrorEquals": ["States.TaskFailed"],
-          "IntervalSeconds": 60,
+          "IntervalSeconds": 10,
           "MaxAttempts": 2,
           "BackoffRate": 2.0
         }
