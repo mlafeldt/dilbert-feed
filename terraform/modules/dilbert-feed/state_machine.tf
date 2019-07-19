@@ -32,6 +32,26 @@ resource "aws_sfn_state_machine" "state_machine" {
           "BackoffRate": 2.0
         }
       ],
+      "Next": "StoreMetadata"
+    },
+    "StoreMetadata": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::dynamodb:putItem",
+      "Parameters": {
+        "TableName": "${aws_dynamodb_table.metadata.name}",
+        "Item": {
+          "date": {
+            "S.$": "$.strip.date"
+          },
+          "strip": {
+            "M.$": "$.strip"
+          },
+          "feed": {
+            "M.$": "$.feed"
+          }
+        }
+      },
+      "ResultPath": "$.dynamodb",
       "Next": "Heartbeat"
     },
     "Heartbeat": {
@@ -50,7 +70,7 @@ EOF
 
 resource "aws_iam_role" "state_machine" {
   name        = "${var.service}-${var.stage}-state-machine-role"
-  description = "Allow state machines to invoke Lambda functions"
+  description = "Allow state machine to do its thing"
 
   assume_role_policy = <<EOF
 {
@@ -69,7 +89,7 @@ EOF
 }
 
 resource "aws_iam_role_policy" "state_machine" {
-  name = "invoke-lambda-functions"
+  name = "state-machine"
   role = "${aws_iam_role.state_machine.id}"
 
   policy = <<EOF
@@ -85,6 +105,15 @@ resource "aws_iam_role_policy" "state_machine" {
         "${data.aws_lambda_function.get_strip.arn}",
         "${data.aws_lambda_function.gen_feed.arn}",
         "${data.aws_lambda_function.heartbeat.arn}"
+      ]
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "dynamodb:PutItem"
+      ],
+      "Resource": [
+        "${aws_dynamodb_table.metadata.arn}"
       ]
     }
   ]
