@@ -52,9 +52,9 @@ resource "aws_sfn_state_machine" "state_machine" {
         }
       },
       "ResultPath": "$.dynamodb",
-      "Next": "Heartbeat"
+      "Next": "SendHeartbeat"
     },
-    "Heartbeat": {
+    "SendHeartbeat": {
       "Type": "Task",
       "Parameters": {
         "endpoint": "https://hc-ping.com/${healthchecksio_check.heartbeat.id}"
