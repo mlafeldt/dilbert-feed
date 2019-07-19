@@ -1,87 +1,17 @@
-resource "aws_sfn_state_machine" "state_machine" {
-  name     = "${var.service}-${var.stage}"
-  role_arn = "${aws_iam_role.state_machine.arn}"
+data "template_file" "state_machine" {
+  template = "${file("${path.module}/state_machine.json")}"
 
-  definition = <<EOF
-{
-  "StartAt": "GetStrip",
-  "States": {
-    "GetStrip": {
-      "Type": "Task",
-      "Resource": "${local.get_strip_func}",
-      "ResultPath": "$.strip",
-      "Retry": [
-        {
-          "ErrorEquals": ["States.TaskFailed"],
-          "IntervalSeconds": 60,
-          "MaxAttempts": 2,
-          "BackoffRate": 2.0
-        }
-      ],
-      "Next": "GenFeed"
-    },
-    "GenFeed": {
-      "Type": "Task",
-      "Resource": "${local.gen_feed_func}",
-      "ResultPath": "$.feed",
-      "Retry": [
-        {
-          "ErrorEquals": ["States.TaskFailed"],
-          "IntervalSeconds": 10,
-          "MaxAttempts": 2,
-          "BackoffRate": 2.0
-        }
-      ],
-      "Next": "StoreMetadata"
-    },
-    "StoreMetadata": {
-      "Type": "Task",
-      "Resource": "arn:aws:states:::dynamodb:putItem",
-      "Parameters": {
-        "TableName": "${aws_dynamodb_table.metadata.name}",
-        "Item": {
-          "date": {
-            "S.$": "$.strip.date"
-          },
-          "strip": {
-            "M.$": "$.strip"
-          },
-          "feed": {
-            "M.$": "$.feed"
-          }
-        }
-      },
-      "ResultPath": "$.dynamodb",
-      "Retry": [
-        {
-          "ErrorEquals": ["States.TaskFailed"],
-          "IntervalSeconds": 10,
-          "MaxAttempts": 2,
-          "BackoffRate": 2.0
-        }
-      ],
-      "Next": "SendHeartbeat"
-    },
-    "SendHeartbeat": {
-      "Type": "Task",
-      "Parameters": {
-        "endpoint": "https://hc-ping.com/${healthchecksio_check.heartbeat.id}"
-      },
-      "Resource": "${local.heartbeat_func}",
-      "ResultPath": "$.heartbeat",
-      "Retry": [
-        {
-          "ErrorEquals": ["States.TaskFailed"],
-          "IntervalSeconds": 10,
-          "MaxAttempts": 2,
-          "BackoffRate": 2.0
-        }
-      ],
-      "End": true
-    }
+  vars = {
+    function_prefix    = "${var.function_prefix}"
+    metadata_table     = "${aws_dynamodb_table.metadata.name}"
+    heartbeat_endpoint = "https://hc-ping.com/${healthchecksio_check.heartbeat.id}"
   }
 }
-EOF
+
+resource "aws_sfn_state_machine" "state_machine" {
+  name       = "${var.service}-${var.stage}"
+  role_arn   = "${aws_iam_role.state_machine.arn}"
+  definition = "${data.template_file.state_machine.rendered}"
 }
 
 resource "aws_iam_role" "state_machine" {
@@ -118,9 +48,7 @@ resource "aws_iam_role_policy" "state_machine" {
         "lambda:InvokeFunction"
       ],
       "Resource": [
-        "${local.get_strip_func}",
-        "${local.gen_feed_func}",
-        "${local.heartbeat_func}"
+        "${var.function_prefix}*"
       ]
     },
     {

@@ -11,3 +11,4 @@ variable "heartbeat_schedule" {
 }
 
 variable "stage" {}
+variable "function_prefix" {}
