@@ -17,6 +17,7 @@ type Input struct {
 // Output is the output returned by the Lambda function.
 type Output struct {
 	Endpoint string `json:"endpoint"`
+	Status   string `json:"status"`
 }
 
 func main() {
@@ -45,5 +46,8 @@ func handler(input Input) (*Output, error) {
 		return nil, fmt.Errorf("HTTP error: %s", resp.Status)
 	}
 
-	return &Output{Endpoint: input.Endpoint}, nil
+	return &Output{
+		Endpoint: input.Endpoint,
+		Status:   resp.Status,
+	}, nil
 }
