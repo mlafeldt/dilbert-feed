@@ -3,7 +3,7 @@ module github.com/mlafeldt/dilbert-feed
 require (
 	github.com/PuerkitoBio/goquery v1.5.0
 	github.com/aws/aws-lambda-go v1.11.1
-	github.com/aws/aws-sdk-go v1.20.16
+	github.com/aws/aws-sdk-go v1.21.0
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/google/go-cmp v0.3.0
 	github.com/gorilla/feeds v1.1.1
