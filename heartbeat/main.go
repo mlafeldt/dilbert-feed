@@ -2,6 +2,7 @@ package main
 
 import (
 	"errors"
+	"fmt"
 	"net/http"
 	"time"
 
@@ -16,7 +17,6 @@ type Input struct {
 // Output is the output returned by the Lambda function.
 type Output struct {
 	Endpoint string `json:"endpoint"`
-	Status   string `json:"status"`
 }
 
 func main() {
@@ -35,15 +35,15 @@ func handler(input Input) (*Output, error) {
 	req.Header.Add("User-Agent", "dilbert-feed")
 
 	client := http.Client{Timeout: 5 * time.Second}
-
 	resp, err := client.Do(req)
 	if err != nil {
 		return nil, err
 	}
 	defer resp.Body.Close()
 
-	return &Output{
-		Endpoint: input.Endpoint,
-		Status:   resp.Status,
-	}, nil
+	if resp.StatusCode != http.StatusOK {
+		return nil, fmt.Errorf("HTTP error: %s", resp.Status)
+	}
+
+	return &Output{Endpoint: input.Endpoint}, nil
 }

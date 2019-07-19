@@ -61,6 +61,14 @@ resource "aws_sfn_state_machine" "state_machine" {
       },
       "Resource": "${data.aws_lambda_function.heartbeat.arn}",
       "ResultPath": "$.heartbeat",
+      "Retry": [
+        {
+          "ErrorEquals": ["States.TaskFailed"],
+          "IntervalSeconds": 60,
+          "MaxAttempts": 2,
+          "BackoffRate": 2.0
+        }
+      ],
       "End": true
     }
   }
