@@ -43,6 +43,16 @@
           },
           "feed": {
             "M.$": "$.feed"
+          },
+          "execution": {
+            "M": {
+              "arn": {
+                "S.$": "$$.Execution.Id"
+              },
+              "start_time": {
+                "S.$": "$$.Execution.StartTime"
+              }
+            }
           }
         }
       },
