@@ -29,8 +29,6 @@ functions:
       include: [bin/get-strip]
   gen-feed:
     handler: bin/gen-feed
-    environment:
-      DOMAIN_NAME: ${file(serverless-${self:provider.stage}.yml):bucket_name}.s3.amazonaws.com
     package:
       include: [bin/gen-feed]
   heartbeat:

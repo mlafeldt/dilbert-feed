@@ -31,7 +31,6 @@ func handler(input Input) (*Output, error) {
 	var env struct {
 		BucketName   string `envconfig:"BUCKET_NAME" required:"true"`
 		BucketPrefix string `envconfig:"BUCKET_PREFIX" required:"true"`
-		DomainName   string `envconfig:"DOMAIN_NAME" required:"true"`
 	}
 	if err := envconfig.Process("", &env); err != nil {
 		return nil, err
@@ -40,7 +39,7 @@ func handler(input Input) (*Output, error) {
 
 	var (
 		now     = time.Now()
-		baseURL = fmt.Sprintf("https://%s/%s", env.DomainName, env.BucketPrefix)
+		baseURL = fmt.Sprintf("https://%s.s3.amazonaws.com/%s", env.BucketName, env.BucketPrefix)
 		buf     bytes.Buffer
 	)
 
