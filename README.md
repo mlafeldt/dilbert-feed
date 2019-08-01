@@ -51,15 +51,15 @@ Generate the RSS feed:
 ```console
 $ sls invoke -f gen-feed
 {
-    "feed_url": "https://dilbert-feed.s3.eu-central-1.amazonaws.com/v0/rss.xml"
+    "feed_url": "https://dilbert-feed.s3.eu-central-1.amazonaws.com/v1/rss.xml"
 }
 ```
 
 ## Deployment
 
 ```console
-make prod
-cd terraform/environments/prod
+cd terraform/environments/<ENV>
 terraform init
 terraform apply
+make <ENV>
 ```

@@ -10,16 +10,10 @@ provider:
   versionFunctions: false
   iamRoleStatements:
     - Effect: Allow
-      Action:
-        - s3:PutObject
-      Resource:
-        - Fn::Join:
-            - "/"
-            - - Fn::GetAtt: [Bucket, Arn]
-              - "*"
+      Action: s3:PutObject
+      Resource: arn:aws:s3:::${file(serverless-${self:provider.stage}.yml):bucket_name}/*
   environment:
-    BUCKET_NAME:
-      Ref: Bucket
+    BUCKET_NAME: ${file(serverless-${self:provider.stage}.yml):bucket_name}
     BUCKET_PREFIX: strips/
 
 package:
@@ -36,62 +30,10 @@ functions:
   gen-feed:
     handler: bin/gen-feed
     environment:
-      DOMAIN_NAME:
-        Fn::GetAtt: [Bucket, DomainName]
+      DOMAIN_NAME: ${file(serverless-${self:provider.stage}.yml):bucket_name}.s3.amazonaws.com
     package:
       include: [bin/gen-feed]
   heartbeat:
     handler: bin/heartbeat
     package:
       include: [bin/heartbeat]
-
-resources:
-  Resources:
-    Bucket:
-      Type: AWS::S3::Bucket
-      Properties:
-        AccessControl: BucketOwnerFullControl
-        BucketName: ${file(${self:provider.stage}.yml):bucket_name}
-        BucketEncryption:
-          ServerSideEncryptionConfiguration:
-            - ServerSideEncryptionByDefault:
-                SSEAlgorithm: AES256
-        LoggingConfiguration:
-          DestinationBucketName:
-            Ref: LogBucket
-        LifecycleConfiguration:
-          Rules:
-            - Id: DeleteStripsAfter30Days
-              Status: Enabled
-              Prefix: strips/
-              ExpirationInDays: 30
-    BucketPolicy:
-      Type: AWS::S3::BucketPolicy
-      Properties:
-        Bucket:
-          Ref: Bucket
-        PolicyDocument:
-          Statement:
-            - Effect: Allow
-              Principal: "*"
-              Action:
-                - s3:GetObject
-              Resource:
-                - Fn::Join:
-                    - "/"
-                    - - Fn::GetAtt: [Bucket, Arn]
-                      - "*"
-    LogBucket:
-      Type: AWS::S3::Bucket
-      Properties:
-        AccessControl: LogDeliveryWrite
-        BucketName: ${file(${self:provider.stage}.yml):log_bucket_name}
-        BucketEncryption:
-          ServerSideEncryptionConfiguration:
-            - ServerSideEncryptionByDefault:
-                SSEAlgorithm: AES256
-        LifecycleConfiguration:
-          Rules:
-            - Id: DeleteLogsAfter30Days
-              Status: Enabled
-              ExpirationInDays: 30

@@ -11,4 +11,5 @@ variable "heartbeat_schedule" {
 }
 
 variable "stage" {}
+variable "bucket_name" {}
 variable "function_prefix" {}
