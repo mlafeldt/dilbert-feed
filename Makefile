@@ -16,8 +16,9 @@ package: zip
 		--output-template-file build/packaged.yaml
 
 deploy: package
-	sam deploy --stack-name $(STACK_NAME) \
-		--template-file build/packaged.yaml \
+	sam deploy --template-file build/packaged.yaml \
+		--stack-name $(STACK_NAME) \
+		--force-upload \
 		--capabilities CAPABILITY_IAM
 
 destroy:
