@@ -9,9 +9,16 @@ Parameters:
   Environment:
     Type: String
     Default: dev
-  BucketName:
-    Type: String
-    Default: dilbert-feed
+    AllowedValues:
+      - dev
+      - prod
+
+Mappings:
+  EnvMap:
+    dev:
+      Bucket: dilbert-feed-dev
+    prod:
+      Bucket: dilbert-feed
 
 Globals:
   Function:
@@ -20,14 +27,14 @@ Globals:
     Timeout: 30
     Environment:
       Variables:
-        BUCKET_NAME: !Ref BucketName
+        BUCKET_NAME: !FindInMap [EnvMap, !Ref Environment, Bucket]
         BUCKET_PREFIX: strips/
 
 Resources:
   GetStrip:
     Type: AWS::Serverless::Function
     Properties:
-      FunctionName: !Join [ -, [ !Ref Project, !Ref Environment, 'get-strip' ] ]
+      FunctionName: !Join [-, [!Ref Project, !Ref Environment, 'get-strip']]
       CodeUri: ./build/get-strip.zip
       Handler: get-strip
       Policies:
@@ -35,11 +42,11 @@ Resources:
           Statement:
             - Effect: Allow
               Action: s3:PutObject
-              Resource: !Join [ '', [ 'arn:aws:s3:::', !Ref BucketName, '/*' ] ]
+              Resource: !Join ['', ['arn:aws:s3:::', !FindInMap [EnvMap, !Ref Environment, Bucket], '/*' ]]
   GenFeed:
     Type: AWS::Serverless::Function
     Properties:
-      FunctionName: !Join [ -, [ !Ref Project, !Ref Environment, 'gen-feed' ] ]
+      FunctionName: !Join [-, [!Ref Project, !Ref Environment, 'gen-feed']]
       CodeUri: ./build/gen-feed.zip
       Handler: gen-feed
       Policies:
@@ -47,10 +54,10 @@ Resources:
           Statement:
             - Effect: Allow
               Action: s3:PutObject
-              Resource: !Join [ '', [ 'arn:aws:s3:::', !Ref BucketName, '/*' ] ]
+              Resource: !Join ['', ['arn:aws:s3:::', !FindInMap [EnvMap, !Ref Environment, Bucket], '/*' ]]
   Heartbeat:
     Type: AWS::Serverless::Function
     Properties:
-      FunctionName: !Join [ -, [ !Ref Project, !Ref Environment, 'heartbeat' ] ]
+      FunctionName: !Join [-, [!Ref Project, !Ref Environment, 'heartbeat']]
       CodeUri: ./build/heartbeat.zip
       Handler: heartbeat
