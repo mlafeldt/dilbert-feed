@@ -1,7 +1,8 @@
 ENV        ?= dev
 FUNCS      := $(subst /,,$(dir $(wildcard */main.go)))
 SERVICE    := $(shell awk '/^service:/ {print $$2}' serverless.yml)
-SERVERLESS := node_modules/.bin/serverless
+S3_BUCKET  := dilbert-feed-sam
+STACK_NAME := dilbert-feed-sam-$(ENV)
 
 dev: ENV=dev
 dev: deploy
@@ -9,33 +10,32 @@ dev: deploy
 prod: ENV=prod
 prod: deploy
 
-deploy: test build $(SERVERLESS)
-	$(SERVERLESS) deploy --stage $(ENV) --verbose
+package: zip
+	sam package --s3-bucket $(S3_BUCKET) \
+		--template-file infrastructure.yaml \
+		--output-template-file build/packaged.yaml
 
-deploy_funcs = $(FUNCS:%=deploy-%)
+deploy: package
+	sam deploy --stack-name $(STACK_NAME) \
+		--template-file build/packaged.yaml \
+		--capabilities CAPABILITY_IAM
 
-$(deploy_funcs): deploy-%: test-% build-% $(SERVERLESS)
-	$(SERVERLESS) deploy function --function $(@:deploy-%=%) --stage $(ENV) --verbose
-
-destroy: $(SERVERLESS)
-	$(SERVERLESS) remove --stage $(ENV) --verbose
-
-logs_funcs = $(FUNCS:%=logs-%)
-
-$(logs_funcs): $(SERVERLESS)
-	$(SERVERLESS) logs --function $(@:logs-%=%) --stage $(ENV) --tail --no-color
-
-$(SERVERLESS): node_modules
-
-node_modules:
-	npm install
+destroy:
+	aws cloudformation delete-stack --stack-name $(STACK_NAME)
 
 build_funcs = $(FUNCS:%=build-%)
 
 build: $(build_funcs)
 
 $(build_funcs):
-	GOOS=linux GOARCH=amd64 go build -o bin/$(@:build-%=%) ./$(@:build-%=%)
+	GOOS=linux GOARCH=amd64 go build -o build/$(@:build-%=%) ./$(@:build-%=%)
+
+zip_funcs = $(FUNCS:%=zip-%)
+
+zip: $(zip_funcs)
+
+$(zip_funcs): zip-%: build-%
+	(cd build; zip $(@:zip-%=%).zip $(@:zip-%=%))
 
 test:
 	go vet ./...
@@ -50,3 +50,5 @@ $(test_funcs):
 update-deps:
 	go get -u ./...
 	go mod tidy
+
+.PHONY: build

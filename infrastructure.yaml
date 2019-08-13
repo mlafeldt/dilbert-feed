@@ -1,0 +1,36 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+
+Description: Lambda functions used by dilbert-feed
+
+Parameters:
+  BucketName:
+    Type: String
+    Default: dilbert-feed
+
+Globals:
+  Function:
+    Runtime: go1.x
+    MemorySize: 128
+    Timeout: 30
+    Environment:
+      Variables:
+        BUCKET_NAME: !Ref BucketName
+        BUCKET_PREFIX: strips/
+
+Resources:
+  GetStrip:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ./build/get-strip.zip
+      Handler: get-strip
+  GenFeed:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ./build/gen-feed.zip
+      Handler: gen-feed
+  Heartbeat:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ./build/heartbeat.zip
+      Handler: heartbeat

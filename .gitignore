@@ -1,5 +1,5 @@
 /.serverless/
-/bin/
+/build/
 /node_modules/
 
 **/.terraform/*
