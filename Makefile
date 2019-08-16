@@ -21,7 +21,7 @@ deploy: package
 
 package: bucket zip
 	sam package --s3-bucket $(SAM_BUCKET) \
-		--template-file infrastructure.yaml \
+		--template-file template.yaml \
 		--output-template-file build/packaged.yaml
 
 bucket:
