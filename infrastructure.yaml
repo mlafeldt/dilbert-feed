@@ -34,7 +34,7 @@ Resources:
   GetStrip:
     Type: AWS::Serverless::Function
     Properties:
-      FunctionName: !Join [-, [!Ref Project, !Ref Environment, "get-strip"]]
+      FunctionName: !Join ["-", [!Ref Project, !Ref Environment, "get-strip"]]
       CodeUri: ./build/get-strip.zip
       Handler: get-strip
       Policies:
@@ -46,7 +46,7 @@ Resources:
   GenFeed:
     Type: AWS::Serverless::Function
     Properties:
-      FunctionName: !Join [-, [!Ref Project, !Ref Environment, "gen-feed"]]
+      FunctionName: !Join ["-", [!Ref Project, !Ref Environment, "gen-feed"]]
       CodeUri: ./build/gen-feed.zip
       Handler: gen-feed
       Policies:
@@ -58,6 +58,6 @@ Resources:
   Heartbeat:
     Type: AWS::Serverless::Function
     Properties:
-      FunctionName: !Join [-, [!Ref Project, !Ref Environment, "heartbeat"]]
+      FunctionName: !Join ["-", [!Ref Project, !Ref Environment, "heartbeat"]]
       CodeUri: ./build/heartbeat.zip
       Handler: heartbeat
