@@ -1,4 +1,4 @@
-AWSTemplateFormatVersion: '2010-09-09'
+AWSTemplateFormatVersion: "2010-09-09"
 Transform: AWS::Serverless-2016-10-31
 Description: Lambda functions used by dilbert-feed
 
@@ -34,30 +34,30 @@ Resources:
   GetStrip:
     Type: AWS::Serverless::Function
     Properties:
-      FunctionName: !Join [-, [!Ref Project, !Ref Environment, 'get-strip']]
+      FunctionName: !Join [-, [!Ref Project, !Ref Environment, "get-strip"]]
       CodeUri: ./build/get-strip.zip
       Handler: get-strip
       Policies:
-        - Version: '2012-10-17'
+        - Version: "2012-10-17"
           Statement:
             - Effect: Allow
               Action: s3:PutObject
-              Resource: !Join ['', ['arn:aws:s3:::', !FindInMap [EnvMap, !Ref Environment, Bucket], '/*' ]]
+              Resource: !Join ["", ["arn:aws:s3:::", !FindInMap [EnvMap, !Ref Environment, Bucket], "/*"]]
   GenFeed:
     Type: AWS::Serverless::Function
     Properties:
-      FunctionName: !Join [-, [!Ref Project, !Ref Environment, 'gen-feed']]
+      FunctionName: !Join [-, [!Ref Project, !Ref Environment, "gen-feed"]]
       CodeUri: ./build/gen-feed.zip
       Handler: gen-feed
       Policies:
-        - Version: '2012-10-17'
+        - Version: "2012-10-17"
           Statement:
             - Effect: Allow
               Action: s3:PutObject
-              Resource: !Join ['', ['arn:aws:s3:::', !FindInMap [EnvMap, !Ref Environment, Bucket], '/*' ]]
+              Resource: !Join ["", ["arn:aws:s3:::", !FindInMap [EnvMap, !Ref Environment, Bucket], "/*"]]
   Heartbeat:
     Type: AWS::Serverless::Function
     Properties:
-      FunctionName: !Join [-, [!Ref Project, !Ref Environment, 'heartbeat']]
+      FunctionName: !Join [-, [!Ref Project, !Ref Environment, "heartbeat"]]
       CodeUri: ./build/heartbeat.zip
       Handler: heartbeat
