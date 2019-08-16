@@ -1,6 +1,4 @@
-/.serverless/
 /build/
-/node_modules/
 
 **/.terraform/*
 *.tfstate
