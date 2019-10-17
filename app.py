@@ -2,6 +2,7 @@ from aws_cdk import (
     aws_events as events,
     aws_lambda as lambda_,
     aws_events_targets as targets,
+    aws_s3 as s3,
     core,
 )
 
@@ -16,6 +17,18 @@ LAMBDA_DEFAULTS = {
 class DilbertFeedStack(core.Stack):
     def __init__(self, app: core.App, name: str, **kwargs) -> None:
         super().__init__(app, name, **kwargs)
+
+        bucket = s3.Bucket(
+            self,
+            "dilbert-feed",
+            encryption=s3.BucketEncryption.S3_MANAGED,
+            public_read_access=True,
+        )
+        bucket.add_lifecycle_rule(
+            id="DeleteStripsAfter30Days",
+            prefix="strips/",
+            expiration=core.Duration.days(30),
+        )
 
         get_strip = lambda_.Function(
             self,
