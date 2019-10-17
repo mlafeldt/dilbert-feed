@@ -34,22 +34,30 @@ class DilbertFeedStack(core.Stack):
             self,
             "GetStrip",
             code=lambda_.Code.asset("bin/get-strip"),
-            **LAMBDA_DEFAULTS
+            environment={"BUCKET_NAME": bucket.bucket_name, "BUCKET_PREFIX": "strips/"},
+            **LAMBDA_DEFAULTS,
         )
 
         gen_feed = lambda_.Function(
-            self, "GenFeed", code=lambda_.Code.asset("bin/gen-feed"), **LAMBDA_DEFAULTS
+            self,
+            "GenFeed",
+            code=lambda_.Code.asset("bin/gen-feed"),
+            environment={"BUCKET_NAME": bucket.bucket_name, "BUCKET_PREFIX": "strips/"},
+            **LAMBDA_DEFAULTS,
         )
 
-        heartbeat = lambda_.Function(
-            self,
-            "Heartbeat",
-            code=lambda_.Code.asset("bin/heartbeat"),
-            **LAMBDA_DEFAULTS
-        )
+        bucket.grant_put(get_strip)
+        bucket.grant_put(gen_feed)
+
+        # heartbeat = lambda_.Function(
+        #     self,
+        #     "Heartbeat",
+        #     code=lambda_.Code.asset("bin/heartbeat"),
+        #     **LAMBDA_DEFAULTS,
+        # )
 
 
 app = core.App()
-DilbertFeedStack(app, "dilbert-feed-cdk-dev", tags={"Environment": "dev"})
-DilbertFeedStack(app, "dilbert-feed-cdk-prod", tags={"Environment": "prod"})
+DilbertFeedStack(app, "dilbert-feed-cdk-dev", tags={"STAGE": "dev"})
+DilbertFeedStack(app, "dilbert-feed-cdk-prod", tags={"STAGE": "prod"})
 app.synth()
