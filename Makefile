@@ -1,5 +1,5 @@
 ENV   ?= dev
-STACK := dilbert-feed-$(ENV)
+STACK := dilbert-feed-cdk-$(ENV)
 FUNCS := $(subst /,,$(dir $(wildcard */main.go)))
 
 #
@@ -11,6 +11,10 @@ dev: deploy
 
 prod: ENV=prod
 prod: deploy
+
+venv:
+	python3 -m venv .venv
+	.venv/bin/pip install -r requirements.txt
 
 deploy: zip
 	cdk deploy $(STACK)

@@ -42,6 +42,6 @@ class DilbertFeedStack(core.Stack):
 
 
 app = core.App()
-DilbertFeedStack(app, "dilbert-feed-dev", tags={"Environment": "dev"})
-DilbertFeedStack(app, "dilbert-feed-prod", tags={"Environment": "prod"})
+DilbertFeedStack(app, "dilbert-feed-cdk-dev", tags={"Environment": "dev"})
+DilbertFeedStack(app, "dilbert-feed-cdk-prod", tags={"Environment": "prod"})
 app.synth()
