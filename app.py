@@ -34,7 +34,7 @@ class DilbertFeedStack(core.Stack):
 
         get_strip = lambda_.Function(
             self,
-            "GetStrip",
+            "GetStripFunc",
             code=lambda_.Code.asset("bin/get-strip"),
             environment={"BUCKET_NAME": bucket.bucket_name, "BUCKET_PREFIX": "strips/"},
             **LAMBDA_DEFAULTS,
@@ -42,7 +42,7 @@ class DilbertFeedStack(core.Stack):
 
         gen_feed = lambda_.Function(
             self,
-            "GenFeed",
+            "GenFeedFunc",
             code=lambda_.Code.asset("bin/gen-feed"),
             environment={"BUCKET_NAME": bucket.bucket_name, "BUCKET_PREFIX": "strips/"},
             **LAMBDA_DEFAULTS,
@@ -60,13 +60,13 @@ class DilbertFeedStack(core.Stack):
 
         definition = sfn.Task(
             self,
-            "GetStripTask",
+            "GetStrip",
             task=sfn_tasks.InvokeFunction(get_strip),
             result_path="$.strip",
         ).next(
             sfn.Task(
                 self,
-                "GenFeedTask",
+                "GenFeed",
                 task=sfn_tasks.InvokeFunction(gen_feed),
                 result_path="$.feed",
             )
