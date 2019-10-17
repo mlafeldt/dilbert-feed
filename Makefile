@@ -1,7 +1,10 @@
-ENV        ?= dev
-FUNCS      := $(subst /,,$(dir $(wildcard */main.go)))
-SERVICE    := $(shell awk '/^service:/ {print $$2}' serverless.yml)
-SERVERLESS := node_modules/.bin/serverless
+ENV   ?= dev
+STACK := dilbert-feed-$(ENV)
+FUNCS := $(subst /,,$(dir $(wildcard */main.go)))
+
+#
+# deploy & destroy
+#
 
 dev: ENV=dev
 dev: deploy
@@ -9,26 +12,14 @@ dev: deploy
 prod: ENV=prod
 prod: deploy
 
-deploy: test build $(SERVERLESS)
-	$(SERVERLESS) deploy --stage $(ENV) --verbose
+deploy: zip
+	cdk deploy $(STACK)
 
-deploy_funcs = $(FUNCS:%=deploy-%)
+diff: zip
+	cdk diff $(STACK)
 
-$(deploy_funcs): deploy-%: test-% build-% $(SERVERLESS)
-	$(SERVERLESS) deploy function --function $(@:deploy-%=%) --stage $(ENV) --verbose
-
-destroy: $(SERVERLESS)
-	$(SERVERLESS) remove --stage $(ENV) --verbose
-
-logs_funcs = $(FUNCS:%=logs-%)
-
-$(logs_funcs): $(SERVERLESS)
-	$(SERVERLESS) logs --function $(@:logs-%=%) --stage $(ENV) --tail --no-color
-
-$(SERVERLESS): node_modules
-
-node_modules:
-	npm install
+destroy:
+	cdk destroy --force $(STACK)
 
 #
 # zip
