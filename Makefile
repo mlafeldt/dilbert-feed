@@ -30,12 +30,33 @@ $(SERVERLESS): node_modules
 node_modules:
 	npm install
 
-build_funcs = $(FUNCS:%=build-%)
+#
+# zip
+#
+
+zip_funcs := $(FUNCS:%=zip-%)
+
+zip: $(zip_funcs)
+
+$(zip_funcs): zip-%: build-%
+	(cd build; zip $(@:zip-%=%).zip $(@:zip-%=%))
+
+#
+# build
+#
+
+build_funcs := $(FUNCS:%=build-%)
 
 build: $(build_funcs)
 
 $(build_funcs):
-	GOOS=linux GOARCH=amd64 go build -o bin/$(@:build-%=%) ./$(@:build-%=%)
+	GOOS=linux GOARCH=amd64 go build -o build/$(@:build-%=%) ./$(@:build-%=%)
+
+.PHONY: build
+
+#
+# test
+#
 
 test:
 	go vet ./...

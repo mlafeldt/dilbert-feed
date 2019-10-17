@@ -5,3 +5,7 @@
 **/.terraform/*
 *.tfstate
 *.tfstate.*
+
+/.venv/
+/cdk.out/
+/build/
