@@ -3,6 +3,8 @@ from aws_cdk import (
     aws_lambda as lambda_,
     aws_events_targets as targets,
     aws_s3 as s3,
+    aws_stepfunctions as sfn,
+    aws_stepfunctions_tasks as sfn_tasks,
     core,
 )
 
@@ -55,6 +57,32 @@ class DilbertFeedStack(core.Stack):
         #     code=lambda_.Code.asset("bin/heartbeat"),
         #     **LAMBDA_DEFAULTS,
         # )
+
+        definition = sfn.Task(
+            self,
+            "GetStripTask",
+            task=sfn_tasks.InvokeFunction(get_strip),
+            result_path="$.strip",
+        ).next(
+            sfn.Task(
+                self,
+                "GenFeedTask",
+                task=sfn_tasks.InvokeFunction(gen_feed),
+                result_path="$.feed",
+            )
+        )
+
+        sm = sfn.StateMachine(
+            self,
+            "StateMachine",
+            definition=definition,
+            timeout=core.Duration.seconds(30),
+        )
+
+        cron = events.Rule(
+            self, "Cron", schedule=events.Schedule.expression("cron(0 6 * * ? *)")
+        )
+        cron.add_target(targets.SfnStateMachine(sm))
 
 
 app = core.App()
