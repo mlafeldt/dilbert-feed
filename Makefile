@@ -12,18 +12,15 @@ dev: deploy
 prod: ENV=prod
 prod: deploy
 
+deploy diff synth: venv zip
+	@cdk $@ $(STACK)
+
+destroy: venv
+	@cdk destroy --force $(STACK)
+
 venv:
-	python3 -m venv .venv
-	.venv/bin/pip install -r requirements.txt
-
-deploy: zip
-	cdk deploy $(STACK)
-
-diff: zip
-	cdk diff $(STACK)
-
-destroy:
-	cdk destroy --force $(STACK)
+	python3 -m venv $@
+	venv/bin/pip install -r requirements.txt
 
 #
 # zip
