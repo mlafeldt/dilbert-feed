@@ -5,6 +5,13 @@ from aws_cdk import (
     core,
 )
 
+LAMBDA_DEFAULTS = {
+    "handler": "handler",
+    "runtime": lambda_.Runtime.GO_1_X,
+    "memory_size": 128,
+    "timeout": core.Duration.seconds(30),
+}
+
 
 class DilbertFeedStack(core.Stack):
     def __init__(self, app: core.App, name: str, **kwargs) -> None:
@@ -14,30 +21,18 @@ class DilbertFeedStack(core.Stack):
             self,
             "GetStrip",
             code=lambda_.Code.asset("bin/get-strip"),
-            handler="handler",
-            runtime=lambda_.Runtime.GO_1_X,
-            memory_size=128,
-            timeout=core.Duration.seconds(30),
+            **LAMBDA_DEFAULTS
         )
 
         gen_feed = lambda_.Function(
-            self,
-            "GenFeed",
-            code=lambda_.Code.asset("bin/gen-feed"),
-            handler="handler",
-            runtime=lambda_.Runtime.GO_1_X,
-            memory_size=128,
-            timeout=core.Duration.seconds(30),
+            self, "GenFeed", code=lambda_.Code.asset("bin/gen-feed"), **LAMBDA_DEFAULTS
         )
 
         heartbeat = lambda_.Function(
             self,
             "Heartbeat",
             code=lambda_.Code.asset("bin/heartbeat"),
-            handler="handler",
-            runtime=lambda_.Runtime.GO_1_X,
-            memory_size=128,
-            timeout=core.Duration.seconds(30),
+            **LAMBDA_DEFAULTS
         )
 
 
