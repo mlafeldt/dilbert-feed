@@ -6,6 +6,5 @@
 *.tfstate
 *.tfstate.*
 
-/build/
 /cdk.out/
 /venv/

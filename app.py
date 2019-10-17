@@ -13,8 +13,8 @@ class DilbertFeedStack(core.Stack):
         get_strip = lambda_.Function(
             self,
             "GetStrip",
-            code=lambda_.Code.asset("./build/get-strip.zip"),
-            handler="get-strip",
+            code=lambda_.Code.asset("bin/get-strip"),
+            handler="handler",
             runtime=lambda_.Runtime.GO_1_X,
             memory_size=128,
             timeout=core.Duration.seconds(30),
@@ -23,8 +23,8 @@ class DilbertFeedStack(core.Stack):
         gen_feed = lambda_.Function(
             self,
             "GenFeed",
-            code=lambda_.Code.asset("./build/gen-feed.zip"),
-            handler="gen-feed",
+            code=lambda_.Code.asset("bin/gen-feed"),
+            handler="handler",
             runtime=lambda_.Runtime.GO_1_X,
             memory_size=128,
             timeout=core.Duration.seconds(30),
@@ -33,8 +33,8 @@ class DilbertFeedStack(core.Stack):
         heartbeat = lambda_.Function(
             self,
             "Heartbeat",
-            code=lambda_.Code.asset("./build/heartbeat.zip"),
-            handler="heartbeat",
+            code=lambda_.Code.asset("bin/heartbeat"),
+            handler="handler",
             runtime=lambda_.Runtime.GO_1_X,
             memory_size=128,
             timeout=core.Duration.seconds(30),

@@ -12,7 +12,7 @@ dev: deploy
 prod: ENV=prod
 prod: deploy
 
-deploy diff synth: venv zip
+deploy diff synth: venv build
 	@cdk $@ $(STACK)
 
 destroy: venv
@@ -23,17 +23,6 @@ venv:
 	venv/bin/pip install -r requirements.txt
 
 #
-# zip
-#
-
-zip_funcs := $(FUNCS:%=zip-%)
-
-zip: $(zip_funcs)
-
-$(zip_funcs): zip-%: build-%
-	(cd build; zip $(@:zip-%=%).zip $(@:zip-%=%))
-
-#
 # build
 #
 
@@ -42,9 +31,8 @@ build_funcs := $(FUNCS:%=build-%)
 build: $(build_funcs)
 
 $(build_funcs):
-	GOOS=linux GOARCH=amd64 go build -o build/$(@:build-%=%) ./$(@:build-%=%)
-
-.PHONY: build
+	mkdir -p bin/$(@:build-%=%)
+	GOOS=linux GOARCH=amd64 go build -o bin/$(@:build-%=%)/handler ./$(@:build-%=%)
 
 #
 # test
