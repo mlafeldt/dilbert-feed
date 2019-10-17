@@ -15,6 +15,8 @@ LAMBDA_DEFAULTS = {
     "timeout": core.Duration.seconds(30),
 }
 
+STRIPS_DIR = "strips/"
+
 
 class DilbertFeedStack(core.Stack):
     def __init__(self, app: core.App, name: str, **kwargs) -> None:
@@ -28,7 +30,7 @@ class DilbertFeedStack(core.Stack):
         )
         bucket.add_lifecycle_rule(
             id="DeleteStripsAfter30Days",
-            prefix="strips/",
+            prefix=STRIPS_DIR,
             expiration=core.Duration.days(30),
         )
 
@@ -36,7 +38,10 @@ class DilbertFeedStack(core.Stack):
             self,
             "GetStripFunc",
             code=lambda_.Code.asset("bin/get-strip"),
-            environment={"BUCKET_NAME": bucket.bucket_name, "BUCKET_PREFIX": "strips/"},
+            environment={
+                "BUCKET_NAME": bucket.bucket_name,
+                "BUCKET_PREFIX": STRIPS_DIR,
+            },
             **LAMBDA_DEFAULTS,
         )
 
@@ -44,7 +49,10 @@ class DilbertFeedStack(core.Stack):
             self,
             "GenFeedFunc",
             code=lambda_.Code.asset("bin/gen-feed"),
-            environment={"BUCKET_NAME": bucket.bucket_name, "BUCKET_PREFIX": "strips/"},
+            environment={
+                "BUCKET_NAME": bucket.bucket_name,
+                "BUCKET_PREFIX": STRIPS_DIR,
+            },
             **LAMBDA_DEFAULTS,
         )
 
