@@ -1,10 +1,7 @@
-/.serverless/
 /bin/
-/node_modules/
+/cdk.out/
+/venv/
 
 **/.terraform/*
 *.tfstate
 *.tfstate.*
-
-/cdk.out/
-/venv/
