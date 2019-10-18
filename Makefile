@@ -1,5 +1,5 @@
 ENV   ?= dev
-STACK := dilbert-feed-cdk-$(ENV)
+STACK  = dilbert-feed-cdk-$(ENV)
 FUNCS := $(subst /,,$(dir $(wildcard */main.go)))
 
 #
