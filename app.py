@@ -24,9 +24,11 @@ class DilbertFeedStack(core.Stack):
 
         bucket = s3.Bucket(
             self,
-            "dilbert-feed",
-            encryption=s3.BucketEncryption.S3_MANAGED,
+            "bucket",
+            bucket_name=name,
             public_read_access=True,
+            encryption=s3.BucketEncryption.S3_MANAGED,
+            removal_policy=core.RemovalPolicy.DESTROY,
         )
         bucket.add_lifecycle_rule(
             id="DeleteStripsAfter30Days",
