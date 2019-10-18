@@ -7,6 +7,7 @@ from aws_cdk import (
     aws_stepfunctions_tasks as sfn_tasks,
     core,
 )
+from dataclasses import dataclass
 
 LAMBDA_DEFAULTS = {
     "handler": "handler",
@@ -15,23 +16,33 @@ LAMBDA_DEFAULTS = {
     "timeout": core.Duration.seconds(30),
 }
 
-STRIPS_DIR = "strips/"
+
+@dataclass
+class DilbertFeedProps:
+    bucket_name: str = None
+    strips_dir: str = "strips/"
 
 
 class DilbertFeedStack(core.Stack):
-    def __init__(self, app: core.App, name: str, params={}, **kwargs) -> None:
+    def __init__(
+        self,
+        app: core.App,
+        name: str,
+        props: DilbertFeedProps = DilbertFeedProps(),
+        **kwargs,
+    ) -> None:
         super().__init__(app, name, **kwargs)
 
         bucket = s3.Bucket(
             self,
             "Bucket",
-            bucket_name=params.get("bucket_name"),
+            bucket_name=props.bucket_name,
             public_read_access=True,
             encryption=s3.BucketEncryption.S3_MANAGED,
         )
         bucket.add_lifecycle_rule(
             id="DeleteStripsAfter30Days",
-            prefix=STRIPS_DIR,
+            prefix=props.strips_dir,
             expiration=core.Duration.days(30),
         )
 
@@ -41,7 +52,7 @@ class DilbertFeedStack(core.Stack):
             code=lambda_.Code.asset("bin/get-strip"),
             environment={
                 "BUCKET_NAME": bucket.bucket_name,
-                "BUCKET_PREFIX": STRIPS_DIR,
+                "BUCKET_PREFIX": props.strips_dir,
             },
             **LAMBDA_DEFAULTS,
         )
@@ -52,7 +63,7 @@ class DilbertFeedStack(core.Stack):
             code=lambda_.Code.asset("bin/gen-feed"),
             environment={
                 "BUCKET_NAME": bucket.bucket_name,
-                "BUCKET_PREFIX": STRIPS_DIR,
+                "BUCKET_PREFIX": props.strips_dir,
             },
             **LAMBDA_DEFAULTS,
         )
@@ -99,7 +110,7 @@ DilbertFeedStack(app, "dilbert-feed-cdk-dev", tags={"STAGE": "dev"})
 DilbertFeedStack(
     app,
     "dilbert-feed-cdk-prod",
-    params={"bucket_name": "dilbert-feed-cdk"},
+    DilbertFeedProps(bucket_name="dilbert-feed-cdk"),
     tags={"STAGE": "prod"},
 )
 app.synth()
