@@ -13,7 +13,7 @@ LAMBDA_DEFAULTS = {
     "handler": "handler",
     "runtime": lambda_.Runtime.GO_1_X,
     "memory_size": 128,
-    "timeout": core.Duration.seconds(30),
+    "timeout": core.Duration.seconds(10),
 }
 
 
