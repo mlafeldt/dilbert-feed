@@ -19,16 +19,15 @@ STRIPS_DIR = "strips/"
 
 
 class DilbertFeedStack(core.Stack):
-    def __init__(self, app: core.App, name: str, **kwargs) -> None:
+    def __init__(self, app: core.App, name: str, params={}, **kwargs) -> None:
         super().__init__(app, name, **kwargs)
 
         bucket = s3.Bucket(
             self,
-            "bucket",
-            bucket_name=name,
+            "Bucket",
+            bucket_name=params.get("bucket_name"),
             public_read_access=True,
             encryption=s3.BucketEncryption.S3_MANAGED,
-            removal_policy=core.RemovalPolicy.DESTROY,
         )
         bucket.add_lifecycle_rule(
             id="DeleteStripsAfter30Days",
@@ -97,5 +96,10 @@ class DilbertFeedStack(core.Stack):
 
 app = core.App()
 DilbertFeedStack(app, "dilbert-feed-cdk-dev", tags={"STAGE": "dev"})
-DilbertFeedStack(app, "dilbert-feed-cdk-prod", tags={"STAGE": "prod"})
+DilbertFeedStack(
+    app,
+    "dilbert-feed-cdk-prod",
+    params={"bucket_name": "dilbert-feed-cdk"},
+    tags={"STAGE": "prod"},
+)
 app.synth()
