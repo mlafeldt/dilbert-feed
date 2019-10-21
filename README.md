@@ -58,8 +58,6 @@ $ sls invoke -f gen-feed
 ## Deployment
 
 ```console
-cd terraform/environments/<ENV>
-terraform init
-terraform apply
-make <ENV>
+make bootstrap
+make [dev|prod]
 ```

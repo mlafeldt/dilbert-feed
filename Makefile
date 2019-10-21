@@ -18,6 +18,9 @@ deploy diff synth: venv build
 destroy: venv
 	@cdk destroy --force $(STACK)
 
+bootstrap:
+	@cdk bootstrap
+
 venv:
 	python3 -m venv $@
 	venv/bin/pip install -r requirements.txt
