@@ -73,7 +73,7 @@ class DilbertFeedStack(core.Stack):
             **LAMBDA_DEFAULTS,
         )
 
-        definition = (
+        steps = (
             sfn.Task(
                 self,
                 "GetStrip",
@@ -99,7 +99,7 @@ class DilbertFeedStack(core.Stack):
         )
 
         sm = sfn.StateMachine(
-            self, "StateMachine", state_machine_name=name, definition=definition
+            self, "StateMachine", state_machine_name=name, definition=steps
         )
 
         cron = events.Rule(
