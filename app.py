@@ -21,12 +21,12 @@ class DilbertFeedStack(core.Stack):
     def __init__(
         self,
         app: core.App,
-        id: str,
+        name: str,
         bucket_name: str = None,
         heartbeat_endpoint: str = None,
         **kwargs,
     ) -> None:
-        super().__init__(app, id, **kwargs)
+        super().__init__(app, name, **kwargs)
 
         bucket = s3.Bucket(
             self,
@@ -99,14 +99,15 @@ class DilbertFeedStack(core.Stack):
         )
 
         sm = sfn.StateMachine(
-            self,
-            "StateMachine",
-            definition=definition,
-            timeout=core.Duration.seconds(30),
+            self, "StateMachine", state_machine_name=name, definition=definition
         )
 
         cron = events.Rule(
-            self, "Cron", schedule=events.Schedule.expression("cron(0 6 * * ? *)")
+            self,
+            "Cron",
+            description="Update Dilbert feed",
+            rule_name=name + "-cron",
+            schedule=events.Schedule.expression("cron(0 6 * * ? *)"),
         )
         cron.add_target(targets.SfnStateMachine(sm))
 
