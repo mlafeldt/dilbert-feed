@@ -1,8 +1,7 @@
 from aws_cdk import (
-    aws_dynamodb as dynamo,
     aws_events as events,
-    aws_events_targets as targets,
     aws_lambda as lambda_,
+    aws_events_targets as targets,
     aws_s3 as s3,
     aws_stepfunctions as sfn,
     aws_stepfunctions_tasks as sfn_tasks,
@@ -74,17 +73,6 @@ class DilbertFeedStack(core.Stack):
             **LAMBDA_DEFAULTS,
         )
 
-        table = dynamo.Table(
-            self,
-            "Table",
-            table_name=name,
-            partition_key=dynamo.Attribute(
-                name="date", type=dynamo.AttributeType.STRING
-            ),
-            billing_mode=dynamo.BillingMode.PAY_PER_REQUEST,
-            point_in_time_recovery=True,
-        )
-
         steps = (
             sfn.Task(
                 self,
@@ -129,7 +117,6 @@ class DilbertFeedStack(core.Stack):
         sm = sfn.StateMachine(
             self, "StateMachine", state_machine_name=name, definition=steps
         )
-        table.grant_write_data(sm.role)
 
         cron = events.Rule(
             self,
