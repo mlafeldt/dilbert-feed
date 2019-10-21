@@ -51,6 +51,7 @@ class DilbertFeedStack(core.Stack):
             },
             **LAMBDA_DEFAULTS,
         )
+        bucket.grant_put(get_strip)
 
         gen_feed = lambda_.Function(
             self,
@@ -62,33 +63,32 @@ class DilbertFeedStack(core.Stack):
             },
             **LAMBDA_DEFAULTS,
         )
-
-        bucket.grant_put(get_strip)
         bucket.grant_put(gen_feed)
 
-        definition = sfn.Task(
+        heartbeat = lambda_.Function(
             self,
-            "GetStrip",
-            task=sfn_tasks.InvokeFunction(get_strip),
-            result_path="$.strip",
-        ).next(
-            sfn.Task(
-                self,
-                "GenFeed",
-                task=sfn_tasks.InvokeFunction(gen_feed),
-                result_path="$.feed",
-            )
+            "HeartbeatFunc",
+            code=lambda_.Code.asset("bin/heartbeat"),
+            environment={"HEARTBEAT_ENDPOINT": heartbeat_endpoint},
+            **LAMBDA_DEFAULTS,
         )
 
-        if heartbeat_endpoint is not None:
-            heartbeat = lambda_.Function(
+        definition = (
+            sfn.Task(
                 self,
-                "HeartbeatFunc",
-                code=lambda_.Code.asset("bin/heartbeat"),
-                environment={"HEARTBEAT_ENDPOINT": heartbeat_endpoint},
-                **LAMBDA_DEFAULTS,
+                "GetStrip",
+                task=sfn_tasks.InvokeFunction(get_strip),
+                result_path="$.strip",
             )
-            definition.next(
+            .next(
+                sfn.Task(
+                    self,
+                    "GenFeed",
+                    task=sfn_tasks.InvokeFunction(gen_feed),
+                    result_path="$.feed",
+                )
+            )
+            .next(
                 sfn.Task(
                     self,
                     "SendHeartbeat",
@@ -96,6 +96,7 @@ class DilbertFeedStack(core.Stack):
                     result_path="$.heartbeat",
                 )
             )
+        )
 
         sm = sfn.StateMachine(
             self,
@@ -118,8 +119,8 @@ DilbertFeedStack(
     heartbeat_endpoint="https://hc-ping.com/07321d8b-251b-4cf8-aaec-73e152eee601",
     tags={"STAGE": "dev"},
 )
-DilbertFeedStack(
-    app, "dilbert-feed-cdk-prod", bucket_name="dilbert-feed-cdk", tags={"STAGE": "prod"}
-)
+# DilbertFeedStack(
+#     app, "dilbert-feed-cdk-prod", bucket_name="dilbert-feed-cdk", tags={"STAGE": "prod"}
+# )
 
 app.synth()
