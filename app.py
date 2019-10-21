@@ -44,6 +44,7 @@ class DilbertFeedStack(core.Stack):
         get_strip = lambda_.Function(
             self,
             "GetStripFunc",
+            function_name=f"{name}-get-strip",
             code=lambda_.Code.asset("bin/get-strip"),
             environment={
                 "BUCKET_NAME": bucket.bucket_name,
@@ -56,6 +57,7 @@ class DilbertFeedStack(core.Stack):
         gen_feed = lambda_.Function(
             self,
             "GenFeedFunc",
+            function_name=f"{name}-gen-feed",
             code=lambda_.Code.asset("bin/gen-feed"),
             environment={
                 "BUCKET_NAME": bucket.bucket_name,
@@ -68,6 +70,7 @@ class DilbertFeedStack(core.Stack):
         heartbeat = lambda_.Function(
             self,
             "HeartbeatFunc",
+            function_name=f"{name}-heartbeat",
             code=lambda_.Code.asset("bin/heartbeat"),
             environment={"HEARTBEAT_ENDPOINT": heartbeat_endpoint},
             **LAMBDA_DEFAULTS,
@@ -122,7 +125,7 @@ class DilbertFeedStack(core.Stack):
             self,
             "Cron",
             description="Update Dilbert feed",
-            rule_name=name + "-cron",
+            rule_name=f"{name}-cron",
             schedule=events.Schedule.expression("cron(0 6 * * ? *)"),
         )
         cron.add_target(targets.SfnStateMachine(sm))
