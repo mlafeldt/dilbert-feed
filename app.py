@@ -22,8 +22,8 @@ class DilbertFeedStack(core.Stack):
         self,
         app: core.App,
         name: str,
+        heartbeat_endpoint: str,
         bucket_name: str = None,
-        heartbeat_endpoint: str = None,
         **kwargs,
     ) -> None:
         super().__init__(app, name, **kwargs)
@@ -120,8 +120,12 @@ DilbertFeedStack(
     heartbeat_endpoint="https://hc-ping.com/07321d8b-251b-4cf8-aaec-73e152eee601",
     tags={"STAGE": "dev"},
 )
-# DilbertFeedStack(
-#     app, "dilbert-feed-cdk-prod", bucket_name="dilbert-feed-cdk", tags={"STAGE": "prod"}
-# )
+DilbertFeedStack(
+    app,
+    "dilbert-feed-cdk-prod",
+    bucket_name="dilbert-feed-cdk",
+    heartbeat_endpoint="https://hc-ping.com/22916110-70c7-4071-bf02-919e210da7c4",
+    tags={"STAGE": "prod"},
+)
 
 app.synth()
