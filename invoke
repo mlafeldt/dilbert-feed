@@ -1,0 +1,9 @@
+#!/bin/bash
+
+set -e
+set -o pipefail
+
+outfile=$(mktemp)
+trap "rm -f $outfile" EXIT
+aws lambda invoke --function-name "$@" "$outfile" >/dev/null
+jq < "$outfile"
