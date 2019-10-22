@@ -1,4 +1,6 @@
 #!/bin/bash
+# Convenience wrapper for invoking Lambda functions.
+# Usage: ./invoke <function> [--payload <payload>]
 
 set -e
 set -o pipefail
