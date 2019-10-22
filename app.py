@@ -76,6 +76,13 @@ class DilbertFeedStack(core.Stack):
             **LAMBDA_DEFAULTS,
         )
 
+        retry = {
+            "errors": ["States.TaskFailed"],
+            "interval": core.Duration.seconds(10),
+            "max_attempts": 2,
+            "backoff_rate": 2.0,
+        }
+
         steps = (
             sfn.Task(
                 self,
@@ -83,24 +90,14 @@ class DilbertFeedStack(core.Stack):
                 task=sfn_tasks.InvokeFunction(get_strip),
                 result_path="$.strip",
             )
-            .add_retry(
-                errors=["States.TaskFailed"],
-                interval=core.Duration.seconds(60),
-                max_attempts=2,
-                backoff_rate=2.0,
-            )
+            .add_retry(**retry)
             .next(
                 sfn.Task(
                     self,
                     "GenFeed",
                     task=sfn_tasks.InvokeFunction(gen_feed),
                     result_path="$.feed",
-                ).add_retry(
-                    errors=["States.TaskFailed"],
-                    interval=core.Duration.seconds(10),
-                    max_attempts=2,
-                    backoff_rate=2.0,
-                )
+                ).add_retry(**retry)
             )
             .next(
                 sfn.Task(
@@ -108,12 +105,7 @@ class DilbertFeedStack(core.Stack):
                     "SendHeartbeat",
                     task=sfn_tasks.InvokeFunction(heartbeat),
                     result_path="$.heartbeat",
-                ).add_retry(
-                    errors=["States.TaskFailed"],
-                    interval=core.Duration.seconds(10),
-                    max_attempts=2,
-                    backoff_rate=2.0,
-                )
+                ).add_retry(**retry)
             )
         )
 
