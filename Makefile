@@ -1,7 +1,10 @@
-ENV        ?= dev
-FUNCS      := $(subst /,,$(dir $(wildcard */main.go)))
-SERVICE    := $(shell awk '/^service:/ {print $$2}' serverless.yml)
-SERVERLESS := node_modules/.bin/serverless
+ENV   ?= dev
+STACK  = dilbert-feed-$(ENV)
+FUNCS := $(subst /,,$(dir $(wildcard */main.go)))
+
+#
+# deploy & destroy
+#
 
 dev: ENV=dev
 dev: deploy
@@ -9,33 +12,34 @@ dev: deploy
 prod: ENV=prod
 prod: deploy
 
-deploy: test build $(SERVERLESS)
-	$(SERVERLESS) deploy --stage $(ENV) --verbose
+deploy diff synth: venv build
+	@cdk $@ $(STACK)
 
-deploy_funcs = $(FUNCS:%=deploy-%)
+destroy: venv build
+	@cdk destroy --force $(STACK)
 
-$(deploy_funcs): deploy-%: test-% build-% $(SERVERLESS)
-	$(SERVERLESS) deploy function --function $(@:deploy-%=%) --stage $(ENV) --verbose
+bootstrap: venv build
+	@cdk bootstrap
 
-destroy: $(SERVERLESS)
-	$(SERVERLESS) remove --stage $(ENV) --verbose
+venv:
+	python3 -m venv $@
+	venv/bin/pip install -r requirements.txt
 
-logs_funcs = $(FUNCS:%=logs-%)
+#
+# build
+#
 
-$(logs_funcs): $(SERVERLESS)
-	$(SERVERLESS) logs --function $(@:logs-%=%) --stage $(ENV) --tail --no-color
-
-$(SERVERLESS): node_modules
-
-node_modules:
-	npm install
-
-build_funcs = $(FUNCS:%=build-%)
+build_funcs := $(FUNCS:%=build-%)
 
 build: $(build_funcs)
 
 $(build_funcs):
-	GOOS=linux GOARCH=amd64 go build -o bin/$(@:build-%=%) ./$(@:build-%=%)
+	mkdir -p bin/$(@:build-%=%)
+	GOOS=linux GOARCH=amd64 go build -o bin/$(@:build-%=%)/handler ./$(@:build-%=%)
+
+#
+# test
+#
 
 test:
 	go vet ./...
@@ -46,7 +50,3 @@ test_funcs = $(FUNCS:%=test-%)
 $(test_funcs):
 	go vet ./$(@:test-%=%)
 	go test -v -cover ./$(@:test-%=%)
-
-update-deps:
-	go get -u ./...
-	go mod tidy

@@ -1,0 +1,5 @@
+{
+  "app": "venv/bin/python3 app.py",
+  "requireApproval": "never",
+  "versionReporting": false
+}
