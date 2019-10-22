@@ -1,7 +1,3 @@
 /bin/
 /cdk.out/
 /venv/
-
-**/.terraform/*
-*.tfstate
-*.tfstate.*

@@ -1,5 +1,5 @@
 ENV   ?= dev
-STACK  = dilbert-feed-cdk-$(ENV)
+STACK  = dilbert-feed-$(ENV)
 FUNCS := $(subst /,,$(dir $(wildcard */main.go)))
 
 #
@@ -15,10 +15,10 @@ prod: deploy
 deploy diff synth: venv build
 	@cdk $@ $(STACK)
 
-destroy: venv
+destroy: venv build
 	@cdk destroy --force $(STACK)
 
-bootstrap:
+bootstrap: venv build
 	@cdk bootstrap
 
 venv:
@@ -50,7 +50,3 @@ test_funcs = $(FUNCS:%=test-%)
 $(test_funcs):
 	go vet ./$(@:test-%=%)
 	go test -v -cover ./$(@:test-%=%)
-
-update-deps:
-	go get -u ./...
-	go mod tidy

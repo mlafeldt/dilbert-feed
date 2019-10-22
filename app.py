@@ -127,15 +127,15 @@ app = core.App()
 
 DilbertFeedStack(
     app,
-    "dilbert-feed-cdk-dev",
-    heartbeat_endpoint="https://hc-ping.com/07321d8b-251b-4cf8-aaec-73e152eee601",
+    "dilbert-feed-dev",
+    heartbeat_endpoint="https://hc-ping.com/33868fe9-9efc-414a-b882-a598a2b09dea",
     tags={"STAGE": "dev"},
 )
 DilbertFeedStack(
     app,
-    "dilbert-feed-cdk-prod",
-    bucket_name="dilbert-feed-cdk",
-    heartbeat_endpoint="https://hc-ping.com/22916110-70c7-4071-bf02-919e210da7c4",
+    "dilbert-feed-prod",
+    bucket_name="dilbert-feed",
+    heartbeat_endpoint="https://hc-ping.com/4fb7e55d-fe13-498b-bfaf-73cbf20e279e",
     tags={"STAGE": "prod"},
 )
 
