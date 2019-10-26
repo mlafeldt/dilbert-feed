@@ -38,15 +38,27 @@ $(build_funcs):
 	GOOS=linux GOARCH=amd64 go build -o bin/$(@:build-%=%)/handler ./$(@:build-%=%)
 
 #
+# lint
+#
+
+lint:
+	go vet ./...
+	golint -set_exit_status $$(go list ./...)
+
+lint_funcs := $(FUNCS:%=lint-%)
+
+$(lint_funcs):
+	go vet ./$(@:lint-%=%)
+	golint -set_exit_status ./$(@:lint-%=%)
+
+#
 # test
 #
 
 test:
-	go vet ./...
 	go test -v -cover -count=1 ./...
 
-test_funcs = $(FUNCS:%=test-%)
+test_funcs := $(FUNCS:%=test-%)
 
 $(test_funcs):
-	go vet ./$(@:test-%=%)
 	go test -v -cover ./$(@:test-%=%)
