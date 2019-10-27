@@ -15,6 +15,8 @@ prod: deploy
 deploy diff synth: venv build
 	@cdk $@ $(STACK)
 
+deploy: test
+
 destroy: venv build
 	@cdk destroy --force $(STACK)
 
