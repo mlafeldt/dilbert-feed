@@ -1,7 +1,9 @@
 from aws_cdk import (
+    aws_codebuild as codebuild,
     aws_events as events,
-    aws_lambda as lambda_,
     aws_events_targets as targets,
+    aws_iam as iam,
+    aws_lambda as lambda_,
     aws_s3 as s3,
     aws_stepfunctions as sfn,
     aws_stepfunctions_tasks as sfn_tasks,
@@ -123,6 +125,40 @@ class DilbertFeedStack(core.Stack):
         cron.add_target(targets.SfnStateMachine(sm))
 
 
+class DilbertFeedCICDStack(core.Stack):
+    def __init__(self, app: core.App, name: str, **kwargs,) -> None:
+        super().__init__(app, name, **kwargs)
+
+        project = codebuild.Project(
+            self,
+            "CodeBuild",
+            project_name=name,
+            source=codebuild.Source.git_hub(
+                owner="mlafeldt",
+                repo="dilbert-feed",
+                webhook_filters=[
+                    codebuild.FilterGroup.in_event_of(
+                        codebuild.EventAction.PUSH
+                    ).and_branch_is("master")
+                ],
+            ),
+            build_spec=codebuild.BuildSpec.from_object(
+                {
+                    "version": "0.2",
+                    "env": {"variables": {"GO111MODULE": "on"}},
+                    "phases": {
+                        "install": {
+                            "runtime-versions": {"golang": "1.13", "nodejs": "10"},
+                            "commands": ["npm install -g aws-cdk"],
+                        },
+                        "build": {"commands": ["env", "make dev"]},
+                    },
+                }
+            ),
+        )
+        project.add_to_role_policy(iam.PolicyStatement(actions=["*"], resources=["*"]))
+
+
 app = core.App()
 
 DilbertFeedStack(
@@ -137,6 +173,9 @@ DilbertFeedStack(
     bucket_name="dilbert-feed",
     heartbeat_endpoint="https://hc-ping.com/4fb7e55d-fe13-498b-bfaf-73cbf20e279e",
     tags={"STAGE": "prod"},
+)
+DilbertFeedCICDStack(
+    app, "dilbert-feed-cicd", tags={"STAGE": "prod"},
 )
 
 app.synth()
