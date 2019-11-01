@@ -162,8 +162,9 @@ class DilbertFeedPipelineStack(core.Stack):
                             "runtime-versions": {"golang": "1.13", "nodejs": "10"},
                             "commands": ["npm install -g aws-cdk"],
                         },
-                        "build": {"commands": ["env", "make build"]},
+                        "build": {"commands": ["make synth STACK="]},
                     },
+                    "artifacts": {"base-directory": "cdk.out", "files": ["**/*"]},
                 }
             ),
         )
