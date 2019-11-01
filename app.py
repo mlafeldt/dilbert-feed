@@ -1,5 +1,7 @@
 from aws_cdk import (
     aws_codebuild as codebuild,
+    aws_codepipeline as codepipeline,
+    aws_codepipeline_actions as actions,
     aws_events as events,
     aws_events_targets as targets,
     aws_iam as iam,
@@ -125,23 +127,23 @@ class DilbertFeedStack(core.Stack):
         cron.add_target(targets.SfnStateMachine(sm))
 
 
-class DilbertFeedCICDStack(core.Stack):
+class DilbertFeedPipelineStack(core.Stack):
     def __init__(self, app: core.App, name: str, **kwargs,) -> None:
         super().__init__(app, name, **kwargs)
 
-        project = codebuild.Project(
+        source_output = codepipeline.Artifact("SourceArtifact")
+        source_action = actions.GitHubSourceAction(
+            action_name="GitHubSource",
+            owner="mlafeldt",
+            repo="dilbert-feed",
+            oauth_token=core.SecretValue.plain_text("xxx"),
+            output=source_output,
+        )
+
+        build_project = codebuild.PipelineProject(
             self,
             "CodeBuild",
             project_name=name,
-            source=codebuild.Source.git_hub(
-                owner="mlafeldt",
-                repo="dilbert-feed",
-                webhook_filters=[
-                    codebuild.FilterGroup.in_event_of(
-                        codebuild.EventAction.PUSH
-                    ).and_branch_is("master")
-                ],
-            ),
             build_spec=codebuild.BuildSpec.from_object(
                 {
                     "version": "0.2",
@@ -151,12 +153,25 @@ class DilbertFeedCICDStack(core.Stack):
                             "runtime-versions": {"golang": "1.13", "nodejs": "10"},
                             "commands": ["npm install -g aws-cdk"],
                         },
-                        "build": {"commands": ["env", "make dev"]},
+                        "build": {"commands": ["env", "make build"]},
                     },
                 }
             ),
         )
-        project.add_to_role_policy(iam.PolicyStatement(actions=["*"], resources=["*"]))
+        # build_project.add_to_role_policy(
+        #     iam.PolicyStatement(actions=["*"], resources=["*"])
+        # )
+        build_artifact = codepipeline.Artifact("BuildArtifact")
+        build_action = actions.CodeBuildAction(
+            action_name="CodeBuild",
+            project=build_project,
+            input=source_output,
+            outputs=[build_artifact],
+        )
+
+        pipeline = codepipeline.Pipeline(self, "Pipeline", pipeline_name=name)
+        pipeline.add_stage(stage_name="Source", actions=[source_action])
+        pipeline.add_stage(stage_name="Build", actions=[build_action])
 
 
 app = core.App()
@@ -174,8 +189,6 @@ DilbertFeedStack(
     heartbeat_endpoint="https://hc-ping.com/4fb7e55d-fe13-498b-bfaf-73cbf20e279e",
     tags={"STAGE": "prod"},
 )
-DilbertFeedCICDStack(
-    app, "dilbert-feed-cicd", tags={"STAGE": "prod"},
-)
+DilbertFeedPipelineStack(app, "dilbert-feed-pipeline")
 
 app.synth()

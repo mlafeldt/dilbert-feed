@@ -1,4 +1,6 @@
 aws-cdk.aws-codebuild==1.15.0
+aws-cdk.aws-codepipeline-actions==1.15.0
+aws-cdk.aws-codepipeline==1.15.0
 aws-cdk.aws-events-targets==1.15.0
 aws-cdk.aws-events==1.15.0
 aws-cdk.aws-lambda==1.15.0
