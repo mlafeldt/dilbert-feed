@@ -7,10 +7,12 @@ from aws_cdk import (
     aws_iam as iam,
     aws_lambda as lambda_,
     aws_s3 as s3,
+    aws_ssm as ssm,
     aws_stepfunctions as sfn,
     aws_stepfunctions_tasks as sfn_tasks,
     core,
 )
+import os
 
 LAMBDA_DEFAULTS = {
     "handler": "handler",
@@ -131,12 +133,19 @@ class DilbertFeedPipelineStack(core.Stack):
     def __init__(self, app: core.App, name: str, **kwargs,) -> None:
         super().__init__(app, name, **kwargs)
 
+        # Read OAuth token from SSM at synthesis time because I'm cheap and
+        # don't want to pay for Secrets Manager.
+        # https://docs.aws.amazon.com/cdk/latest/guide/get_ssm_value.html
+        github_token = ssm.StringParameter.value_from_lookup(
+            self, "/dilbert-feed/github_token"
+        )
+
         source_output = codepipeline.Artifact("SourceArtifact")
         source_action = actions.GitHubSourceAction(
             action_name="GitHubSource",
             owner="mlafeldt",
             repo="dilbert-feed",
-            oauth_token=core.SecretValue.plain_text("xxx"),
+            oauth_token=core.SecretValue(github_token),
             output=source_output,
         )
 
@@ -189,6 +198,13 @@ DilbertFeedStack(
     heartbeat_endpoint="https://hc-ping.com/4fb7e55d-fe13-498b-bfaf-73cbf20e279e",
     tags={"STAGE": "prod"},
 )
-DilbertFeedPipelineStack(app, "dilbert-feed-pipeline")
+DilbertFeedPipelineStack(
+    app,
+    "dilbert-feed-pipeline",
+    env={
+        "account": os.environ["CDK_DEFAULT_ACCOUNT"],
+        "region": os.environ["CDK_DEFAULT_REGION"],
+    },
+)
 
 app.synth()
