@@ -28,6 +28,12 @@ func TestNewComic(t *testing.T) {
 			ImageURL: "https://assets.amuniversal.com/cda546d0a88c01365b26005056a9545d",
 			StripURL: ts.URL + "/strip/2018-10-30",
 		},
+		{
+			Date:     "2019-11-02",
+			Title:    "Multiple Choice",
+			ImageURL: "https://assets.amuniversal.com/ce7ec130d6480137c832005056a9545d",
+			StripURL: ts.URL + "/strip/2019-11-02",
+		},
 	}
 
 	for _, td := range testdata {
