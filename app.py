@@ -139,7 +139,6 @@ class DilbertFeedPipelineStack(core.Stack):
         github_token = ssm.StringParameter.value_from_lookup(
             self, "/dilbert-feed/github_token"
         )
-
         source_output = codepipeline.Artifact("SourceArtifact")
         source_action = actions.GitHubSourceAction(
             action_name="GitHubSource",
@@ -162,15 +161,12 @@ class DilbertFeedPipelineStack(core.Stack):
                             "runtime-versions": {"golang": "1.13", "nodejs": "10"},
                             "commands": ["npm install -g aws-cdk"],
                         },
-                        "build": {"commands": ["make synth STACK="]},
+                        "build": {"commands": ["make synth STACK=", "ls -la cdk.out"]},
                     },
                     "artifacts": {"base-directory": "cdk.out", "files": ["**/*"]},
                 }
             ),
         )
-        # build_project.add_to_role_policy(
-        #     iam.PolicyStatement(actions=["*"], resources=["*"])
-        # )
         build_artifact = codepipeline.Artifact("BuildArtifact")
         build_action = actions.CodeBuildAction(
             action_name="CodeBuild",
@@ -182,6 +178,28 @@ class DilbertFeedPipelineStack(core.Stack):
         pipeline = codepipeline.Pipeline(self, "Pipeline", pipeline_name=name)
         pipeline.add_stage(stage_name="Source", actions=[source_action])
         pipeline.add_stage(stage_name="Build", actions=[build_action])
+
+        pipeline.add_stage(
+            stage_name="DeployToDev",
+            actions=[
+                actions.CloudFormationCreateReplaceChangeSetAction(
+                    action_name="PrepareChangesDev",
+                    change_set_name="StagedChangeSet",
+                    stack_name="dilbert-feed-dev",
+                    template_path=build_artifact.at_path(
+                        "dilbert-feed-dev.template.json"
+                    ),
+                    admin_permissions=True,
+                    run_order=1,
+                ),
+                actions.CloudFormationExecuteChangeSetAction(
+                    action_name="ExecuteChangesDev",
+                    change_set_name="StagedChangeSet",
+                    stack_name="dilbert-feed-dev",
+                    run_order=2,
+                ),
+            ],
+        )
 
 
 app = core.App()
