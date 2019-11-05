@@ -133,6 +133,8 @@ class DilbertFeedPipelineStack(core.Stack):
     def __init__(self, app: core.App, name: str, **kwargs,) -> None:
         super().__init__(app, name, **kwargs)
 
+        pipeline = codepipeline.Pipeline(self, "Pipeline", pipeline_name=name)
+
         # Read OAuth token from SSM at synthesis time because I'm cheap and
         # don't want to pay for Secrets Manager.
         # https://docs.aws.amazon.com/cdk/latest/guide/get_ssm_value.html
@@ -141,65 +143,77 @@ class DilbertFeedPipelineStack(core.Stack):
         )
         source_output = codepipeline.Artifact("SourceArtifact")
         source_action = actions.GitHubSourceAction(
-            action_name="GitHubSource",
+            action_name="Source",
             owner="mlafeldt",
             repo="dilbert-feed",
             oauth_token=core.SecretValue(github_token),
             output=source_output,
         )
+        pipeline.add_stage(stage_name="Source", actions=[source_action])
 
         build_project = codebuild.PipelineProject(
             self,
-            "CodeBuild",
-            project_name=name,
+            "Build",
+            project_name=f"{name}-build",
             build_spec=codebuild.BuildSpec.from_object(
                 {
                     "version": "0.2",
                     "env": {"variables": {"GO111MODULE": "on"}},
                     "phases": {
-                        "install": {
-                            "runtime-versions": {"golang": "1.13", "nodejs": "10"},
-                            "commands": ["npm install -g aws-cdk"],
-                        },
-                        "build": {"commands": ["make synth STACK=", "ls -la cdk.out"]},
+                        "install": {"runtime-versions": {"golang": "1.13"}},
+                        "build": {"commands": ["make test", "make build"]},
                     },
-                    "artifacts": {"base-directory": "cdk.out", "files": ["**/*"]},
+                    "artifacts": {
+                        "files": [
+                            "app.py",
+                            "bin/**/*",
+                            "cdk.json",
+                            "Makefile",
+                            "requirements.txt",
+                        ]
+                    },
                 }
             ),
         )
-        build_artifact = codepipeline.Artifact("BuildArtifact")
+        build_output = codepipeline.Artifact("BuildArtifact")
         build_action = actions.CodeBuildAction(
-            action_name="CodeBuild",
+            action_name="Build",
             project=build_project,
             input=source_output,
-            outputs=[build_artifact],
+            outputs=[build_output],
         )
-
-        pipeline = codepipeline.Pipeline(self, "Pipeline", pipeline_name=name)
-        pipeline.add_stage(stage_name="Source", actions=[source_action])
         pipeline.add_stage(stage_name="Build", actions=[build_action])
 
-        pipeline.add_stage(
-            stage_name="DeployToDev",
-            actions=[
-                actions.CloudFormationCreateReplaceChangeSetAction(
-                    action_name="PrepareChangesDev",
-                    change_set_name="StagedChangeSet",
-                    stack_name="dilbert-feed-dev",
-                    template_path=build_artifact.at_path(
-                        "dilbert-feed-dev.template.json"
-                    ),
-                    admin_permissions=True,
-                    run_order=1,
-                ),
-                actions.CloudFormationExecuteChangeSetAction(
-                    action_name="ExecuteChangesDev",
-                    change_set_name="StagedChangeSet",
-                    stack_name="dilbert-feed-dev",
-                    run_order=2,
-                ),
-            ],
+        deploy_project = codebuild.PipelineProject(
+            self,
+            "Deploy",
+            project_name=f"{name}-deploy",
+            build_spec=codebuild.BuildSpec.from_object(
+                {
+                    "version": "0.2",
+                    "phases": {
+                        "install": {
+                            "runtime-versions": {"nodejs": "10"},
+                            "commands": ["npm install -g aws-cdk@^1.15.0"],
+                        },
+                        "build": {
+                            "commands": [
+                                "make venv",
+                                "cdk diff dilbert-feed-dev || true",
+                                "cdk deploy --ci dilbert-feed-dev",
+                            ]
+                        },
+                    },
+                }
+            ),
         )
+        deploy_project.add_to_role_policy(
+            iam.PolicyStatement(actions=["*"], resources=["*"])
+        )
+        deploy_action = actions.CodeBuildAction(
+            action_name="Deploy", project=deploy_project, input=build_output
+        )
+        pipeline.add_stage(stage_name="Deploy", actions=[deploy_action])
 
 
 app = core.App()
