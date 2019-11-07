@@ -37,7 +37,7 @@ build: $(build_funcs)
 
 $(build_funcs):
 	mkdir -p bin/$(@:build-%=%)
-	GOOS=linux GOARCH=amd64 go build -o bin/$(@:build-%=%)/handler ./$(@:build-%=%)
+	GOOS=linux GOARCH=amd64 go build -trimpath -ldflags=-buildid= -o bin/$(@:build-%=%)/handler ./$(@:build-%=%)
 
 #
 # lint
