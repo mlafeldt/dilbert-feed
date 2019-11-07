@@ -146,6 +146,7 @@ class DilbertFeedPipelineStack(core.Stack):
             action_name="Source",
             owner="mlafeldt",
             repo="dilbert-feed",
+            branch="cicd",
             oauth_token=core.SecretValue(github_token),
             output=source_output,
         )
