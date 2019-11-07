@@ -156,10 +156,12 @@ class DilbertFeedPipelineStack(core.Stack):
             self,
             "Build",
             project_name=f"{name}-build",
+            environment=codebuild.BuildEnvironment(
+                build_image=codebuild.LinuxBuildImage.STANDARD_2_0
+            ),
             build_spec=codebuild.BuildSpec.from_object(
                 {
                     "version": "0.2",
-                    "env": {"variables": {"GO111MODULE": "on"}},
                     "phases": {
                         "install": {"runtime-versions": {"golang": "1.13"}},
                         "build": {"commands": ["make test", "make build"]},
@@ -189,6 +191,9 @@ class DilbertFeedPipelineStack(core.Stack):
             self,
             "Deploy",
             project_name=f"{name}-deploy",
+            environment=codebuild.BuildEnvironment(
+                build_image=codebuild.LinuxBuildImage.STANDARD_2_0
+            ),
             build_spec=codebuild.BuildSpec.from_object(
                 {
                     "version": "0.2",
