@@ -1,3 +1,4 @@
 /bin/
+/cdk.context.json
 /cdk.out/
 /venv/
