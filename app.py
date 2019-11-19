@@ -8,13 +8,19 @@ from aws_cdk import (
     core,
 )
 
+STRIPS_DIR = "strips/"
 LAMBDA_DEFAULTS = {
     "handler": "handler",
     "runtime": lambda_.Runtime.GO_1_X,
     "memory_size": 128,
     "timeout": core.Duration.seconds(10),
 }
-STRIPS_DIR = "strips/"
+TASK_RETRY = {
+    "errors": ["States.TaskFailed"],
+    "interval": core.Duration.seconds(10),
+    "max_attempts": 2,
+    "backoff_rate": 2.0,
+}
 
 
 class DilbertFeedStack(core.Stack):
@@ -76,13 +82,6 @@ class DilbertFeedStack(core.Stack):
             **LAMBDA_DEFAULTS,
         )
 
-        retry = {
-            "errors": ["States.TaskFailed"],
-            "interval": core.Duration.seconds(10),
-            "max_attempts": 2,
-            "backoff_rate": 2.0,
-        }
-
         steps = (
             sfn.Task(
                 self,
@@ -90,14 +89,14 @@ class DilbertFeedStack(core.Stack):
                 task=sfn_tasks.InvokeFunction(get_strip),
                 result_path="$.strip",
             )
-            .add_retry(**retry)
+            .add_retry(**TASK_RETRY)
             .next(
                 sfn.Task(
                     self,
                     "GenFeed",
                     task=sfn_tasks.InvokeFunction(gen_feed),
                     result_path="$.feed",
-                ).add_retry(**retry)
+                ).add_retry(**TASK_RETRY)
             )
             .next(
                 sfn.Task(
@@ -105,7 +104,7 @@ class DilbertFeedStack(core.Stack):
                     "SendHeartbeat",
                     task=sfn_tasks.InvokeFunction(heartbeat),
                     result_path="$.heartbeat",
-                ).add_retry(**retry)
+                ).add_retry(**TASK_RETRY)
             )
         )
 
