@@ -1,7 +1,7 @@
 from aws_cdk import (
     aws_events as events,
-    aws_lambda as lambda_,
     aws_events_targets as targets,
+    aws_lambda as lambda_,
     aws_s3 as s3,
     aws_stepfunctions as sfn,
     aws_stepfunctions_tasks as sfn_tasks,
