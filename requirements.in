@@ -1,0 +1,10 @@
+aws-cdk.aws-events
+aws-cdk.aws-events-targets
+aws-cdk.aws-lambda
+aws-cdk.aws-s3
+aws-cdk.aws-stepfunctions
+aws-cdk.aws-stepfunctions-tasks
+aws-cdk.core
+
+black
+pylint
