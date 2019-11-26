@@ -9,12 +9,6 @@ from aws_cdk import (
 )
 
 STRIPS_DIR = "strips/"
-LAMBDA_DEFAULTS = {
-    "handler": "handler",
-    "runtime": lambda_.Runtime.GO_1_X,
-    "memory_size": 128,
-    "timeout": core.Duration.seconds(10),
-}
 TASK_RETRY = {
     "errors": ["States.TaskFailed"],
     "interval": core.Duration.seconds(10),
@@ -52,11 +46,14 @@ class DilbertFeedStack(core.Stack):
             "GetStripFunc",
             function_name=f"{name}-get-strip",
             code=lambda_.Code.asset("bin/get-strip"),
+            handler="handler",
+            runtime=lambda_.Runtime.GO_1_X,
+            memory_size=128,
+            timeout=core.Duration.seconds(10),
             environment={
                 "BUCKET_NAME": bucket.bucket_name,
                 "BUCKET_PREFIX": STRIPS_DIR,
             },
-            **LAMBDA_DEFAULTS,
         )
         bucket.grant_put(get_strip)
 
@@ -65,11 +62,14 @@ class DilbertFeedStack(core.Stack):
             "GenFeedFunc",
             function_name=f"{name}-gen-feed",
             code=lambda_.Code.asset("bin/gen-feed"),
+            handler="handler",
+            runtime=lambda_.Runtime.GO_1_X,
+            memory_size=128,
+            timeout=core.Duration.seconds(10),
             environment={
                 "BUCKET_NAME": bucket.bucket_name,
                 "BUCKET_PREFIX": STRIPS_DIR,
             },
-            **LAMBDA_DEFAULTS,
         )
         bucket.grant_put(gen_feed)
 
@@ -77,9 +77,12 @@ class DilbertFeedStack(core.Stack):
             self,
             "HeartbeatFunc",
             function_name=f"{name}-heartbeat",
-            code=lambda_.Code.asset("bin/heartbeat"),
+            code=lambda_.Code.asset("heartbeat"),
+            handler="index.handler",
+            runtime=lambda_.Runtime.NODEJS_12_X,
+            memory_size=128,
+            timeout=core.Duration.seconds(10),
             environment={"HEARTBEAT_ENDPOINT": heartbeat_endpoint},
-            **LAMBDA_DEFAULTS,
         )
 
         steps = (
