@@ -124,6 +124,9 @@ class DilbertFeedStack(core.Stack):
         )
         cron.add_target(targets.SfnStateMachine(sm))
 
+        core.CfnOutput(self, "BucketName", value=bucket.bucket_name)
+        core.CfnOutput(self, "HeartbeatEndpoint", value=heartbeat_endpoint)
+
 
 app = core.App()
 
