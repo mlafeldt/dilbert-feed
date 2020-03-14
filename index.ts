@@ -1,4 +1,5 @@
 import cdk = require('@aws-cdk/core');
+import s3 = require('@aws-cdk/aws-s3');
 
 interface DilbertFeedStackProps extends cdk.StackProps {
   bucketName?: string;
@@ -8,6 +9,19 @@ interface DilbertFeedStackProps extends cdk.StackProps {
 export class DilbertFeedStack extends cdk.Stack {
   constructor(scope: cdk.App, id: string, props: DilbertFeedStackProps) {
     super(scope, id, props);
+
+    const stripsDir = 'strips/';
+
+    const bucket = new s3.Bucket(this, 'Bucket', {
+      bucketName: props.bucketName,
+      publicReadAccess: true,
+      encryption: s3.BucketEncryption.S3_MANAGED
+    });
+    bucket.addLifecycleRule({
+      id: 'DeleteStripsAfter30Days',
+      prefix: stripsDir,
+      expiration: cdk.Duration.days(30)
+    });
   }
 }
 

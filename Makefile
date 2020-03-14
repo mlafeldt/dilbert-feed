@@ -13,16 +13,19 @@ dev: deploy
 prod: ENV=prod
 prod: deploy
 
-deploy diff synth: build
+deploy diff synth: build transpile
 	@$(CDK) $@ $(STACK)
 
 deploy: test
 
-destroy: build
+destroy: build transpile
 	@$(CDK) destroy --force $(STACK)
 
-bootstrap: build
+bootstrap: build transpile
 	@$(CDK) bootstrap
+
+transpile: node_modules
+	@npm run build
 
 node_modules:
 	npm install
