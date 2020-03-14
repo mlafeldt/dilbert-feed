@@ -13,30 +13,32 @@ dev: deploy
 prod: ENV=prod
 prod: deploy
 
-deploy diff synth: build transpile
+deploy diff synth: build
 	@$(CDK) $@ $(STACK)
 
 deploy: test
 
-destroy: build transpile
+destroy: build
 	@$(CDK) destroy --force $(STACK)
 
-bootstrap: build transpile
+bootstrap: build
 	@$(CDK) bootstrap
-
-transpile: node_modules
-	@npm run build
-
-node_modules:
-	npm install
 
 #
 # build
 #
 
+build: npm-build go-build
+
+npm-build: node_modules
+	@npm run build
+
+node_modules:
+	npm install
+
 build_funcs := $(FUNCS:%=build-%)
 
-build: $(build_funcs)
+go-build: $(build_funcs)
 
 $(build_funcs):
 	mkdir -p bin/$(@:build-%=%)

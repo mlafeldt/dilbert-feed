@@ -105,12 +105,8 @@ export class DilbertFeedStack extends cdk.Stack {
     });
     cron.addTarget(new targets.SfnStateMachine(sm));
 
-    new cdk.CfnOutput(this, 'BucketName', {
-      value: bucket.bucketName
-    });
-    new cdk.CfnOutput(this, 'HeartbeatEndpoint', {
-      value: props.heartbeatEndpoint
-    });
+    new cdk.CfnOutput(this, 'BucketName', { value: bucket.bucketName });
+    new cdk.CfnOutput(this, 'HeartbeatEndpoint', { value: props.heartbeatEndpoint });
   }
 }
 

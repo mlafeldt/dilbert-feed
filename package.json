@@ -1,6 +1,6 @@
 {
   "name": "dilbert-feed",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Enjoy Dilbert in your RSS feed reader without any ads!",
   "private": true,
   "scripts": {
