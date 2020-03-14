@@ -12,6 +12,7 @@ export class DilbertFeedStack extends cdk.Stack {
     super(scope, id, props);
 
     const stripsDir = 'strips/';
+    const feedPath = 'v1/rss.xml';
 
     const bucket = new s3.Bucket(this, 'Bucket', {
       publicReadAccess: true,
@@ -46,7 +47,8 @@ export class DilbertFeedStack extends cdk.Stack {
       timeout: cdk.Duration.seconds(10),
       environment: {
         BUCKET_NAME: bucket.bucketName,
-        BUCKET_PREFIX: stripsDir
+        BUCKET_PREFIX: stripsDir,
+        FEED_PATH: feedPath
       }
     });
     bucket.grantPut(genFeed);

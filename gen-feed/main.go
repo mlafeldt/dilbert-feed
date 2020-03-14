@@ -10,10 +10,7 @@ import (
 	"github.com/kelseyhightower/envconfig"
 )
 
-const (
-	defaultFeedPath   = "v1/rss.xml"
-	defaultFeedLength = 30
-)
+const feedLength = 30
 
 // Input is the input passed to the Lambda function.
 type Input struct{}
@@ -31,6 +28,7 @@ func handler(input Input) (*Output, error) {
 	var env struct {
 		BucketName   string `envconfig:"BUCKET_NAME" required:"true"`
 		BucketPrefix string `envconfig:"BUCKET_PREFIX" required:"true"`
+		FeedPath     string `envconfig:"FEED_PATH" required:"true"`
 	}
 	if err := envconfig.Process("", &env); err != nil {
 		return nil, err
@@ -44,12 +42,12 @@ func handler(input Input) (*Output, error) {
 	)
 
 	log.Printf("[INFO] Generating feed for date %s ...", now.Format(time.RFC3339))
-	if err := generateFeed(&buf, now, defaultFeedLength, baseURL); err != nil {
+	if err := generateFeed(&buf, now, feedLength, baseURL); err != nil {
 		return nil, err
 	}
 
-	log.Printf("[INFO] Uploading feed to bucket %q with path %q ...", env.BucketName, defaultFeedPath)
-	feedURL, err := uploadFeed(&buf, env.BucketName, defaultFeedPath)
+	log.Printf("[INFO] Uploading feed to bucket %q with path %q ...", env.BucketName, env.FeedPath)
+	feedURL, err := uploadFeed(&buf, env.BucketName, env.FeedPath)
 	if err != nil {
 		return nil, err
 	}
