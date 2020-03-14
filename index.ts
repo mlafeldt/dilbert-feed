@@ -1,6 +1,8 @@
 import cdk = require('@aws-cdk/core');
 import lambda = require('@aws-cdk/aws-lambda');
 import s3 = require('@aws-cdk/aws-s3');
+import sfn = require('@aws-cdk/aws-stepfunctions');
+import tasks = require('@aws-cdk/aws-stepfunctions-tasks');
 
 interface DilbertFeedStackProps extends cdk.StackProps {
   bucketName?: string;
@@ -52,7 +54,6 @@ export class DilbertFeedStack extends cdk.Stack {
     });
     bucket.grantPut(genFeed);
 
-    // @ts-ignore
     const heartbeat = new lambda.Function(this, 'HeartbeatFunc', {
       functionName: `${id}-heartbeat`,
       code: lambda.Code.fromAsset('heartbeat'),
@@ -65,8 +66,35 @@ export class DilbertFeedStack extends cdk.Stack {
       }
     });
 
-    new cdk.CfnOutput(this, 'BucketName', { value: bucket.bucketName });
-    new cdk.CfnOutput(this, 'HeartbeatEndpoint', { value: props.heartbeatEndpoint });
+    const steps = new sfn.Task(this, 'GetStrip', {
+      task: new tasks.InvokeFunction(getStrip),
+      resultPath: '$.strip'
+    })
+      .next(
+        new sfn.Task(this, 'GenFeed', {
+          task: new tasks.InvokeFunction(genFeed),
+          resultPath: '$.feed'
+        })
+      )
+      .next(
+        new sfn.Task(this, 'SendHeartbeat', {
+          task: new tasks.InvokeFunction(heartbeat),
+          resultPath: '$.heartbeat'
+        })
+      );
+
+    // @ts-ignore
+    const sm = new sfn.StateMachine(this, 'StateMachine', {
+      stateMachineName: id,
+      definition: steps
+    });
+
+    new cdk.CfnOutput(this, 'BucketName', {
+      value: bucket.bucketName
+    });
+    new cdk.CfnOutput(this, 'HeartbeatEndpoint', {
+      value: props.heartbeatEndpoint
+    });
   }
 }
 
