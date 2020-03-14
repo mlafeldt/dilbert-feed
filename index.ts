@@ -1,7 +1,9 @@
 import cdk = require('@aws-cdk/core');
+import events = require('@aws-cdk/aws-events');
 import lambda = require('@aws-cdk/aws-lambda');
 import s3 = require('@aws-cdk/aws-s3');
 import sfn = require('@aws-cdk/aws-stepfunctions');
+import targets = require('@aws-cdk/aws-events-targets');
 import tasks = require('@aws-cdk/aws-stepfunctions-tasks');
 
 interface DilbertFeedStackProps extends cdk.StackProps {
@@ -83,11 +85,17 @@ export class DilbertFeedStack extends cdk.Stack {
         })
       );
 
-    // @ts-ignore
     const sm = new sfn.StateMachine(this, 'StateMachine', {
       stateMachineName: id,
       definition: steps
     });
+
+    const cron = new events.Rule(this, 'Cron', {
+      description: 'Update Dilbert feed',
+      ruleName: `${id}-cron`,
+      schedule: events.Schedule.expression('cron(0 6 * * ? *)')
+    });
+    cron.addTarget(new targets.SfnStateMachine(sm));
 
     new cdk.CfnOutput(this, 'BucketName', {
       value: bucket.bucketName
