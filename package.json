@@ -2,7 +2,7 @@
   "name": "dilbert-feed",
   "version": "1.0.0",
   "description": "Enjoy Dilbert in your RSS feed reader without any ads!",
-  "private": true,
+  "repository": "github:mlafeldt/dilbert-feed",
   "scripts": {
     "build": "tsc",
     "watch": "tsc -w",
