@@ -57,7 +57,22 @@ $ ./invoke dilbert-feed-prod-gen-feed
 
 ## Deployment
 
-Install Node.js and Go. Then run:
+Set AWS region and credentials in environment:
+
+```console
+export AWS_REGION=eu-central-1
+export AWS_ACCESS_KEY_ID=...
+export AWS_SECRET_ACCESS_KEY=...
+```
+
+Configure heartbeat endpoint via AWS CLI:
+
+```console
+aws ssm put-parameter --overwrite --name /dilbert-feed-dev/heartbeat-endpoint --type String --value <url>
+aws ssm put-parameter --overwrite --name /dilbert-feed-prod/heartbeat-endpoint --type String --value <url>
+```
+
+Deploy the stack (requires Node.js and Go to be installed):
 
 ```console
 make bootstrap
