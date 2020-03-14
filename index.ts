@@ -68,21 +68,29 @@ export class DilbertFeedStack extends cdk.Stack {
       }
     });
 
+    const taskRetry = {
+      errors: ['States.TaskFailed'],
+      interval: cdk.Duration.seconds(10),
+      maxAttempts: 2,
+      backoffRate: 2.0
+    };
+
     const steps = new sfn.Task(this, 'GetStrip', {
       task: new tasks.InvokeFunction(getStrip),
       resultPath: '$.strip'
     })
+      .addRetry(taskRetry)
       .next(
         new sfn.Task(this, 'GenFeed', {
           task: new tasks.InvokeFunction(genFeed),
           resultPath: '$.feed'
-        })
+        }).addRetry(taskRetry)
       )
       .next(
         new sfn.Task(this, 'SendHeartbeat', {
           task: new tasks.InvokeFunction(heartbeat),
           resultPath: '$.heartbeat'
-        })
+        }).addRetry(taskRetry)
       );
 
     const sm = new sfn.StateMachine(this, 'StateMachine', {
