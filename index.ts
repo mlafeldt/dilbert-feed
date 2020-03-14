@@ -3,22 +3,17 @@ import events = require('@aws-cdk/aws-events');
 import lambda = require('@aws-cdk/aws-lambda');
 import s3 = require('@aws-cdk/aws-s3');
 import sfn = require('@aws-cdk/aws-stepfunctions');
+import ssm = require('@aws-cdk/aws-ssm');
 import targets = require('@aws-cdk/aws-events-targets');
 import tasks = require('@aws-cdk/aws-stepfunctions-tasks');
 
-interface DilbertFeedStackProps extends cdk.StackProps {
-  bucketName?: string;
-  heartbeatEndpoint: string;
-}
-
 export class DilbertFeedStack extends cdk.Stack {
-  constructor(scope: cdk.App, id: string, props: DilbertFeedStackProps) {
+  constructor(scope: cdk.App, id: string, props: cdk.StackProps) {
     super(scope, id, props);
 
     const stripsDir = 'strips/';
 
     const bucket = new s3.Bucket(this, 'Bucket', {
-      bucketName: props.bucketName,
       publicReadAccess: true,
       encryption: s3.BucketEncryption.S3_MANAGED
     });
@@ -56,6 +51,7 @@ export class DilbertFeedStack extends cdk.Stack {
     });
     bucket.grantPut(genFeed);
 
+    const heartbeatEndpoint = ssm.StringParameter.valueForStringParameter(this, `/${id}/heartbeat-endpoint`);
     const heartbeat = new lambda.Function(this, 'HeartbeatFunc', {
       functionName: `${id}-heartbeat`,
       code: lambda.Code.fromAsset('heartbeat'),
@@ -64,7 +60,7 @@ export class DilbertFeedStack extends cdk.Stack {
       memorySize: 128,
       timeout: cdk.Duration.seconds(10),
       environment: {
-        HEARTBEAT_ENDPOINT: props.heartbeatEndpoint
+        HEARTBEAT_ENDPOINT: heartbeatEndpoint
       }
     });
 
@@ -106,20 +102,11 @@ export class DilbertFeedStack extends cdk.Stack {
     cron.addTarget(new targets.SfnStateMachine(sm));
 
     new cdk.CfnOutput(this, 'BucketName', { value: bucket.bucketName });
-    new cdk.CfnOutput(this, 'HeartbeatEndpoint', { value: props.heartbeatEndpoint });
+    new cdk.CfnOutput(this, 'HeartbeatEndpoint', { value: heartbeatEndpoint });
   }
 }
 
 const app = new cdk.App();
-
-new DilbertFeedStack(app, 'dilbert-feed-dev', {
-  heartbeatEndpoint: 'https://hc-ping.com/33868fe9-9efc-414a-b882-a598a2b09dea',
-  tags: { STAGE: 'dev' }
-});
-new DilbertFeedStack(app, 'dilbert-feed-prod', {
-  bucketName: 'dilbert-feed',
-  heartbeatEndpoint: 'https://hc-ping.com/4fb7e55d-fe13-498b-bfaf-73cbf20e279e',
-  tags: { STAGE: 'prod' }
-});
-
+new DilbertFeedStack(app, 'dilbert-feed-dev', { tags: { STAGE: 'dev' } });
+new DilbertFeedStack(app, 'dilbert-feed-prod', { tags: { STAGE: 'prod' } });
 app.synth();

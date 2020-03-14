@@ -2,7 +2,7 @@
   "name": "dilbert-feed",
   "version": "1.0.0",
   "description": "Enjoy Dilbert in your RSS feed reader without any ads!",
-  "private": true,
+  "repository": "github:mlafeldt/dilbert-feed",
   "scripts": {
     "build": "tsc",
     "watch": "tsc -w",
@@ -12,7 +12,7 @@
   "author": {
     "name": "Mathias Lafeldt"
   },
-  "license": "UNLICENSED",
+  "license": "Apache-2.0",
   "devDependencies": {
     "@types/node": "^13.5.0",
     "typescript": "~3.7.5",
@@ -24,6 +24,7 @@
     "@aws-cdk/aws-events-targets": "^1.27.0",
     "@aws-cdk/aws-lambda": "^1.27.0",
     "@aws-cdk/aws-s3": "^1.27.0",
+    "@aws-cdk/aws-ssm": "^1.27.0",
     "@aws-cdk/aws-stepfunctions": "^1.27.0",
     "@aws-cdk/aws-stepfunctions-tasks": "^1.27.0"
   }
