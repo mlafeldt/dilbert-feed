@@ -1,6 +1,7 @@
 ENV   ?= dev
 STACK  = dilbert-feed-$(ENV)
 FUNCS := $(subst /,,$(dir $(wildcard */main.go)))
+CDK   ?= ./node_modules/.bin/cdk
 
 #
 # deploy & destroy
@@ -12,28 +13,32 @@ dev: deploy
 prod: ENV=prod
 prod: deploy
 
-deploy diff synth: venv build
-	@cdk $@ $(STACK)
+deploy diff synth: build
+	@$(CDK) $@ $(STACK)
 
 deploy: test
 
-destroy: venv build
-	@cdk destroy --force $(STACK)
+destroy: build
+	@$(CDK) destroy --force $(STACK)
 
-bootstrap: venv build
-	@cdk bootstrap
-
-venv:
-	python3 -m venv $@
-	venv/bin/pip install -r requirements.txt
+bootstrap: build
+	@$(CDK) bootstrap
 
 #
 # build
 #
 
+build: npm-build go-build
+
+npm-build: node_modules
+	@npm run build
+
+node_modules:
+	npm install
+
 build_funcs := $(FUNCS:%=build-%)
 
-build: $(build_funcs)
+go-build: $(build_funcs)
 
 $(build_funcs):
 	mkdir -p bin/$(@:build-%=%)

@@ -57,9 +57,7 @@ $ ./invoke dilbert-feed-prod-gen-feed
 
 ## Deployment
 
-Install Go and the [AWS CDK](https://docs.aws.amazon.com/cdk/index.html).
-
-Then run:
+Install Node.js and Go. Then run:
 
 ```console
 make bootstrap

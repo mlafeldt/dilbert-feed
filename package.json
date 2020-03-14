@@ -1,0 +1,30 @@
+{
+  "name": "dilbert-feed",
+  "version": "1.0.0",
+  "description": "Enjoy Dilbert in your RSS feed reader without any ads!",
+  "private": true,
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w",
+    "test": "echo ok",
+    "cdk": "cdk"
+  },
+  "author": {
+    "name": "Mathias Lafeldt"
+  },
+  "license": "UNLICENSED",
+  "devDependencies": {
+    "@types/node": "^13.5.0",
+    "typescript": "~3.7.5",
+    "aws-cdk": "^1.27.0"
+  },
+  "dependencies": {
+    "@aws-cdk/core": "^1.27.0",
+    "@aws-cdk/aws-events": "^1.27.0",
+    "@aws-cdk/aws-events-targets": "^1.27.0",
+    "@aws-cdk/aws-lambda": "^1.27.0",
+    "@aws-cdk/aws-s3": "^1.27.0",
+    "@aws-cdk/aws-stepfunctions": "^1.27.0",
+    "@aws-cdk/aws-stepfunctions-tasks": "^1.27.0"
+  }
+}

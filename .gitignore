@@ -1,5 +1,6 @@
-/__pycache__/
-/bin/
-/cdk.context.json
-/cdk.out/
-/venv/
+*.js
+*.zip
+bin
+cdk.context.json
+cdk.out
+node_modules

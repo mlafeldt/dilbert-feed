@@ -1,4 +1,4 @@
 {
-  "app": "venv/bin/python3 app.py",
+  "app": "node index",
   "requireApproval": "never"
 }
