@@ -44,6 +44,8 @@ make dev
 make prod
 ```
 
+Among other things, the stack outputs will show the URL of the RSS feed, which you can then subscribe.
+
 ## Usage
 
 The serverless stack will update the feed automatically. However, you can also invoke the Lambda functions manually.
