@@ -26,9 +26,9 @@ func main() {
 
 func handler(input Input) (*Output, error) {
 	var env struct {
-		BucketName   string `envconfig:"BUCKET_NAME" required:"true"`
-		BucketPrefix string `envconfig:"BUCKET_PREFIX" required:"true"`
-		FeedPath     string `envconfig:"FEED_PATH" required:"true"`
+		BucketName string `envconfig:"BUCKET_NAME" required:"true"`
+		StripsDir  string `envconfig:"STRIPS_DIR" required:"true"`
+		FeedPath   string `envconfig:"FEED_PATH" required:"true"`
 	}
 	if err := envconfig.Process("", &env); err != nil {
 		return nil, err
@@ -37,7 +37,7 @@ func handler(input Input) (*Output, error) {
 
 	var (
 		now     = time.Now()
-		baseURL = fmt.Sprintf("https://%s.s3.amazonaws.com/%s", env.BucketName, env.BucketPrefix)
+		baseURL = fmt.Sprintf("https://%s.s3.amazonaws.com/%s", env.BucketName, env.StripsDir)
 		buf     bytes.Buffer
 	)
 

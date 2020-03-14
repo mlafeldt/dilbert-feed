@@ -33,7 +33,7 @@ export class DilbertFeedStack extends cdk.Stack {
       timeout: cdk.Duration.seconds(10),
       environment: {
         BUCKET_NAME: bucket.bucketName,
-        BUCKET_PREFIX: stripsDir
+        STRIPS_DIR: stripsDir
       }
     });
     bucket.grantPut(getStrip);
@@ -47,7 +47,7 @@ export class DilbertFeedStack extends cdk.Stack {
       timeout: cdk.Duration.seconds(10),
       environment: {
         BUCKET_NAME: bucket.bucketName,
-        BUCKET_PREFIX: stripsDir,
+        STRIPS_DIR: stripsDir,
         FEED_PATH: feedPath
       }
     });

@@ -34,8 +34,8 @@ func main() {
 
 func handler(input Input) (*Output, error) {
 	var env struct {
-		BucketName   string `envconfig:"BUCKET_NAME" required:"true"`
-		BucketPrefix string `envconfig:"BUCKET_PREFIX" required:"true"`
+		BucketName string `envconfig:"BUCKET_NAME" required:"true"`
+		StripsDir  string `envconfig:"STRIPS_DIR" required:"true"`
 	}
 	if err := envconfig.Process("", &env); err != nil {
 		return nil, err
@@ -72,7 +72,7 @@ func handler(input Input) (*Output, error) {
 		return nil, fmt.Errorf("HTTP error: %s", resp.Status)
 	}
 
-	stripPath := fmt.Sprintf("%s%s.gif", env.BucketPrefix, comic.Date)
+	stripPath := fmt.Sprintf("%s%s.gif", env.StripsDir, comic.Date)
 	stripURL, err := uploadStrip(resp.Body, env.BucketName, stripPath)
 	if err != nil {
 		return nil, err
