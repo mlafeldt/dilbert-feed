@@ -116,13 +116,12 @@ export class DilbertFeedStack extends cdk.Stack {
 
 const app = new cdk.App();
 
-// TODO: remove -ts suffix
-new DilbertFeedStack(app, 'dilbert-feed-dev-ts', {
+new DilbertFeedStack(app, 'dilbert-feed-dev', {
   heartbeatEndpoint: 'https://hc-ping.com/33868fe9-9efc-414a-b882-a598a2b09dea',
   tags: { STAGE: 'dev' }
 });
-new DilbertFeedStack(app, 'dilbert-feed-prod-ts', {
-  bucketName: 'dilbert-feed-ts',
+new DilbertFeedStack(app, 'dilbert-feed-prod', {
+  bucketName: 'dilbert-feed',
   heartbeatEndpoint: 'https://hc-ping.com/4fb7e55d-fe13-498b-bfaf-73cbf20e279e',
   tags: { STAGE: 'prod' }
 });
