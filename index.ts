@@ -7,7 +7,6 @@ import targets = require('@aws-cdk/aws-events-targets');
 import tasks = require('@aws-cdk/aws-stepfunctions-tasks');
 
 interface DilbertFeedStackProps extends cdk.StackProps {
-  bucketName?: string;
   heartbeatEndpoint: string;
 }
 
@@ -18,7 +17,6 @@ export class DilbertFeedStack extends cdk.Stack {
     const stripsDir = 'strips/';
 
     const bucket = new s3.Bucket(this, 'Bucket', {
-      bucketName: props.bucketName,
       publicReadAccess: true,
       encryption: s3.BucketEncryption.S3_MANAGED
     });
@@ -117,7 +115,6 @@ new DilbertFeedStack(app, 'dilbert-feed-dev', {
   tags: { STAGE: 'dev' }
 });
 new DilbertFeedStack(app, 'dilbert-feed-prod', {
-  bucketName: 'dilbert-feed',
   heartbeatEndpoint: 'https://hc-ping.com/4fb7e55d-fe13-498b-bfaf-73cbf20e279e',
   tags: { STAGE: 'prod' }
 });
