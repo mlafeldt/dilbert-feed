@@ -51,7 +51,7 @@ export class DilbertFeedStack extends cdk.Stack {
     });
     bucket.grantPut(genFeed);
 
-    const heartbeatEndpoint = ssm.StringParameter.valueFromLookup(this, `/${id}/heartbeat-endpoint`);
+    const heartbeatEndpoint = ssm.StringParameter.valueForStringParameter(this, `/${id}/heartbeat-endpoint`);
     const heartbeat = new lambda.Function(this, 'HeartbeatFunc', {
       functionName: `${id}-heartbeat`,
       code: lambda.Code.fromAsset('heartbeat'),
@@ -107,21 +107,6 @@ export class DilbertFeedStack extends cdk.Stack {
 }
 
 const app = new cdk.App();
-
-new DilbertFeedStack(app, 'dilbert-feed-dev', {
-  env: {
-    account: process.env.CDK_DEFAULT_ACCOUNT,
-    region: process.env.CDK_DEFAULT_REGION
-  },
-  tags: { STAGE: 'dev' }
-});
-
-new DilbertFeedStack(app, 'dilbert-feed-prod', {
-  env: {
-    account: process.env.CDK_DEFAULT_ACCOUNT,
-    region: process.env.CDK_DEFAULT_REGION
-  },
-  tags: { STAGE: 'prod' }
-});
-
+new DilbertFeedStack(app, 'dilbert-feed-dev', { tags: { STAGE: 'dev' } });
+new DilbertFeedStack(app, 'dilbert-feed-prod', { tags: { STAGE: 'prod' } });
 app.synth();
