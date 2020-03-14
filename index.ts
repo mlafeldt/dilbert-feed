@@ -64,6 +64,9 @@ export class DilbertFeedStack extends cdk.Stack {
         HEARTBEAT_ENDPOINT: props.heartbeatEndpoint
       }
     });
+
+    new cdk.CfnOutput(this, 'BucketName', { value: bucket.bucketName });
+    new cdk.CfnOutput(this, 'HeartbeatEndpoint', { value: props.heartbeatEndpoint });
   }
 }
 
