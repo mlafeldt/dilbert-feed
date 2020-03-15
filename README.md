@@ -44,7 +44,11 @@ make dev
 make prod
 ```
 
-Among other things, the stack outputs will show the URL of the RSS feed, which you can then subscribe.
+Among other things, the stack outputs will show the URL of the RSS feed, which you can then subscribe:
+
+```console
+dilbert-feed-prod.FeedUrl = https://dilbert-feed-prod.s3.eu-central-1.amazonaws.com/v1/rss.xml
+```
 
 ## Usage
 
