@@ -47,7 +47,7 @@ make prod
 Among other things, the stack outputs will show the URL of the RSS feed, which you can then subscribe:
 
 ```console
-dilbert-feed-prod.FeedUrl = https://dilbert-feed-prod.s3.eu-central-1.amazonaws.com/v1/rss.xml
+dilbert-feed-prod.FeedUrl = https://dilbert-feed-example.s3.eu-central-1.amazonaws.com/v1/rss.xml
 ```
 
 ## Usage
@@ -63,7 +63,7 @@ $ ./invoke dilbert-feed-prod-get-strip
   "title": "Best Employees",
   "image_url": "https://assets.amuniversal.com/87b83e10c7460137c2df005056a9545d",
   "strip_url": "http://dilbert.com/strip/2019-10-22",
-  "upload_url": "https://dilbert-feed-prod.s3.eu-central-1.amazonaws.com/strips/2019-10-22.gif"
+  "upload_url": "https://dilbert-feed-example.s3.eu-central-1.amazonaws.com/strips/2019-10-22.gif"
 }
 ```
 
@@ -76,7 +76,7 @@ $ ./invoke dilbert-feed-prod-get-strip --payload '{"date":"2016-01-01"}'
   "title": "Forgetting Meetings",
   "image_url": "https://assets.amuniversal.com/1a6be66079e101332131005056a9545d",
   "strip_url": "http://dilbert.com/strip/2016-01-01",
-  "upload_url": "https://dilbert-feed-prod.s3.eu-central-1.amazonaws.com/strips/2016-01-01.gif"
+  "upload_url": "https://dilbert-feed-example.s3.eu-central-1.amazonaws.com/strips/2016-01-01.gif"
 }
 ```
 
@@ -91,6 +91,6 @@ Generate the RSS feed:
 ```console
 $ ./invoke dilbert-feed-prod-gen-feed
 {
-  "feed_url": "https://dilbert-feed-prod.s3.eu-central-1.amazonaws.com/v1/rss.xml"
+  "feed_url": "https://dilbert-feed-example.s3.eu-central-1.amazonaws.com/v1/rss.xml"
 }
 ```
