@@ -6,7 +6,9 @@ Unfortunetly, Dilbert's official feed now forces you to go to the website:
 
 > Dilbert readers - Please visit Dilbert.com to read this feature. Due to changes with our feeds, we are now making this RSS feed a link to Dilbert.com.
 
-This serverless stack provides a custom feed with direct access to Dilbert comics that gets updated every day.
+This serverless application provides a custom feed with direct access to Dilbert comics that gets updated every day.
+
+For some background information, check out my presentation on [Recreational Programming with Serverless](https://speakerdeck.com/mlafeldt/recreational-programming-with-serverless).
 
 ## Architecture
 
