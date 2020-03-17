@@ -1,7 +1,7 @@
 {
   "name": "dilbert-feed",
   "version": "1.0.0",
-  "description": "Enjoy Dilbert in your RSS feed reader without any ads!",
+  "description": "Enjoy Dilbert in your RSS feed reader without any ads",
   "repository": "github:mlafeldt/dilbert-feed",
   "scripts": {
     "build": "tsc",
@@ -16,16 +16,16 @@
   "devDependencies": {
     "@types/node": "^13.5.0",
     "typescript": "~3.7.5",
-    "aws-cdk": "^1.27.0"
+    "aws-cdk": "^1.28.0"
   },
   "dependencies": {
-    "@aws-cdk/core": "^1.27.0",
-    "@aws-cdk/aws-events": "^1.27.0",
-    "@aws-cdk/aws-events-targets": "^1.27.0",
-    "@aws-cdk/aws-lambda": "^1.27.0",
-    "@aws-cdk/aws-s3": "^1.27.0",
-    "@aws-cdk/aws-ssm": "^1.27.0",
-    "@aws-cdk/aws-stepfunctions": "^1.27.0",
-    "@aws-cdk/aws-stepfunctions-tasks": "^1.27.0"
+    "@aws-cdk/core": "^1.28.0",
+    "@aws-cdk/aws-events": "^1.28.0",
+    "@aws-cdk/aws-events-targets": "^1.28.0",
+    "@aws-cdk/aws-lambda": "^1.28.0",
+    "@aws-cdk/aws-s3": "^1.28.0",
+    "@aws-cdk/aws-ssm": "^1.28.0",
+    "@aws-cdk/aws-stepfunctions": "^1.28.0",
+    "@aws-cdk/aws-stepfunctions-tasks": "^1.28.0"
   }
 }
