@@ -2,15 +2,15 @@ package main
 
 import (
 	"bytes"
-	"fmt"
 	"log"
 	"time"
 
 	"github.com/aws/aws-lambda-go/lambda"
+	"github.com/aws/aws-sdk-go/aws/session"
+	"github.com/aws/aws-sdk-go/service/s3"
+	"github.com/aws/aws-sdk-go/service/s3/s3manager"
 	"github.com/kelseyhightower/envconfig"
 )
-
-const feedLength = 30
 
 // Input is the input passed to the Lambda function.
 type Input struct{}
@@ -36,18 +36,34 @@ func handler(input Input) (*Output, error) {
 	log.Printf("[DEBUG] env = %+v", env)
 
 	var (
-		now     = time.Now()
-		baseURL = fmt.Sprintf("https://%s.s3.amazonaws.com/%s", env.BucketName, env.StripsDir)
-		buf     bytes.Buffer
+		now = time.Now()
+		buf bytes.Buffer
 	)
 
+	sess, err := session.NewSession()
+	if err != nil {
+		return nil, err
+	}
+
 	log.Printf("[INFO] Generating feed for date %s ...", now.Format(time.RFC3339))
-	if err := generateFeed(&buf, now, feedLength, baseURL); err != nil {
+	g := FeedGenerator{
+		BucketName: env.BucketName,
+		StripsDir:  env.StripsDir,
+		StartDate:  now,
+		FeedLength: 30,
+		S3Client:   s3.New(sess),
+	}
+	if err := g.Generate(&buf); err != nil {
 		return nil, err
 	}
 
 	log.Printf("[INFO] Uploading feed to bucket %q with path %q ...", env.BucketName, env.FeedPath)
-	feedURL, err := uploadFeed(&buf, env.BucketName, env.FeedPath)
+	u := FeedUploader{
+		BucketName: env.BucketName,
+		FeedPath:   env.FeedPath,
+		S3Uploader: s3manager.NewUploader(sess),
+	}
+	feedURL, err := u.Upload(&buf)
 	if err != nil {
 		return nil, err
 	}

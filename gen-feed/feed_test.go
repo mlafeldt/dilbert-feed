@@ -9,11 +9,17 @@ import (
 	"github.com/google/go-cmp/cmp"
 )
 
-func TestGenerateFeed(t *testing.T) {
+func TestFeedGenerator(t *testing.T) {
 	var buf bytes.Buffer
 	date, _ := time.Parse("2006-01-02", "2018-10-01")
+	g := FeedGenerator{
+		BucketName: "dilbert-feed-example",
+		StripsDir:  "strips/",
+		StartDate:  date,
+		FeedLength: 3,
+	}
 
-	if err := generateFeed(&buf, date, 3, "https://example.com/strips/"); err != nil {
+	if err := g.Generate(&buf); err != nil {
 		t.Fatal(err)
 	}
 
