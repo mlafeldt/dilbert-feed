@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"io"
 	"log"
 	"net/http"
 	"strings"
@@ -12,6 +11,7 @@ import (
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/s3/s3manager"
+	"github.com/aws/aws-sdk-go/service/s3/s3manager/s3manageriface"
 	"github.com/kelseyhightower/envconfig"
 
 	"github.com/mlafeldt/dilbert-feed/dilbert"
@@ -57,23 +57,21 @@ func handler(input Input) (*Output, error) {
 	if err != nil {
 		return nil, err
 	}
-
 	log.Printf("[DEBUG] comic = %+v", comic)
-	log.Printf("[INFO] Uploading strip %s to bucket %q ...", comic.StripURL, env.BucketName)
 
-	client := &http.Client{Timeout: 10 * time.Second}
-	resp, err := client.Get(comic.ImageURL)
+	sess, err := session.NewSession()
 	if err != nil {
 		return nil, err
 	}
-	defer resp.Body.Close()
 
-	if resp.StatusCode != http.StatusOK {
-		return nil, fmt.Errorf("HTTP error: %s", resp.Status)
+	log.Printf("[INFO] Uploading strip %s to bucket %q ...", comic.StripURL, env.BucketName)
+	cp := StripCopier{
+		BucketName: env.BucketName,
+		StripsDir:  env.StripsDir,
+		S3Uploader: s3manager.NewUploader(sess),
+		HTTPClient: &http.Client{Timeout: 10 * time.Second},
 	}
-
-	stripPath := fmt.Sprintf("%s/%s.gif", env.StripsDir, comic.Date)
-	stripURL, err := uploadStrip(resp.Body, env.BucketName, stripPath, comic.Title)
+	stripURL, err := cp.Copy(comic)
 	if err != nil {
 		return nil, err
 	}
@@ -82,21 +80,35 @@ func handler(input Input) (*Output, error) {
 	return &Output{comic, stripURL}, nil
 }
 
-func uploadStrip(r io.Reader, bucketName, stripPath, title string) (string, error) {
-	sess, err := session.NewSession()
+// StripCopier can copy a comic strip from dilbert.com to S3.
+type StripCopier struct {
+	BucketName string
+	StripsDir  string
+	S3Uploader s3manageriface.UploaderAPI
+	HTTPClient *http.Client
+}
+
+// Copy copies a comic strip from dilbert.com to S3.
+func (cp *StripCopier) Copy(comic *dilbert.Comic) (string, error) {
+	resp, err := cp.HTTPClient.Get(comic.ImageURL)
 	if err != nil {
 		return "", err
 	}
+	defer resp.Body.Close()
 
-	upload, err := s3manager.NewUploader(sess).Upload(&s3manager.UploadInput{
-		Bucket:      aws.String(bucketName),
-		Key:         aws.String(stripPath),
+	if resp.StatusCode != http.StatusOK {
+		return "", fmt.Errorf("HTTP error: %s", resp.Status)
+	}
+
+	upload, err := cp.S3Uploader.Upload(&s3manager.UploadInput{
+		Bucket:      aws.String(cp.BucketName),
+		Key:         aws.String(fmt.Sprintf("%s/%s.gif", cp.StripsDir, comic.Date)),
 		ContentType: aws.String("image/gif"),
 		// Add strip title to metadata for gen-feed to create nicer RSS feed entries
 		Metadata: map[string]*string{
-			"Title": aws.String(title),
+			"Title": aws.String(comic.Title),
 		},
-		Body: r,
+		Body: resp.Body,
 	})
 	if err != nil {
 		return "", err
