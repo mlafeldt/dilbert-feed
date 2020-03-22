@@ -26,7 +26,7 @@ type FeedGenerator struct {
 func (g *FeedGenerator) Generate(w io.Writer) error {
 	feed := &feeds.Feed{
 		Title:       "Dilbert",
-		Link:        &feeds.Link{Href: "http://dilbert.com"},
+		Link:        &feeds.Link{Href: "https://dilbert.com"},
 		Description: "Dilbert Daily Strip",
 	}
 

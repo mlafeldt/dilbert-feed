@@ -19,7 +19,7 @@ type Comic struct {
 
 const titleSuffix = "- Dilbert by Scott Adams"
 
-var baseURL = "http://dilbert.com"
+var baseURL = "https://dilbert.com"
 
 // SetBaseURL overrides the base URL for testing.
 func SetBaseURL(url string) {

@@ -1,6 +1,6 @@
 # dilbert-feed
 
-Enjoy [Dilbert](http://dilbert.com/) in your RSS feed reader without any ads!
+Enjoy [Dilbert](https://dilbert.com/) in your RSS feed reader without any ads!
 
 Unfortunetly, Dilbert's official feed now forces you to go to the website:
 
@@ -64,7 +64,7 @@ $ ./invoke dilbert-feed-prod-get-strip
   "date": "2019-10-22",
   "title": "Best Employees",
   "image_url": "https://assets.amuniversal.com/87b83e10c7460137c2df005056a9545d",
-  "strip_url": "http://dilbert.com/strip/2019-10-22",
+  "strip_url": "https://dilbert.com/strip/2019-10-22",
   "upload_url": "https://dilbert-feed-example.s3.eu-central-1.amazonaws.com/strips/2019-10-22.gif"
 }
 ```
@@ -77,7 +77,7 @@ $ ./invoke dilbert-feed-prod-get-strip --payload '{"date":"2016-01-01"}'
   "date": "2016-01-01",
   "title": "Forgetting Meetings",
   "image_url": "https://assets.amuniversal.com/1a6be66079e101332131005056a9545d",
-  "strip_url": "http://dilbert.com/strip/2016-01-01",
+  "strip_url": "https://dilbert.com/strip/2016-01-01",
   "upload_url": "https://dilbert-feed-example.s3.eu-central-1.amazonaws.com/strips/2016-01-01.gif"
 }
 ```
