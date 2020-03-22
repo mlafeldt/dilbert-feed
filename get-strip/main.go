@@ -72,7 +72,7 @@ func handler(input Input) (*Output, error) {
 		return nil, fmt.Errorf("HTTP error: %s", resp.Status)
 	}
 
-	stripPath := fmt.Sprintf("%s%s.gif", env.StripsDir, comic.Date)
+	stripPath := fmt.Sprintf("%s/%s.gif", env.StripsDir, comic.Date)
 	stripURL, err := uploadStrip(resp.Body, env.BucketName, stripPath, comic.Title)
 	if err != nil {
 		return nil, err

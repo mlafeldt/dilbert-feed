@@ -11,7 +11,7 @@ export class DilbertFeedStack extends cdk.Stack {
   constructor(scope: cdk.App, id: string, props: cdk.StackProps) {
     super(scope, id, props);
 
-    const stripsDir = 'strips/';
+    const stripsDir = 'strips';
     const feedPath = 'v1/rss.xml';
 
     const bucket = new s3.Bucket(this, 'Bucket', {
@@ -20,7 +20,7 @@ export class DilbertFeedStack extends cdk.Stack {
     });
     bucket.addLifecycleRule({
       id: 'DeleteStripsAfter30Days',
-      prefix: stripsDir,
+      prefix: `${stripsDir}/`,
       expiration: cdk.Duration.days(30)
     });
 

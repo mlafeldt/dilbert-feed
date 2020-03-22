@@ -42,7 +42,7 @@ func TestFeedGenerator(t *testing.T) {
 
 	g := FeedGenerator{
 		BucketName: "dilbert-feed-test",
-		StripsDir:  "strips/",
+		StripsDir:  "strips",
 		StartDate:  date,
 		FeedLength: 3,
 		S3Client:   mockClient,

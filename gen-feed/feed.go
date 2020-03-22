@@ -34,7 +34,7 @@ func (g *FeedGenerator) Generate(w io.Writer) error {
 		var (
 			day   = g.StartDate.AddDate(0, 0, -i).Truncate(24 * time.Hour)
 			date  = fmt.Sprintf("%d-%02d-%02d", day.Year(), day.Month(), day.Day())
-			url   = fmt.Sprintf("https://%s.s3.amazonaws.com/%s%s.gif", g.BucketName, g.StripsDir, date)
+			url   = fmt.Sprintf("https://%s.s3.amazonaws.com/%s/%s.gif", g.BucketName, g.StripsDir, date)
 			title = g.title(date)
 		)
 
@@ -56,7 +56,7 @@ func (g *FeedGenerator) title(date string) string {
 	if g.S3Client != nil {
 		out, err := g.S3Client.HeadObject(&s3.HeadObjectInput{
 			Bucket: aws.String(g.BucketName),
-			Key:    aws.String(fmt.Sprintf("%s%s.gif", g.StripsDir, date)),
+			Key:    aws.String(fmt.Sprintf("%s/%s.gif", g.StripsDir, date)),
 		})
 		// Silently return fabricated title on error
 		if err == nil {
