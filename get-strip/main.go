@@ -73,7 +73,7 @@ func handler(input Input) (*Output, error) {
 	}
 
 	stripPath := fmt.Sprintf("%s%s.gif", env.StripsDir, comic.Date)
-	stripURL, err := uploadStrip(resp.Body, env.BucketName, stripPath)
+	stripURL, err := uploadStrip(resp.Body, env.BucketName, stripPath, comic.Title)
 	if err != nil {
 		return nil, err
 	}
@@ -82,7 +82,7 @@ func handler(input Input) (*Output, error) {
 	return &Output{comic, stripURL}, nil
 }
 
-func uploadStrip(r io.Reader, bucketName, stripPath string) (string, error) {
+func uploadStrip(r io.Reader, bucketName, stripPath, title string) (string, error) {
 	sess, err := session.NewSession()
 	if err != nil {
 		return "", err
@@ -92,7 +92,11 @@ func uploadStrip(r io.Reader, bucketName, stripPath string) (string, error) {
 		Bucket:      aws.String(bucketName),
 		Key:         aws.String(stripPath),
 		ContentType: aws.String("image/gif"),
-		Body:        r,
+		// Add strip title to metadata for gen-feed to create nicer RSS feed entries
+		Metadata: map[string]*string{
+			"Title": aws.String(title),
+		},
+		Body: r,
 	})
 	if err != nil {
 		return "", err

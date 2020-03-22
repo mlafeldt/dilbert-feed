@@ -51,7 +51,7 @@ export class DilbertFeedStack extends cdk.Stack {
         FEED_PATH: feedPath
       }
     });
-    bucket.grantPut(genFeed);
+    bucket.grantReadWrite(genFeed);
 
     const heartbeatEndpoint = ssm.StringParameter.valueForStringParameter(this, `/${id}/heartbeat-endpoint`);
     const heartbeat = new lambda.Function(this, 'HeartbeatFunc', {
