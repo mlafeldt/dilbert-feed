@@ -1,5 +1,4 @@
 *.js
-*.zip
 bin
 cdk.context.json
 cdk.out
