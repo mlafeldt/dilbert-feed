@@ -13,36 +13,34 @@ dev: deploy
 prod: ENV=prod
 prod: deploy
 
-deploy diff synth: build
+deploy diff synth: build transpile
 	@$(CDK) $@ $(STACK)
 
 deploy: test
 
-destroy: build
+destroy: build transpile
 	@$(CDK) destroy --force $(STACK)
 
-bootstrap: build
+bootstrap: build transpile
 	@$(CDK) bootstrap
 
 #
-# build
+# build & transpile
 #
-
-build: npm-build go-build
-
-npm-build: node_modules
-	@npm run build
-
-node_modules:
-	npm install
 
 build_funcs := $(FUNCS:%=build-%)
 
-go-build: $(build_funcs)
+build: $(build_funcs)
 
 $(build_funcs):
 	mkdir -p bin/$(@:build-%=%)
 	GOOS=linux GOARCH=amd64 go build -trimpath -ldflags=-buildid= -o bin/$(@:build-%=%)/handler ./$(@:build-%=%)
+
+transpile: node_modules
+	@npm run build
+
+node_modules:
+	npm install
 
 #
 # lint
