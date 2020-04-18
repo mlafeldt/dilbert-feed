@@ -1,28 +1,28 @@
-import cdk = require('@aws-cdk/core');
-import events = require('@aws-cdk/aws-events');
-import lambda = require('@aws-cdk/aws-lambda');
-import s3 = require('@aws-cdk/aws-s3');
-import sfn = require('@aws-cdk/aws-stepfunctions');
-import ssm = require('@aws-cdk/aws-ssm');
-import targets = require('@aws-cdk/aws-events-targets');
-import tasks = require('@aws-cdk/aws-stepfunctions-tasks');
+import cdk = require('@aws-cdk/core')
+import events = require('@aws-cdk/aws-events')
+import lambda = require('@aws-cdk/aws-lambda')
+import s3 = require('@aws-cdk/aws-s3')
+import sfn = require('@aws-cdk/aws-stepfunctions')
+import ssm = require('@aws-cdk/aws-ssm')
+import targets = require('@aws-cdk/aws-events-targets')
+import tasks = require('@aws-cdk/aws-stepfunctions-tasks')
 
 export class DilbertFeedStack extends cdk.Stack {
   constructor(scope: cdk.App, id: string, props: cdk.StackProps) {
-    super(scope, id, props);
+    super(scope, id, props)
 
-    const stripsDir = 'strips';
-    const feedPath = 'v1/rss.xml';
+    const stripsDir = 'strips'
+    const feedPath = 'v1/rss.xml'
 
     const bucket = new s3.Bucket(this, 'Bucket', {
       publicReadAccess: true,
       encryption: s3.BucketEncryption.S3_MANAGED
-    });
+    })
     bucket.addLifecycleRule({
       id: 'DeleteStripsAfter30Days',
       prefix: `${stripsDir}/`,
       expiration: cdk.Duration.days(30)
-    });
+    })
 
     const getStrip = new lambda.Function(this, 'GetStripFunc', {
       functionName: `${id}-get-strip`,
@@ -35,8 +35,8 @@ export class DilbertFeedStack extends cdk.Stack {
         BUCKET_NAME: bucket.bucketName,
         STRIPS_DIR: stripsDir
       }
-    });
-    bucket.grantPut(getStrip);
+    })
+    bucket.grantPut(getStrip)
 
     const genFeed = new lambda.Function(this, 'GenFeedFunc', {
       functionName: `${id}-gen-feed`,
@@ -50,10 +50,10 @@ export class DilbertFeedStack extends cdk.Stack {
         STRIPS_DIR: stripsDir,
         FEED_PATH: feedPath
       }
-    });
-    bucket.grantReadWrite(genFeed);
+    })
+    bucket.grantReadWrite(genFeed)
 
-    const heartbeatEndpoint = ssm.StringParameter.valueForStringParameter(this, `/${id}/heartbeat-endpoint`);
+    const heartbeatEndpoint = ssm.StringParameter.valueForStringParameter(this, `/${id}/heartbeat-endpoint`)
     const heartbeat = new lambda.Function(this, 'HeartbeatFunc', {
       functionName: `${id}-heartbeat`,
       code: lambda.Code.fromAsset('heartbeat'),
@@ -64,14 +64,14 @@ export class DilbertFeedStack extends cdk.Stack {
       environment: {
         HEARTBEAT_ENDPOINT: heartbeatEndpoint
       }
-    });
+    })
 
     const taskRetry = {
       errors: ['States.TaskFailed'],
       interval: cdk.Duration.seconds(10),
       maxAttempts: 2,
       backoffRate: 2.0
-    };
+    }
 
     const steps = new sfn.Task(this, 'GetStrip', {
       task: new tasks.InvokeFunction(getStrip),
@@ -89,27 +89,27 @@ export class DilbertFeedStack extends cdk.Stack {
           task: new tasks.InvokeFunction(heartbeat),
           resultPath: '$.heartbeat'
         }).addRetry(taskRetry)
-      );
+      )
 
     const sm = new sfn.StateMachine(this, 'StateMachine', {
       stateMachineName: id,
       definition: steps
-    });
+    })
 
     const cron = new events.Rule(this, 'Cron', {
       description: 'Update Dilbert feed',
       ruleName: `${id}-cron`,
       schedule: events.Schedule.expression('cron(0 6 * * ? *)')
-    });
-    cron.addTarget(new targets.SfnStateMachine(sm));
+    })
+    cron.addTarget(new targets.SfnStateMachine(sm))
 
-    new cdk.CfnOutput(this, 'BucketName', { value: bucket.bucketName });
-    new cdk.CfnOutput(this, 'FeedUrl', { value: `https://${bucket.bucketRegionalDomainName}/${feedPath}` });
-    new cdk.CfnOutput(this, 'HeartbeatEndpoint', { value: heartbeatEndpoint });
+    new cdk.CfnOutput(this, 'BucketName', { value: bucket.bucketName })
+    new cdk.CfnOutput(this, 'FeedUrl', { value: `https://${bucket.bucketRegionalDomainName}/${feedPath}` })
+    new cdk.CfnOutput(this, 'HeartbeatEndpoint', { value: heartbeatEndpoint })
   }
 }
 
-const app = new cdk.App();
-new DilbertFeedStack(app, 'dilbert-feed-dev', { tags: { STAGE: 'dev' } });
-new DilbertFeedStack(app, 'dilbert-feed-prod', { tags: { STAGE: 'prod' } });
-app.synth();
+const app = new cdk.App()
+new DilbertFeedStack(app, 'dilbert-feed-dev', { tags: { STAGE: 'dev' } })
+new DilbertFeedStack(app, 'dilbert-feed-prod', { tags: { STAGE: 'prod' } })
+app.synth()
