@@ -57,7 +57,7 @@ export class DilbertFeedStack extends cdk.Stack {
     const heartbeat = new lambda.Function(this, 'HeartbeatFunc', {
       functionName: `${id}-heartbeat`,
       code: lambda.Code.fromAsset('heartbeat'),
-      handler: 'index.handler',
+      handler: 'lambda.handler',
       runtime: lambda.Runtime.NODEJS_12_X,
       memorySize: 128,
       timeout: cdk.Duration.seconds(10),
