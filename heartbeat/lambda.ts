@@ -1,10 +1,14 @@
 import { Context, Callback } from 'aws-lambda';
 import { get } from 'https';
 
-export function handler(event: any, _: Context, callback: Callback) {
+interface Event {
+  endpoint?: string;
+}
+
+export function handler(event: Event, _: Context, callback: Callback) {
   console.log('event: ', JSON.stringify(event));
 
-  const endpoint = process.env.HEARTBEAT_ENDPOINT;
+  const endpoint = event.endpoint || process.env.HEARTBEAT_ENDPOINT;
   if (!endpoint) {
     throw new Error('heartbeat endpoint must be set');
   }
