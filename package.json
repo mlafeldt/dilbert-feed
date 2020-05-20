@@ -14,20 +14,20 @@
   },
   "license": "Apache-2.0",
   "devDependencies": {
-    "@types/aws-lambda": "^8.10.50",
-    "@types/node": "^13.13.0",
-    "aws-cdk": "^1.33.0",
-    "aws-lambda": "^1.0.5",
+    "@types/aws-lambda": "^8.10.51",
+    "@types/node": "^13.13.8",
+    "aws-cdk": "^1.40.0",
+    "aws-lambda": "^1.0.6",
     "typescript": "~3.7.5"
   },
   "dependencies": {
-    "@aws-cdk/aws-events": "^1.33.0",
-    "@aws-cdk/aws-events-targets": "^1.33.0",
-    "@aws-cdk/aws-lambda": "^1.33.0",
-    "@aws-cdk/aws-s3": "^1.33.0",
-    "@aws-cdk/aws-ssm": "^1.33.0",
-    "@aws-cdk/aws-stepfunctions": "^1.33.0",
-    "@aws-cdk/aws-stepfunctions-tasks": "^1.33.0",
-    "@aws-cdk/core": "^1.33.0"
+    "@aws-cdk/aws-events": "^1.40.0",
+    "@aws-cdk/aws-events-targets": "^1.40.0",
+    "@aws-cdk/aws-lambda": "^1.40.0",
+    "@aws-cdk/aws-s3": "^1.40.0",
+    "@aws-cdk/aws-ssm": "^1.40.0",
+    "@aws-cdk/aws-stepfunctions": "^1.40.0",
+    "@aws-cdk/aws-stepfunctions-tasks": "^1.40.0",
+    "@aws-cdk/core": "^1.40.0"
   }
 }
