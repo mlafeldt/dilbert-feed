@@ -8,7 +8,7 @@ Unfortunetly, Dilbert's official feed now forces you to go to the website:
 
 This serverless application provides a custom feed with direct access to Dilbert comics that gets updated every day.
 
-For some background information, check out my presentation on [Recreational Programming with Serverless](https://speakerdeck.com/mlafeldt/recreational-programming-with-serverless).
+For some background information, check out my article on [Recreational Programming with Serverless](https://sharpend.io/recreational-programming-with-serverless/).
 
 ## Architecture
 
