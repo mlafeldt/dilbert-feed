@@ -1,4 +1,4 @@
 {
-  "app": "node index",
+  "app": "npx ts-node index.ts",
   "requireApproval": "never"
 }
