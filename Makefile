@@ -1,7 +1,7 @@
 ENV   ?= dev
 STACK  = dilbert-feed-$(ENV)
 FUNCS := $(subst /,,$(dir $(wildcard */main.go)))
-CDK   ?= ./node_modules/.bin/cdk
+CDK   ?= npx cdk
 
 #
 # deploy & destroy
