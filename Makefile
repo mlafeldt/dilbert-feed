@@ -1,7 +1,7 @@
 ENV   ?= dev
 STACK  = dilbert-feed-$(ENV)
 FUNCS := $(subst /,,$(dir $(wildcard */main.go)))
-CDK   ?= npx cdk
+CDK   ?= ./node_modules/.bin/cdk
 
 #
 # deploy & destroy
@@ -13,22 +13,19 @@ dev: deploy
 prod: ENV=prod
 prod: deploy
 
-deploy diff synth: build node_modules
+deploy diff synth: build transpile
 	@$(CDK) $@ $(STACK)
 
 deploy: test
 
-destroy: build node_modules
+destroy: build transpile
 	@$(CDK) destroy --force $(STACK)
 
-bootstrap: build node_modules
+bootstrap: build transpile
 	@$(CDK) bootstrap
 
-node_modules:
-	npm install
-
 #
-# build
+# build & transpile
 #
 
 build_funcs := $(FUNCS:%=build-%)
@@ -38,6 +35,12 @@ build: $(build_funcs)
 $(build_funcs):
 	mkdir -p bin/$(@:build-%=%)
 	GOOS=linux GOARCH=amd64 go build -trimpath -ldflags=-buildid= -o bin/$(@:build-%=%)/handler ./$(@:build-%=%)
+
+transpile: node_modules
+	@npm run build
+
+node_modules:
+	npm install
 
 #
 # lint
