@@ -7,5 +7,5 @@ set -o pipefail
 
 outfile=$(mktemp)
 trap "rm -f $outfile" EXIT
-aws lambda invoke --function-name "$@" "$outfile" >/dev/null
+aws lambda invoke --cli-binary-format raw-in-base64-out --function-name "$@" "$outfile" >/dev/null
 jq < "$outfile"
