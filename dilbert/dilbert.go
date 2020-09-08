@@ -35,7 +35,13 @@ func NewComic(date string) (*Comic, error) {
 
 	stripURL := fmt.Sprintf("%s/strip/%s", baseURL, strings.TrimSpace(date))
 
-	client := &http.Client{Timeout: 10 * time.Second}
+	client := &http.Client{
+		Timeout: 10 * time.Second,
+		// Don't follow redirects
+		CheckRedirect: func(req *http.Request, via []*http.Request) error {
+			return http.ErrUseLastResponse
+		},
+	}
 	resp, err := client.Get(stripURL)
 	if err != nil {
 		return nil, err
