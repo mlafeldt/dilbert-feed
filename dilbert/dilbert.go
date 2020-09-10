@@ -65,7 +65,7 @@ func NewComic(date string) (*Comic, error) {
 			title = strings.TrimSpace(strings.TrimSuffix(v, titleSuffix))
 		}
 		if v, ok := img.Attr("src"); ok {
-			imageURL = "https:" + strings.TrimSpace(v)
+			imageURL = strings.TrimSpace(v)
 		}
 	})
 
