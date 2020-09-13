@@ -1,12 +1,12 @@
 import 'source-map-support/register'
-import cdk = require('@aws-cdk/core')
-import events = require('@aws-cdk/aws-events')
-import lambda = require('@aws-cdk/aws-lambda')
-import s3 = require('@aws-cdk/aws-s3')
-import sfn = require('@aws-cdk/aws-stepfunctions')
-import ssm = require('@aws-cdk/aws-ssm')
-import targets = require('@aws-cdk/aws-events-targets')
-import tasks = require('@aws-cdk/aws-stepfunctions-tasks')
+import * as cdk from '@aws-cdk/core'
+import * as events from '@aws-cdk/aws-events'
+import * as lambda from '@aws-cdk/aws-lambda'
+import * as s3 from '@aws-cdk/aws-s3'
+import * as sfn from '@aws-cdk/aws-stepfunctions'
+import * as ssm from '@aws-cdk/aws-ssm'
+import * as targets from '@aws-cdk/aws-events-targets'
+import * as tasks from '@aws-cdk/aws-stepfunctions-tasks'
 
 export class DilbertFeedStack extends cdk.Stack {
   constructor(scope: cdk.App, id: string, props: cdk.StackProps) {
