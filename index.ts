@@ -67,29 +67,29 @@ export class DilbertFeedStack extends cdk.Stack {
       }
     })
 
-    const taskRetry = {
+    const retryProps = {
       errors: ['States.TaskFailed'],
       interval: cdk.Duration.seconds(10),
       maxAttempts: 2,
       backoffRate: 2.0
     }
 
-    const steps = new sfn.Task(this, 'GetStrip', {
-      task: new tasks.InvokeFunction(getStrip),
+    const steps = new tasks.LambdaInvoke(this, 'GetStrip', {
+      lambdaFunction: getStrip,
       resultPath: '$.strip'
     })
-      .addRetry(taskRetry)
+      .addRetry(retryProps)
       .next(
-        new sfn.Task(this, 'GenFeed', {
-          task: new tasks.InvokeFunction(genFeed),
+        new tasks.LambdaInvoke(this, 'GenFeed', {
+          lambdaFunction: genFeed,
           resultPath: '$.feed'
-        }).addRetry(taskRetry)
+        }).addRetry(retryProps)
       )
       .next(
-        new sfn.Task(this, 'SendHeartbeat', {
-          task: new tasks.InvokeFunction(heartbeat),
+        new tasks.LambdaInvoke(this, 'SendHeartbeat', {
+          lambdaFunction: heartbeat,
           resultPath: '$.heartbeat'
-        }).addRetry(taskRetry)
+        }).addRetry(retryProps)
       )
 
     const sm = new sfn.StateMachine(this, 'StateMachine', {
