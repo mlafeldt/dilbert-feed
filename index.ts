@@ -2,6 +2,7 @@ import 'source-map-support/register'
 import * as cdk from '@aws-cdk/core'
 import * as events from '@aws-cdk/aws-events'
 import * as lambda from '@aws-cdk/aws-lambda'
+import * as logs from '@aws-cdk/aws-logs'
 import * as s3 from '@aws-cdk/aws-s3'
 import * as sfn from '@aws-cdk/aws-stepfunctions'
 import * as ssm from '@aws-cdk/aws-ssm'
@@ -32,6 +33,7 @@ export class DilbertFeedStack extends cdk.Stack {
       runtime: lambda.Runtime.GO_1_X,
       memorySize: 128,
       timeout: cdk.Duration.seconds(10),
+      logRetention: logs.RetentionDays.ONE_MONTH,
       environment: {
         BUCKET_NAME: bucket.bucketName,
         STRIPS_DIR: stripsDir
@@ -46,6 +48,7 @@ export class DilbertFeedStack extends cdk.Stack {
       runtime: lambda.Runtime.GO_1_X,
       memorySize: 128,
       timeout: cdk.Duration.seconds(10),
+      logRetention: logs.RetentionDays.ONE_MONTH,
       environment: {
         BUCKET_NAME: bucket.bucketName,
         STRIPS_DIR: stripsDir,
@@ -62,6 +65,7 @@ export class DilbertFeedStack extends cdk.Stack {
       runtime: lambda.Runtime.NODEJS_12_X,
       memorySize: 128,
       timeout: cdk.Duration.seconds(10),
+      logRetention: logs.RetentionDays.ONE_MONTH,
       environment: {
         HEARTBEAT_ENDPOINT: heartbeatEndpoint
       }
