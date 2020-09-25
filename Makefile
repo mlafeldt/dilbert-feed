@@ -22,7 +22,7 @@ destroy: build transpile
 	@$(CDK) destroy --force $(STACK)
 
 bootstrap: build transpile
-	@$(CDK) bootstrap
+	@$(CDK) bootstrap --cloudformation-execution-policies arn:aws:iam::aws:policy/AdministratorAccess
 
 #
 # build & transpile
