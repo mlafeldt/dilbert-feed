@@ -1,11 +1,7 @@
 ENV   ?= dev
 STACK  = dilbert-feed-$(ENV)
-FUNCS := $(subst /,,$(dir $(wildcard */main.go)))
 CDK   ?= npx cdk
-
-#
-# deploy & destroy
-#
+GOX   ?= gox
 
 dev: ENV=dev
 dev: deploy
@@ -24,46 +20,18 @@ destroy: build transpile
 bootstrap: build transpile
 	@$(CDK) bootstrap --cloudformation-execution-policies arn:aws:iam::aws:policy/AdministratorAccess
 
-#
-# build & transpile
-#
-
-build_funcs := $(FUNCS:%=build-%)
-
-build: $(build_funcs)
-
-$(build_funcs):
-	mkdir -p bin/$(@:build-%=%)
-	GOOS=linux GOARCH=amd64 go build -trimpath -ldflags=-buildid= -o bin/$(@:build-%=%)/handler ./$(@:build-%=%)
-
 transpile: node_modules
 	@npm run build
 
 node_modules:
 	npm install
 
-#
-# lint
-#
+build:
+	@GOFLAGS=-trimpath $(GOX) -os=linux -arch=amd64 -output="bin/{{.Dir}}/handler" ./...
 
 lint:
 	go vet ./...
 	golint -set_exit_status $$(go list ./...)
 
-lint_funcs := $(FUNCS:%=lint-%)
-
-$(lint_funcs):
-	go vet ./$(@:lint-%=%)
-	golint -set_exit_status ./$(@:lint-%=%)
-
-#
-# test
-#
-
 test:
-	go test -v -cover -count=1 ./...
-
-test_funcs := $(FUNCS:%=test-%)
-
-$(test_funcs):
-	go test -v -cover ./$(@:test-%=%)
+	go test -v -cover ./...
