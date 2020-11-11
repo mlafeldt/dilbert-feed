@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en"
+  data-ad-slot-path="/19196947/dilbert.com/home"
+  data-disqus-url="http://dilbert.com/"
+  >
+  <head>
+    <title>Homepage | Dilbert by Scott Adams</title>
+    <!-- General and Security -->
+<meta charset="utf-8" />
+<meta name="csrf-param" content="authenticity_token" />
+<meta name="csrf-token" content="BOz8Alu/4557sE2pE6XMZM3SL5JV66schrOQGgnMBKk10+nSsesbsoO67owN760/ewOtjruSi79yQcnyxYiBIg==" />
+<meta name="language" content="english" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<!-- Webmaster Tools Verification -->
+<meta name="google-site-verification" content="iMe_GbOppnxshIHn7KwTW8Eey9Lfzflvc9NrzGPoewI" />
+<!-- SEO and Sharing Related -->
+<meta name="keywords" content="official dilbert website, dilbert comic strip, scott adams, Dilbert, Dogbert, Wally, The Pointy Haired Boss, Alice, Asok, Dogberts New Ruling Class, catbert, ratbert, mashups, animation, comics">
+<meta name="description" content="The Official Dilbert Website featuring Scott Adams Dilbert strips, animation, mashups and more starring Dilbert, Dogbert, Wally, The Pointy Haired Boss, Alice, Asok, Dogberts New Ruling Class and more.">
+<!-- Generic Twitter Meta Information -->
+<meta name="twitter:site" content="@Dilbert_Daily">
+<meta name="twitter:creator" content="Dilbert_Daily">
+  <!-- Global Sharing -->
+  <!-- Facebook Open Graph Tags -->
+  <meta property="og:url" content="http://dilbert.com/"/>
+  <meta property="og:type" content="website"/>
+  <meta property="og:title" content="Welcome to Dilbert"/>
+  <!-- <meta property="og:image" content=""/> -->
+  <meta property="og:description" content="The Official Dilbert Website featuring Scott Adams Dilbert strips, animation, mashups and more starring Dilbert, Dogbert, Wally, The Pointy Haired Boss, Alice, Asok, Dogberts New Ruling Class and more."/>
+  <meta property="og:site_name" content="Dilbert"/>
+  <meta property="fb:app_id" content="163128967074041"/>
+  <!-- Dynamic Twitter Card Meta Tags -->
+  <meta name="twitter:card" content="summary">
+  <!-- <meta name="twitter:url" content=""> -->
+  <meta name="twitter:title" content="Welcome to Dilbert">
+  <meta name="twitter:description" content="The Official Dilbert Website featuring Scott Adams Dilbert strips, animation, mashups and more starring Dilbert, Dogbert, Wally, The Pointy Haired Boss, Alice, Asok, Dogberts New Ruling Class and more.">
+  <meta name="twitter:image" content="http://dilbert.com/assets/packs/images/dilbert-logo-social-46e9be4d18e02d38a3a231d90d25399c.gif">
+  <!-- <meta name="twitter:domain" content=""> -->
+  <link rel="canonical" href="https://www.dilbert.com/">
+
+    <link rel="apple-touch-icon" type="image/png" href="/assets/packs/images/favicon/apple-touch-icon-57x57-1bbdfabd9f792891c311140662b99146.png" sizes="57x57" />
+<link rel="apple-touch-icon" type="image/png" href="/assets/packs/images/favicon/apple-touch-icon-60x60-f14d099a03eefc009bfc872b71de0a34.png" sizes="60x60" />
+<link rel="apple-touch-icon" type="image/png" href="/assets/packs/images/favicon/apple-touch-icon-72x72-974df3d96cdaf0fd749cd9a61e0d4aea.png" sizes="72x72" />
+<link rel="apple-touch-icon" type="image/png" href="/assets/packs/images/favicon/apple-touch-icon-114x114-3f1f7b9fb1420f57704bc745ea6ab055.png" sizes="114x114" />
+<link rel="apple-touch-icon" type="image/png" href="/assets/packs/images/favicon/apple-touch-icon-144x144-11aedc172fb1a16c12698cac66288043.png" sizes="144x144" />
+<link rel="apple-touch-icon" type="image/png" href="/assets/packs/images/favicon/apple-touch-icon-120x120-ee7d826e52be1dd50d0853079f14a5c5.png" sizes="120x120" />
+<link rel="apple-touch-icon" type="image/png" href="/assets/packs/images/favicon/apple-touch-icon-76x76-971028008725366da87bf80548c50353.png" sizes="76x76" />
+<link rel="apple-touch-icon" type="image/png" href="/assets/packs/images/favicon/apple-touch-icon-152x152-65509571445997e7b53d4f1fbe4373ad.png" sizes="152x152" />
+<link rel="icon" type="image/png" href="/assets/packs/images/favicon/favicon-196x196-21d3f791195be908fc24b0eca3eaaeac.png" sizes="196x196" />
+<link rel="icon" type="image/png" href="/assets/packs/images/favicon/favicon-160x160-d279c1400677060aea8b02b2a088eeba.png" sizes="160x160" />
+<link rel="icon" type="image/png" href="/assets/packs/images/favicon/favicon-96x96-a0f26560c9b6b16718286105ece26211.png" sizes="96x96" />
+<link rel="icon" type="image/png" href="/assets/packs/images/favicon/favicon-32x32-53cb616ea9e1e9f3a9ca5257a8f96af4.png" sizes="32x32" />
+<link rel="icon" type="image/png" href="/assets/packs/images/favicon/favicon-16x16-5d9c2b2ccb15f28bbb0b2496b272f770.png" sizes="16x16" />
+<link rel="shortcut icon" type="image/x-icon" href="/assets/packs/images/favicon/favicon-d10216bec74c15652860bbf4ddf1084a.ico" />
+<meta name="msapplication-TileColor" content="#ffffff" />
+
+    <link rel="stylesheet" media="all" href="/assets/packs/application-97fe7e6743b56f6057c834f16f836e61.css" />
+    <link rel="preconnect" href="https://gdpr-tcfv2.sp-prod.net" crossorigin>
+<link rel="dns-prefetch" href="https://gdpr-tcfv2.sp-prod.net/">
+<link rel="preconnect" href="https://ccpa.sp-prod.net" crossorigin>
+<link rel="dns-prefetch" href="https://ccpa.sp-prod.net">
+<link rel="preconnect" href="https://confiant-integrations.global.ssl.fastly.net" crossorigin>
+<link rel="dns-prefetch" href="https://confiant-integrations.global.ssl.fastly.net">
+<link rel="preconnect" href="https://securepubads.g.doubleclick.net" crossorigin>
+<link rel="dns-prefetch" href="https://securepubads.g.doubleclick.net">
+<link rel="preconnect" href="https://c.amazon-adsystem.com" crossorigin>
+<link rel="dns-prefetch" href="https://c.amazon-adsystem.com">
+
+    <script type="text/javascript">
+  /*---------- Global JS Variables and Objects ---------------------------------------*/
+  // Global Dilbert Object and Pre Document Load Variables
+  window.amuDilbert = window.amuDilbert || {};
+  amuDilbert.layoutWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+  amuDilbert.layoutHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+  amuDilbert.env = "production";
+  amuDilbert.debug = 'false';
+  amuDilbert.displayAds = true;
+  amuDilbert.disqusShortname = "dilbertcomics";
+  amuDilbert.privacyLink = "https://www.andrewsmcmeel.com/privacy-policy";
+  amuDilbert.quantcastId = "p-5bhew76JBcfq6"
+  // Dilbert Data Layer for Google Tag Manager/Analytics
+  window.dataLayer = window.dataLayer || [];
+  window.dataLayer.push({
+  'event': 'dataLayer-loaded',
+  'language': 'english',
+  'clientName': 'Dilbert Website',
+  'featureName': 'Dilbert',
+  });
+  // Summary: sourcepoint manages all of our user compliance obligations.  If a user wants to see what data we are tracking on them, sourcepoint presents what's called a "CMP" Consent Management Platform.  In here they can "consent" or "reject" whether or not we keep that information on them.  Most vendors are completely handled by sourcepoint, however there are a few "custom" vendors, where we have to add hooks before those vendors execute on page.  These hooks allow sourcepoint to pass the user's preference of "consent" or "reject" to this product's web page.
+  // 1. The user's location is identified by sourcepoint.
+  // 2. Depending on that location and if sourcepoint has previous information saved for the user, the object below gets modified.  Under each vendor in the sourcepoint UI, there is javascript sent to update the specific vendor's consent status.  IE: The user rejected us from using the custom vendor comscore.  This would be sent to the user's page: amuDilbert.spCustomVendors.comscore.consented = false;
+  // NOTE: The default is to render all tags like normal.  ONLY if sourcepoint sends consented: false do we halt the corresponding tag from firing.
+  // Global variable for advertising config
+  var amu_ads = amu_ads || {};
+  // This is a utility to easily output what typically is "console" messages.  It is turned off by default in production but can be enabled by adding a "?debug=true" to the end of the url.
+  if (window.amuDilbert.debug === 'true') {
+    console.log("AMU: ***DEBUG MESSAGES ARE ENABLED***");
+    function debug(message, object) {
+      object = object || ''
+      if (window.amuDilbert.debug) {
+        console.debug(message, object);
+      }
+    }
+  } else {
+    function debug(message, object) {
+      return;
+    }
+  }
+</script>
+
+    <script src="/assets/application-preload-2fce9e211cde6e39368d7cfe5a7ac6b8b83ad6e9626da9fa0682a1d1545ad49a.js"></script>
+    <!-- Sourcepoint: Code-Side Integration - GDPR Messaging Library (Part 3/3) -->
+<script src="https://gdpr-tcfv2.sp-prod.net/wrapperMessagingWithoutDetection.js"></script>
+<!-- Sourcepoint: Code-Side Integration - CCPA Messaging Library (Part 3/3) -->
+<script src="https://ccpa.sp-prod.net/ccpa.js"></script>
+<!-- GPT -->
+<script async="async" src="https://securepubads.g.doubleclick.net/tag/js/gpt.js"></script>
+<!-- Confiant -->
+<script async="async" src="https://confiant-integrations.global.ssl.fastly.net/DN19JX_5rrJXKmPMrwRRdO8wyOY/gpt_and_prebid/config.js"></script>
+<!-- Amazon A9 Programmatic Advertising -->
+<script async="async">
+  !function (a9, a, p, s, t, A, g) { if (a[a9]) return; function q(c, r) { a[a9]._Q.push([c, r]) } a[a9] = { init: function () { q("i", arguments) }, fetchBids: function () { q("f", arguments) }, setDisplayBids: function () { }, targetingKeys: function () { return [] }, _Q: [] }; A = p.createElement(s); A.async = !0; A.src = t; g = p.getElementsByTagName(s)[0]; g.parentNode.insertBefore(A, g) }("apstag", window, document, "script", "////c.amazon-adsystem.com/aax2/apstag.js");
+</script>
+
+    <script src="/assets/ad-dependencies-4d63416ab35c8e6af3f244d1bcf81eae1d021e82b4d83cd82c8320abc27e8f21.js"></script>
+    <script src="/assets/packs/vendor-4c45de0e24297cc56254.js" defer="defer"></script>
+    <script src="/assets/packs/application-0bf5f540f50f9cf87eae.js" defer="defer"></script>
+    <link rel="alternate" type="application/atom+xml" title="ATOM" href="/feed" />
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.rss" />
+    <link href='https://fonts.googleapis.com/css?family=Raleway:800' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.2.0/css/font-awesome.css" integrity="sha384-acGNjq0ZO3YC8YdbDezfdh+P9JYzpbVLNKWULhNFraiKnRIhnbcb75B7Jvzqf3hA" crossorigin="anonymous" media="all">
+  </head>
+  <body class="layout-anchored" role="document">
+    <!-- Google Universal Analytics Start -->
+<script type="text/javascript" async="async">
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  
+  // UU Tracking Object
+  ga('create', "UA-273330-47", 'auto', {'name': 'trackerUU47'});
+  ga('trackerUU47.require', 'displayfeatures');
+  ga('trackerUU47.require', 'linkid');
+  // TODO: GTM Migration Kill the outboundLinkTracker once we switch over to GTM. If this is delayed, we could do a custom build with only this plugin.
+  ga('trackerUU47.require', 'outboundLinkTracker', {
+      shouldTrackOutboundLink: function(link) {
+        // Checks that the link's hostname does not contain "example.com".
+        return link.hostname.indexOf('dilbert.com') < 0;
+      }
+  });
+  ga('trackerUU47.set', 'dimension1', "Dilbert Website");
+  ga('trackerUU47.set', 'dimension2', "Dilbert");
+  
+  ga('trackerUU47.send', 'pageview');
+  debug("AMU/Analytics: Sending static pageview for non-homepage page: http://dilbert.com/");
+</script>
+<!-- Google Universal Analytics End -->
+
+    <div class="container-fluid">
+      <div class="site-bg-bar"></div>
+<div class="container-header">
+  <header class="site-header" role="banner">
+    <div class="visible-xs-block site-mobile-header">
+      <a class="btn btn-link site-header-mobile-link pull-left js-toggle-link" href="" data-target=".site-header-nav"><i class="fa fa-bars fa-lg" aria-hidden="true"></i><i class="fa fa-times fa-lg" aria-hidden="true"></i> <span class="sr-only">Menu</span></a>
+      <a href="" class="btn btn-link pull-right site-header-mobile-link js-toggle-link" data-target=".site-header-mobile-search"><i class="fa fa-search fa-lg" aria-hidden="true"></i><i class="fa fa-times fa-lg" aria-hidden="true"></i> <span class="sr-only">Search</span></a>
+    </div>
+    <div class="site-header-branding">
+      <span class="logo-container"><a class="logo" title="Dilbert Logo" href="https://dilbert.com/"><img src="/assets/packs/images/dilbert-logo-515f1f57d74079af0c64a41158ded433.png" alt="Dilbert logo" /></a></span>
+      <span class="hidden-xs"><img src="/assets/packs/images/dilbert_character_top-b1b24dba0f6ee1cb0bea8de1eb84b5fe.png" alt="Dilbert character top" /></span>
+    </div>
+    <!-- /.site-header-branding -->
+    <div class="site-header-nav hidden-xs">
+      <nav role="navigation">
+        <ul class="nav-main" role="menubar">
+          <li role="menuitem" class="nav-main-item">
+            <a class="nav-main-link" href="/about">About</a>
+          </li>
+          <li role="menuitem" tabindex="-1" class="nav-main-item"><a class="nav-main-link js-toggle-link js-toggle-link--follow" data-target=".dropdown-menu" aria-haspopup="true" aria-expanded="false">Follow</a>
+            <ul role="menubar" class="dropdown-menu nav-main-dropdown">
+              <li role="menuitem" class="nav-sub-item"><a class="js-follow js-follow--facebook" href="https://www.facebook.com/dilbert?utm_source=dilbert.com&amp;utm_medium=site&amp;utm_campaign=brand-social&amp;utm_content=navigation" data-label="Facebook" target="_blank"><i class="fa fa-fw fa-facebook"></i> Facebook</a></li>
+              <li role="menuitem" class="nav-sub-item"><a class="js-follow js-follow--twitter" href="https://twitter.com/Dilbert_Daily?utm_source=dilbert.com&amp;utm_medium=site&amp;utm_campaign=brand-social&amp;utm_content=navigation" data-label="Twitter" target="_blank"><i class="fa fa-fw fa-twitter"></i> Twitter</a></li>
+              <li role="menuitem" class="nav-sub-item">
+                <a class="js-follow js-follow--comic-feed link-blended" data-label="Comic Feed" target="_blank" href="http://feed.dilbert.com/dilbert/daily_strip"><i class='fa fa-fw fa-rss'></i> Comics</a></li>
+            </ul>
+          </li>
+          <li role="search" class="nav-main-item ">
+            <a class="nav-main-link" href="/search"><i class='fa fa-search'></i> <span class='sr-only'>Search</span></a></li>
+        </ul>
+        <ul class="nav-secondary" role="menubar">
+          <li role="menuitem" class="nav-secondary-item">
+            <div class="nav-secondary-link dilbert-sp-message" id="dilbert-sp-message"></div>
+          </li>
+          <li role="menuitem" class="nav-secondary-item">
+            <a class="nav-secondary-link" href="/advertising">Advertising</a>
+          </li>
+          <li role="menuitem" class="nav-secondary-item">
+            <a class="nav-secondary-link" href="/contact">Contact</a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+    <!-- /.site-header-nav -->
+    <div class="site-header-mobile-search">
+      <form action="/search_results" method="get">
+        <div class="form-group">
+          <input type="text" name="terms" id="terms" class="form-control input-lg" placeholder="Search by Keyword or Date" />
+        </div>
+        <div class="form-group">
+          <button name="" type="sumbit" class="btn btn-block btn-primary btn-lg">
+            <i class='fa fa-search'></i> Search
+</button>        </div>
+      </form>
+    </div>
+  </header>
+  <!-- /.site-header -->
+</div>
+<!-- /.container-header -->
+
+      <div class="ad-leaderboard" aria-hidden="true">
+    <div id="leaderboard0" class="ad js-ad js-ad-refresh" data-ad-type="leaderboard">
+    </div>
+</div>
+      <div class="page-wrapper content-section" role="main">
+          <div class="alert show alert-error" role="alert">
+  <center>Oops!  We could not find a Dilbert strip for that date.</center>
+</div>
+        <div class="ad-anchored" aria-hidden="true">
+    <div id="tower_anchored" class="ad js-ad js-ad-refresh" data-ad-type="tower_anchored">
+    </div>
+</div>
+<h1 class="hidden" id="hidden-header">Dilbert.com by Scott Adams</h1>
+  <script type='application/ld+json'>
+    {
+      "@context":"https://schema.org",
+      "@type":"WebSite",
+      "url":"https://www.dilbert.com",
+      "name":"Dilbert",
+      "logo":"http://dilbert.com/assets/packs/images/dilbert-logo-social-46e9be4d18e02d38a3a231d90d25399c.gif",
+      "potentialAction": {
+        "@type":"SearchAction",
+        "target":"https://www.dilbert.com/search_results?terms={search_term_string}",
+        "query-input":"required name=search_term_string"
+      },
+      "sameAs": [
+        "https://www.facebook.com/dilbert",
+        "https://twitter.com/Dilbert_Daily"
+      ]
+    }
+  </script>
+  <div class="js-comics">
+    <div class="js-comic-block js-comic-block-9275388">
+    <div class="comic-item-container js-comic js-comic-container-2020-11-11"
+     accountablePerson="Andrews McMeel Syndication"
+     creator="Scott Adams"
+     data-itemtype=""
+     data-id="2020-11-11"
+     data-url="https://dilbert.com/strip/2020-11-11?creator=Dilbert_Daily"
+     data-image="https://assets.amuniversal.com/f25312c0fb5b01382ef9005056a9545d"
+     data-date="November 11, 2020"
+     data-creator="Scott Adams"
+     data-title="Elbonian Words"
+     data-tags=""
+     data-description=""
+>
+  <div class="meta-info-container">
+    <section class="comic-item">
+      <h2 class="comic-title">
+        <a class="comic-title-link" href="https://dilbert.com/strip/2020-11-11">
+          <span class="comic-date-wrapper">
+            <date class="comic-title-date" itemProp="datePublished">
+              <span>Wednesday November 11,</span>
+              <span itemprop="copyrightYear">2020</span>
+            </date>
+          </span>
+          <span class="comic-title-name">Elbonian Words</span>
+        </a>
+        <span class="comic-rating">
+          <div class="comic-rating-2020-11-11 js-comic-rating comic-rating" data-date="2020-11-11" data-total="4.5"></div>
+        </span>
+      </h2>
+      <div class="alert alert-success js-comic-rating-success">
+          Thank you for voting.
+      </div>
+      <div class="alert alert-error js-comic-rating-error">
+        Hmm. Something went wrong.  We will take a look as soon as we can.
+      </div>
+      <div class="img-comic-container">
+        <a class="img-comic-link" href="https://dilbert.com/strip/2020-11-11" title="Click to see the comic strip Elbonian Words">
+          <img class="img-responsive img-comic" width="900" height="280" alt="Elbonian Words - Dilbert by Scott Adams" src="https://assets.amuniversal.com/f25312c0fb5b01382ef9005056a9545d" />
+        </a>
+        <meta itemprop="isFamilyFriendly" content="true"/>
+        <div data-src=".js-comic-container-2020-11-11" class="js-amu-social-section">
+  <ul class="amu-section-social" role="toolbar">
+    <li class="amu-social-item"><a name="email" class="social-btn js-social-btn" data-network="email" href="mailto:?body=Check%20out%20this%20Dilbert%20Comic.%0D%0A%0D%0Ahttps%3A%2F%2Fdilbert.com%2Fstrip%2F2020-11-11%3Futm_source%3Ddilbert.com%2Fshare-email%26utm_medium%3Demail%26utm_campaign%3Dbrand-loyalty&amp;subject=Dilbert%20by%20Scott%20Adams%2C%202020-11-11">
+        <i class="fa fa-envelope fa-fw fa-lg"></i> <span class="sr-only">Email Comic</span>
+      </a></li>
+    <li class="amu-social-item"><a name="facebook" class="social-btn js-social-btn social-btn-facebook" data-network="facebook" href="#">
+        <i class="fa fa-facebook fa-fw fa-lg"></i><span class="sr-only"> Share on Facebook</span>
+      </a></li>
+    <li class="amu-social-item"><a name="twitter" class="social-btn js-social-btn social-btn-twitter" data-network="twitter" href="#">
+        <i class="fa fa-twitter fa-fw fa-lg"></i><span class="sr-only"> Tweet</span>
+      </a></li>
+    <li class="amu-social-item"><a name="linkedin" class="social-btn js-social-btn social-btn-linkedin " data-network="linkedin" href="#">
+        <i class="fa fa-linkedin fa-fw fa-lg"></i><span class="sr-only"> Share on LinkedIn</span>
+      </a></li>
+      <li class="amu-social-item">
+        <a href="https://dilbert.com/strip/2020-11-11#comments" class="social-link js-disqus-comments" title="Join the discussion on Elbonian Words Dilbert Comic Strip">
+          <span class="social-link-icon"><i class="fa fa-comments fa-lg fa-fw"></i></span>
+          <span class="social-label-stacked">
+            <span class="social-label-top">Comments</span>
+            <span class="social-label-bottom disqus-comment-count js-disqus-comment-count" data-disqus-identifier="comic-2020-11-11">0</span>
+          </span>
+        </a>
+      </li>
+      <li class="comic-buy-link amu-social-item">
+        <a class="social-btn" href="/buy?date=2020-11-11" title="Purchase this strip"><span class="visible-xs hidden-sm"><i class="fa fa-shopping-cart fa-lg fa-fw"></i></span><span class="hidden-xs">Buy</span></a>
+      </li>
+  </ul>
+</div>
+
+        <div class="meta-info-container">
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
+
+      <div class="shelf-space-container row">
+    <div class="shelf-space-item">
+      <div class="ad-rectangle" aria-hidden="true">
+    <div id="rectangle0" class="ad js-ad js-ad-refresh" data-ad-type="rectangle">
+    </div>
+</div>
+    </div>
+    <div class="shelf-space-item">
+      <div class="Promo_F ad-rectangle" style="height: auto;">
+  <h3 class="hdr-top">Top Dilbert Searches</h3>
+  <p>
+      <a href="search_results?terms=marketing">marketing</a>,
+      <a href="search_results?terms=project">project</a>,
+      <a href="search_results?terms=cloud">cloud</a>,
+      <a href="search_results?terms=catbert">catbert</a>,
+      <a href="search_results?terms=leadership">leadership</a>,
+      <a href="search_results?terms=budget">budget</a>,
+      <a href="search_results?terms=birthday">birthday</a>,
+      <a href="search_results?terms=engineer">engineer</a>,
+      <a href="search_results?terms=time sheet">time sheet</a>,
+      <a href="search_results?terms=sales">sales</a>,
+      <a href="search_results?terms=wally">wally</a>,
+      <a href="search_results?terms=strategy">strategy</a>,
+      <a href="search_results?terms=dogbert">dogbert</a>,
+      <a href="search_results?terms=powerpoint">powerpoint</a>,
+      <a href="search_results?terms=project management">project management</a>,
+      <a href="search_results?terms=topper">topper</a>,
+      <a href="search_results?terms=leader">leader</a>,
+      <a href="search_results?terms=boss">boss</a>,
+      <a href="search_results?terms=change">change</a>,
+      <a href="search_results?terms=meeting">meeting</a>,
+      <a href="search_results?terms=data">data</a>,
+      <a href="search_results?terms=management">management</a>,
+      <a href="search_results?terms=mordac">mordac</a>
+  </p>
+</div>
+
+    </div>
+    <div class="shelf-space-item shelf-space-item-right">
+      <div class="ad-rectangle-right" aria-hidden="true">
+    <div id="rectangle_right0" class="ad js-ad js-ad-refresh" data-ad-type="rectangle_right">
+    </div>
+</div>
+    </div>
+  </div>
+
+    <div class="comic-item-container js-comic js-comic-container-2020-11-10"
+     accountablePerson="Andrews McMeel Syndication"
+     creator="Scott Adams"
+     data-itemtype=""
+     data-id="2020-11-10"
+     data-url="https://dilbert.com/strip/2020-11-10?creator=Dilbert_Daily"
+     data-image="https://assets.amuniversal.com/ef14bbb0fb5b01382ef9005056a9545d"
+     data-date="November 10, 2020"
+     data-creator="Scott Adams"
+     data-title="Ted Liked A Tweet"
+     data-tags=""
+     data-description=""
+>
+  <div class="meta-info-container">
+    <section class="comic-item">
+      <h2 class="comic-title">
+        <a class="comic-title-link" href="https://dilbert.com/strip/2020-11-10">
+          <span class="comic-date-wrapper">
+            <date class="comic-title-date" itemProp="datePublished">
+              <span>Tuesday November 10,</span>
+              <span itemprop="copyrightYear">2020</span>
+            </date>
+          </span>
+          <span class="comic-title-name">Ted Liked A Tweet</span>
+        </a>
+        <span class="comic-rating">
+          <div class="comic-rating-2020-11-10 js-comic-rating comic-rating" data-date="2020-11-10" data-total="5.0"></div>
+        </span>
+      </h2>
+      <div class="alert alert-success js-comic-rating-success">
+          Thank you for voting.
+      </div>
+      <div class="alert alert-error js-comic-rating-error">
+        Hmm. Something went wrong.  We will take a look as soon as we can.
+      </div>
+      <div class="img-comic-container">
+        <a class="img-comic-link" href="https://dilbert.com/strip/2020-11-10" title="Click to see the comic strip Ted Liked A Tweet">
+          <img class="img-responsive img-comic" width="900" height="280" alt="Ted Liked A Tweet - Dilbert by Scott Adams" src="https://assets.amuniversal.com/ef14bbb0fb5b01382ef9005056a9545d" />
+        </a>
+        <meta itemprop="isFamilyFriendly" content="true"/>
+        <div data-src=".js-comic-container-2020-11-10" class="js-amu-social-section">
+  <ul class="amu-section-social" role="toolbar">
+    <li class="amu-social-item"><a name="email" class="social-btn js-social-btn" data-network="email" href="mailto:?body=Check%20out%20this%20Dilbert%20Comic.%0D%0A%0D%0Ahttps%3A%2F%2Fdilbert.com%2Fstrip%2F2020-11-10%3Futm_source%3Ddilbert.com%2Fshare-email%26utm_medium%3Demail%26utm_campaign%3Dbrand-loyalty&amp;subject=Dilbert%20by%20Scott%20Adams%2C%202020-11-10">
+        <i class="fa fa-envelope fa-fw fa-lg"></i> <span class="sr-only">Email Comic</span>
+      </a></li>
+    <li class="amu-social-item"><a name="facebook" class="social-btn js-social-btn social-btn-facebook" data-network="facebook" href="#">
+        <i class="fa fa-facebook fa-fw fa-lg"></i><span class="sr-only"> Share on Facebook</span>
+      </a></li>
+    <li class="amu-social-item"><a name="twitter" class="social-btn js-social-btn social-btn-twitter" data-network="twitter" href="#">
+        <i class="fa fa-twitter fa-fw fa-lg"></i><span class="sr-only"> Tweet</span>
+      </a></li>
+    <li class="amu-social-item"><a name="linkedin" class="social-btn js-social-btn social-btn-linkedin " data-network="linkedin" href="#">
+        <i class="fa fa-linkedin fa-fw fa-lg"></i><span class="sr-only"> Share on LinkedIn</span>
+      </a></li>
+      <li class="amu-social-item">
+        <a href="https://dilbert.com/strip/2020-11-10#comments" class="social-link js-disqus-comments" title="Join the discussion on Ted Liked A Tweet Dilbert Comic Strip">
+          <span class="social-link-icon"><i class="fa fa-comments fa-lg fa-fw"></i></span>
+          <span class="social-label-stacked">
+            <span class="social-label-top">Comments</span>
+            <span class="social-label-bottom disqus-comment-count js-disqus-comment-count" data-disqus-identifier="comic-2020-11-10">0</span>
+          </span>
+        </a>
+      </li>
+      <li class="comic-buy-link amu-social-item">
+        <a class="social-btn" href="/buy?date=2020-11-10" title="Purchase this strip"><span class="visible-xs hidden-sm"><i class="fa fa-shopping-cart fa-lg fa-fw"></i></span><span class="hidden-xs">Buy</span></a>
+      </li>
+  </ul>
+</div>
+
+        <div class="meta-info-container">
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
+
+    
+    <div class="comic-item-container js-comic js-comic-container-2020-11-09"
+     accountablePerson="Andrews McMeel Syndication"
+     creator="Scott Adams"
+     data-itemtype=""
+     data-id="2020-11-09"
+     data-url="https://dilbert.com/strip/2020-11-09?creator=Dilbert_Daily"
+     data-image="https://assets.amuniversal.com/ec556be0fb5b01382ef9005056a9545d"
+     data-date="November 09, 2020"
+     data-creator="Scott Adams"
+     data-title="No Performance Reviews "
+     data-tags=""
+     data-description=""
+>
+  <div class="meta-info-container">
+    <section class="comic-item">
+      <h2 class="comic-title">
+        <a class="comic-title-link" href="https://dilbert.com/strip/2020-11-09">
+          <span class="comic-date-wrapper">
+            <date class="comic-title-date" itemProp="datePublished">
+              <span>Monday November 09,</span>
+              <span itemprop="copyrightYear">2020</span>
+            </date>
+          </span>
+          <span class="comic-title-name">No Performance Reviews </span>
+        </a>
+        <span class="comic-rating">
+          <div class="comic-rating-2020-11-09 js-comic-rating comic-rating" data-date="2020-11-09" data-total="5.0"></div>
+        </span>
+      </h2>
+      <div class="alert alert-success js-comic-rating-success">
+          Thank you for voting.
+      </div>
+      <div class="alert alert-error js-comic-rating-error">
+        Hmm. Something went wrong.  We will take a look as soon as we can.
+      </div>
+      <div class="img-comic-container">
+        <a class="img-comic-link" href="https://dilbert.com/strip/2020-11-09" title="Click to see the comic strip No Performance Reviews ">
+          <img class="img-responsive img-comic" width="900" height="280" alt="No Performance Reviews  - Dilbert by Scott Adams" src="https://assets.amuniversal.com/ec556be0fb5b01382ef9005056a9545d" />
+        </a>
+        <meta itemprop="isFamilyFriendly" content="true"/>
+        <div data-src=".js-comic-container-2020-11-09" class="js-amu-social-section">
+  <ul class="amu-section-social" role="toolbar">
+    <li class="amu-social-item"><a name="email" class="social-btn js-social-btn" data-network="email" href="mailto:?body=Check%20out%20this%20Dilbert%20Comic.%0D%0A%0D%0Ahttps%3A%2F%2Fdilbert.com%2Fstrip%2F2020-11-09%3Futm_source%3Ddilbert.com%2Fshare-email%26utm_medium%3Demail%26utm_campaign%3Dbrand-loyalty&amp;subject=Dilbert%20by%20Scott%20Adams%2C%202020-11-09">
+        <i class="fa fa-envelope fa-fw fa-lg"></i> <span class="sr-only">Email Comic</span>
+      </a></li>
+    <li class="amu-social-item"><a name="facebook" class="social-btn js-social-btn social-btn-facebook" data-network="facebook" href="#">
+        <i class="fa fa-facebook fa-fw fa-lg"></i><span class="sr-only"> Share on Facebook</span>
+      </a></li>
+    <li class="amu-social-item"><a name="twitter" class="social-btn js-social-btn social-btn-twitter" data-network="twitter" href="#">
+        <i class="fa fa-twitter fa-fw fa-lg"></i><span class="sr-only"> Tweet</span>
+      </a></li>
+    <li class="amu-social-item"><a name="linkedin" class="social-btn js-social-btn social-btn-linkedin " data-network="linkedin" href="#">
+        <i class="fa fa-linkedin fa-fw fa-lg"></i><span class="sr-only"> Share on LinkedIn</span>
+      </a></li>
+      <li class="amu-social-item">
+        <a href="https://dilbert.com/strip/2020-11-09#comments" class="social-link js-disqus-comments" title="Join the discussion on No Performance Reviews  Dilbert Comic Strip">
+          <span class="social-link-icon"><i class="fa fa-comments fa-lg fa-fw"></i></span>
+          <span class="social-label-stacked">
+            <span class="social-label-top">Comments</span>
+            <span class="social-label-bottom disqus-comment-count js-disqus-comment-count" data-disqus-identifier="comic-2020-11-09">0</span>
+          </span>
+        </a>
+      </li>
+      <li class="comic-buy-link amu-social-item">
+        <a class="social-btn" href="/buy?date=2020-11-09" title="Purchase this strip"><span class="visible-xs hidden-sm"><i class="fa fa-shopping-cart fa-lg fa-fw"></i></span><span class="hidden-xs">Buy</span></a>
+      </li>
+  </ul>
+</div>
+
+        <div class="meta-info-container">
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
+
+      <div class="ad-banner" aria-hidden="true">
+    <div id="banner0" class="ad js-ad-lazy-load js-ad-refresh" data-ad-type="banner">
+    </div>
+</div>
+
+</div>
+
+  </div>
+  <div class="load-comics-trigger js-load-comics">
+  <a class="js-load-comics-link" data-reset="false" href="/?series_count=0&amp;starting_point=3">
+    <i class="js-load-comics-icon fa-spin fa fa-refresh fa-2x"></i>
+    <p class="js-load-comics-status text-muted">Load More Dilbert</p>
+</a></div>
+
+
+      </div>
+    </div>
+    <div class="ad-locked" aria-hidden="true">
+  <div id="tynt" class="js-ad" data-ad-type="tynt">
+  </div>
+</div>
+<noscript>
+  <div style="display:none;">
+    <img src="//pixel.quantserve.com/pixel/p-5bhew76JBcfq6.gif" border="0" height="1" width="1" alt=""/>
+  </div>
+</noscript>
+<noscript>
+  <img src="http://b.scorecardresearch.com/p?c1=2&c2=20519258&cv=2.0&cj=1" alt="" />
+</noscript>
+<!-- Disqus Comment Count -->
+<script id="dsq-count-scr" src="//dilbertcomics.disqus.com/count.js" async></script>
+
+    
+  </body>
+</html>

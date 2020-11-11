@@ -35,20 +35,14 @@ func NewComic(date string) (*Comic, error) {
 
 	stripURL := fmt.Sprintf("%s/strip/%s", baseURL, strings.TrimSpace(date))
 
-	client := &http.Client{
-		Timeout: 10 * time.Second,
-		// Don't follow redirects
-		CheckRedirect: func(req *http.Request, via []*http.Request) error {
-			return http.ErrUseLastResponse
-		},
-	}
+	client := &http.Client{Timeout: 10 * time.Second}
 	resp, err := client.Get(stripURL)
 	if err != nil {
 		return nil, err
 	}
 	defer resp.Body.Close()
 
-	if resp.StatusCode != http.StatusOK {
+	if resp.StatusCode != http.StatusOK && resp.StatusCode != http.StatusFound {
 		return nil, fmt.Errorf("HTTP error: %s", resp.Status)
 	}
 
@@ -59,15 +53,15 @@ func NewComic(date string) (*Comic, error) {
 
 	var title, imageURL string
 
-	doc.Find(".img-comic-container").Each(func(i int, s *goquery.Selection) {
-		img := s.Find("img")
+	if container := doc.Find(".img-comic-container"); container != nil {
+		img := container.Find("img")
 		if v, ok := img.Attr("alt"); ok {
 			title = strings.TrimSpace(strings.TrimSuffix(v, titleSuffix))
 		}
 		if v, ok := img.Attr("src"); ok {
 			imageURL = strings.TrimSpace(v)
 		}
-	})
+	}
 
 	if imageURL == "" {
 		return nil, fmt.Errorf("image URL not found")
