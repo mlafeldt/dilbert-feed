@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"context"
 	"fmt"
 	"io/ioutil"
 	"strings"
@@ -9,6 +10,7 @@ import (
 	"time"
 
 	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/aws/request"
 	"github.com/aws/aws-sdk-go/service/s3"
 	"github.com/aws/aws-sdk-go/service/s3/s3iface"
 	"github.com/aws/aws-sdk-go/service/s3/s3manager"
@@ -21,7 +23,7 @@ type mockS3Client struct {
 	Titles map[string]*string
 }
 
-func (m *mockS3Client) HeadObject(input *s3.HeadObjectInput) (*s3.HeadObjectOutput, error) {
+func (m *mockS3Client) HeadObjectWithContext(ctx context.Context, input *s3.HeadObjectInput, opt ...request.Option) (*s3.HeadObjectOutput, error) {
 	return &s3.HeadObjectOutput{
 		Metadata: map[string]*string{
 			"Title": m.Titles[aws.StringValue(input.Key)],
@@ -48,7 +50,7 @@ func TestFeedGenerator(t *testing.T) {
 		S3Client:   mockClient,
 	}
 
-	if err := g.Generate(&buf); err != nil {
+	if err := g.Generate(context.Background(), &buf); err != nil {
 		t.Fatal(err)
 	}
 
@@ -71,7 +73,7 @@ type mockS3Uploader struct {
 	s3manageriface.UploaderAPI
 }
 
-func (m *mockS3Uploader) Upload(input *s3manager.UploadInput, options ...func(*s3manager.Uploader)) (*s3manager.UploadOutput, error) {
+func (m *mockS3Uploader) UploadWithContext(ctx context.Context, input *s3manager.UploadInput, options ...func(*s3manager.Uploader)) (*s3manager.UploadOutput, error) {
 	return &s3manager.UploadOutput{
 		Location: fmt.Sprintf("https://%s.s3.amazonaws.com/%s",
 			aws.StringValue(input.Bucket), aws.StringValue(input.Key)),
@@ -86,7 +88,7 @@ func TestFeedUploader(t *testing.T) {
 	}
 	want := "https://dilbert-feed-test.s3.amazonaws.com/some/path/feed.xml"
 
-	got, err := u.Upload(nil)
+	got, err := u.Upload(context.Background(), nil)
 	if err != nil {
 		t.Fatal(err)
 	}

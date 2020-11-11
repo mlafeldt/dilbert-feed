@@ -1,11 +1,11 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"log"
 	"net/http"
 	"strings"
-	"time"
 
 	"github.com/aws/aws-lambda-go/lambda"
 	"github.com/aws/aws-sdk-go/aws"
@@ -32,7 +32,7 @@ func main() {
 	lambda.Start(handler)
 }
 
-func handler(input Input) (*Output, error) {
+func handler(ctx context.Context, input Input) (*Output, error) {
 	var env struct {
 		BucketName string `envconfig:"BUCKET_NAME" required:"true"`
 		StripsDir  string `envconfig:"STRIPS_DIR" required:"true"`
@@ -53,7 +53,7 @@ func handler(input Input) (*Output, error) {
 		}
 	}
 
-	comic, err := dilbert.NewComic(date)
+	comic, err := dilbert.NewComic(ctx, date)
 	if err != nil {
 		return nil, err
 	}
@@ -69,9 +69,9 @@ func handler(input Input) (*Output, error) {
 		BucketName: env.BucketName,
 		StripsDir:  env.StripsDir,
 		S3Uploader: s3manager.NewUploader(sess),
-		HTTPClient: &http.Client{Timeout: 10 * time.Second},
+		HTTPClient: http.DefaultClient,
 	}
-	stripURL, err := cp.Copy(comic)
+	stripURL, err := cp.Copy(ctx, comic)
 	if err != nil {
 		return nil, err
 	}
@@ -89,7 +89,7 @@ type StripCopier struct {
 }
 
 // Copy copies a comic strip from dilbert.com to S3.
-func (cp *StripCopier) Copy(comic *dilbert.Comic) (string, error) {
+func (cp *StripCopier) Copy(ctx context.Context, comic *dilbert.Comic) (string, error) {
 	resp, err := cp.HTTPClient.Get(comic.ImageURL)
 	if err != nil {
 		return "", err
@@ -100,7 +100,7 @@ func (cp *StripCopier) Copy(comic *dilbert.Comic) (string, error) {
 		return "", fmt.Errorf("HTTP error: %s", resp.Status)
 	}
 
-	upload, err := cp.S3Uploader.Upload(&s3manager.UploadInput{
+	upload, err := cp.S3Uploader.UploadWithContext(ctx, &s3manager.UploadInput{
 		Bucket:      aws.String(cp.BucketName),
 		Key:         aws.String(fmt.Sprintf("%s/%s.gif", cp.StripsDir, comic.Date)),
 		ContentType: aws.String("image/gif"),

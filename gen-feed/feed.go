@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"io"
 	"time"
@@ -23,7 +24,7 @@ type FeedGenerator struct {
 }
 
 // Generate builds an RSS feed for Dilbert.
-func (g *FeedGenerator) Generate(w io.Writer) error {
+func (g *FeedGenerator) Generate(ctx context.Context, w io.Writer) error {
 	feed := &feeds.Feed{
 		Title:       "Dilbert",
 		Link:        &feeds.Link{Href: "https://dilbert.com"},
@@ -35,7 +36,7 @@ func (g *FeedGenerator) Generate(w io.Writer) error {
 			day   = g.StartDate.AddDate(0, 0, -i).Truncate(24 * time.Hour)
 			date  = fmt.Sprintf("%d-%02d-%02d", day.Year(), day.Month(), day.Day())
 			url   = fmt.Sprintf("https://%s.s3.amazonaws.com/%s/%s.gif", g.BucketName, g.StripsDir, date)
-			title = g.title(date)
+			title = g.title(ctx, date)
 		)
 
 		feed.Add(&feeds.Item{
@@ -50,11 +51,11 @@ func (g *FeedGenerator) Generate(w io.Writer) error {
 	return feed.WriteRss(w)
 }
 
-func (g *FeedGenerator) title(date string) string {
+func (g *FeedGenerator) title(ctx context.Context, date string) string {
 	title := fmt.Sprintf("Dilbert - %s", date)
 
 	if g.S3Client != nil {
-		out, err := g.S3Client.HeadObject(&s3.HeadObjectInput{
+		out, err := g.S3Client.HeadObjectWithContext(ctx, &s3.HeadObjectInput{
 			Bucket: aws.String(g.BucketName),
 			Key:    aws.String(fmt.Sprintf("%s/%s.gif", g.StripsDir, date)),
 		})
@@ -77,8 +78,8 @@ type FeedUploader struct {
 }
 
 // Upload uploads a Dilbert feed to S3.
-func (u *FeedUploader) Upload(r io.Reader) (string, error) {
-	upload, err := u.S3Uploader.Upload(&s3manager.UploadInput{
+func (u *FeedUploader) Upload(ctx context.Context, r io.Reader) (string, error) {
+	upload, err := u.S3Uploader.UploadWithContext(ctx, &s3manager.UploadInput{
 		Bucket:      aws.String(u.BucketName),
 		Key:         aws.String(u.FeedPath),
 		Body:        r,

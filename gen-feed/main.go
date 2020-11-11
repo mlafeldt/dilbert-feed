@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"context"
 	"log"
 	"time"
 
@@ -24,7 +25,7 @@ func main() {
 	lambda.Start(handler)
 }
 
-func handler(input Input) (*Output, error) {
+func handler(ctx context.Context, input Input) (*Output, error) {
 	var env struct {
 		BucketName string `envconfig:"BUCKET_NAME" required:"true"`
 		StripsDir  string `envconfig:"STRIPS_DIR" required:"true"`
@@ -53,7 +54,7 @@ func handler(input Input) (*Output, error) {
 		FeedLength: 30,
 		S3Client:   s3.New(sess),
 	}
-	if err := g.Generate(&buf); err != nil {
+	if err := g.Generate(ctx, &buf); err != nil {
 		return nil, err
 	}
 
@@ -63,7 +64,7 @@ func handler(input Input) (*Output, error) {
 		FeedPath:   env.FeedPath,
 		S3Uploader: s3manager.NewUploader(sess),
 	}
-	feedURL, err := u.Upload(&buf)
+	feedURL, err := u.Upload(ctx, &buf)
 	if err != nil {
 		return nil, err
 	}

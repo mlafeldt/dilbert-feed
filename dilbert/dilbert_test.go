@@ -1,6 +1,7 @@
 package dilbert_test
 
 import (
+	"context"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -43,7 +44,7 @@ func TestNewComic(t *testing.T) {
 	}
 
 	for _, td := range testdata {
-		comic, err := dilbert.NewComic(td.Date)
+		comic, err := dilbert.NewComic(context.Background(), td.Date)
 		if err != nil {
 			t.Error(err)
 		}

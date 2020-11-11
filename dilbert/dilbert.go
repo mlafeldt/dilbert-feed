@@ -1,6 +1,7 @@
 package dilbert
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 	"strings"
@@ -24,8 +25,8 @@ func SetBaseURL(url string) {
 	baseURL = url
 }
 
-// NewComic returns the Dilbert comic strip for the given date.
-func NewComic(date string) (*Comic, error) {
+// NewComic gets the Dilbert comic strip for the given date.
+func NewComic(ctx context.Context, date string) (*Comic, error) {
 	if date == "" {
 		now := time.Now()
 		date = fmt.Sprintf("%d-%02d-%02d", now.Year(), now.Month(), now.Day())
@@ -33,8 +34,12 @@ func NewComic(date string) (*Comic, error) {
 
 	stripURL := fmt.Sprintf("%s/strip/%s", baseURL, strings.TrimSpace(date))
 
-	client := &http.Client{Timeout: 10 * time.Second}
-	resp, err := client.Get(stripURL)
+	req, err := http.NewRequestWithContext(ctx, "GET", stripURL, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	resp, err := http.DefaultClient.Do(req)
 	if err != nil {
 		return nil, err
 	}
