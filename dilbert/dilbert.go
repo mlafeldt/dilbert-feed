@@ -12,12 +12,10 @@ import (
 // Comic describes a Dilbert comic strip.
 type Comic struct {
 	Date     string `json:"date"`
-	Title    string `json:"title,omitempty"`
+	Title    string `json:"title"`
 	ImageURL string `json:"image_url"`
 	StripURL string `json:"strip_url"`
 }
-
-const titleSuffix = "- Dilbert by Scott Adams"
 
 var baseURL = "https://dilbert.com"
 
@@ -53,16 +51,18 @@ func NewComic(date string) (*Comic, error) {
 
 	var title, imageURL string
 
-	if container := doc.Find(".img-comic-container"); container != nil {
-		img := container.Find("img")
-		if v, ok := img.Attr("alt"); ok {
-			title = strings.TrimSpace(strings.TrimSuffix(v, titleSuffix))
+	if container := doc.Find(".comic-item-container"); container != nil {
+		if v, ok := container.Attr("data-title"); ok {
+			title = strings.TrimSpace(v)
 		}
-		if v, ok := img.Attr("src"); ok {
+		if v, ok := container.Attr("data-image"); ok {
 			imageURL = strings.TrimSpace(v)
 		}
 	}
 
+	if title == "" {
+		return nil, fmt.Errorf("title not found")
+	}
 	if imageURL == "" {
 		return nil, fmt.Errorf("image URL not found")
 	}

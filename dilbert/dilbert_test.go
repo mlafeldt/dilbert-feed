@@ -18,7 +18,7 @@ func TestNewComic(t *testing.T) {
 	testdata := []*dilbert.Comic{
 		{
 			Date:     "2000-01-01",
-			Title:    "",
+			Title:    "Dilbert Comic for 2000-01-01",
 			ImageURL: "https://assets.amuniversal.com/bdc8a4d06d6401301d80001dd8b71c47",
 			StripURL: ts.URL + "/strip/2000-01-01",
 		},
