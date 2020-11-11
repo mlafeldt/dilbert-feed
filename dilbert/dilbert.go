@@ -25,8 +25,8 @@ func SetBaseURL(url string) {
 	baseURL = url
 }
 
-// NewComic gets the Dilbert comic strip for the given date.
-func NewComic(ctx context.Context, date string) (*Comic, error) {
+// ScrapeComic gets the Dilbert comic strip for the given date.
+func ScrapeComic(ctx context.Context, date string) (*Comic, error) {
 	if date == "" {
 		now := time.Now()
 		date = fmt.Sprintf("%d-%02d-%02d", now.Year(), now.Month(), now.Day())

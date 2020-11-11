@@ -53,7 +53,7 @@ func handler(ctx context.Context, input Input) (*Output, error) {
 		}
 	}
 
-	comic, err := dilbert.NewComic(ctx, date)
+	comic, err := dilbert.ScrapeComic(ctx, date)
 	if err != nil {
 		return nil, err
 	}

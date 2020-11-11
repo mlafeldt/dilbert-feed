@@ -11,7 +11,7 @@ import (
 	"github.com/mlafeldt/dilbert-feed/dilbert"
 )
 
-func TestNewComic(t *testing.T) {
+func TestScrapeComic(t *testing.T) {
 	ts := httptest.NewServer(http.FileServer(http.Dir("testdata")))
 	defer ts.Close()
 	dilbert.SetBaseURL(ts.URL)
@@ -44,7 +44,7 @@ func TestNewComic(t *testing.T) {
 	}
 
 	for _, td := range testdata {
-		comic, err := dilbert.NewComic(context.Background(), td.Date)
+		comic, err := dilbert.ScrapeComic(context.Background(), td.Date)
 		if err != nil {
 			t.Error(err)
 		}
