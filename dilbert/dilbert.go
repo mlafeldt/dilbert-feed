@@ -57,6 +57,9 @@ func ScrapeComic(ctx context.Context, date string) (*Comic, error) {
 	var title, imageURL string
 
 	if container := doc.Find(".comic-item-container"); container != nil {
+		if v, ok := container.Attr("data-id"); ok && v != date {
+			return nil, fmt.Errorf("comic not found for date")
+		}
 		if v, ok := container.Attr("data-title"); ok {
 			title = strings.TrimSpace(v)
 		}
