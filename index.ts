@@ -95,8 +95,7 @@ export class DilbertFeedStack extends cdk.Stack {
 
     const cron = new events.Rule(this, 'Cron', {
       description: 'Update Dilbert feed',
-      ruleName: `${id}-cron`,
-      schedule: events.Schedule.expression('cron(0 6 * * ? *)')
+      schedule: events.Schedule.expression('cron(0 8 * * ? *)')
     })
     cron.addTarget(new targets.SfnStateMachine(sm))
 
