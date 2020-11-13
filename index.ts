@@ -71,21 +71,29 @@ export class DilbertFeedStack extends cdk.Stack {
       }
     })
 
+    const retryProps = {
+      errors: ['States.TaskFailed'],
+      interval: cdk.Duration.seconds(10),
+      maxAttempts: 2,
+      backoffRate: 2.0
+    }
+
     const steps = new tasks.LambdaInvoke(this, 'GetStrip', {
       lambdaFunction: getStrip,
       resultPath: '$.strip'
     })
+      .addRetry(retryProps)
       .next(
         new tasks.LambdaInvoke(this, 'GenFeed', {
           lambdaFunction: genFeed,
           resultPath: '$.feed'
-        })
+        }).addRetry(retryProps)
       )
       .next(
         new tasks.LambdaInvoke(this, 'SendHeartbeat', {
           lambdaFunction: heartbeat,
           resultPath: '$.heartbeat'
-        })
+        }).addRetry(retryProps)
       )
 
     const sm = new sfn.StateMachine(this, 'StateMachine', {
