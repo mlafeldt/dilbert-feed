@@ -1,6 +1,7 @@
 import 'source-map-support/register'
 import * as cdk from '@aws-cdk/core'
 import * as events from '@aws-cdk/aws-events'
+import * as iam from '@aws-cdk/aws-iam'
 import * as lambda from '@aws-cdk/aws-lambda'
 import * as logs from '@aws-cdk/aws-logs'
 import * as s3 from '@aws-cdk/aws-s3'
@@ -20,6 +21,17 @@ export class DilbertFeedStack extends cdk.Stack {
       publicReadAccess: true,
       encryption: s3.BucketEncryption.S3_MANAGED
     })
+
+    const sslOnly = new iam.PolicyStatement({
+      sid: 'AllowSSLRequestsOnly',
+      actions: ['s3:*'],
+      effect: iam.Effect.DENY,
+      resources: [bucket.bucketArn, bucket.bucketArn + '/*']
+    })
+    sslOnly.addAnyPrincipal()
+    sslOnly.addCondition('Bool', { 'aws:SecureTransport': 'false' })
+    bucket.addToResourcePolicy(sslOnly)
+
     bucket.addLifecycleRule({
       id: 'DeleteStripsAfter30Days',
       prefix: `${stripsDir}/`,
