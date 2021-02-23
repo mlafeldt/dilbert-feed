@@ -16,20 +16,20 @@
   "devDependencies": {
     "@types/aws-lambda": "^8.10.62",
     "@types/node": "^13.13.17",
-    "aws-cdk": "1.76.0",
+    "aws-cdk": "1.90.1",
     "aws-lambda": "^1.0.6",
     "typescript": "~3.7.5"
   },
   "dependencies": {
-    "@aws-cdk/aws-events": "1.76.0",
-    "@aws-cdk/aws-events-targets": "1.76.0",
-    "@aws-cdk/aws-lambda": "1.76.0",
-    "@aws-cdk/aws-logs": "1.76.0",
-    "@aws-cdk/aws-s3": "1.76.0",
-    "@aws-cdk/aws-ssm": "1.76.0",
-    "@aws-cdk/aws-stepfunctions": "1.76.0",
-    "@aws-cdk/aws-stepfunctions-tasks": "1.76.0",
-    "@aws-cdk/core": "1.76.0",
+    "@aws-cdk/aws-events": "1.90.1",
+    "@aws-cdk/aws-events-targets": "1.90.1",
+    "@aws-cdk/aws-lambda": "1.90.1",
+    "@aws-cdk/aws-logs": "1.90.1",
+    "@aws-cdk/aws-s3": "1.90.1",
+    "@aws-cdk/aws-ssm": "1.90.1",
+    "@aws-cdk/aws-stepfunctions": "1.90.1",
+    "@aws-cdk/aws-stepfunctions-tasks": "1.90.1",
+    "@aws-cdk/core": "1.90.1",
     "source-map-support": "^0.5.16"
   }
 }
