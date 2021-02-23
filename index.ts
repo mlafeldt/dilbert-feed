@@ -19,14 +19,14 @@ export class DilbertFeedStack extends cdk.Stack {
 
     const bucket = new s3.Bucket(this, 'Bucket', {
       publicReadAccess: true,
-      encryption: s3.BucketEncryption.S3_MANAGED
+      encryption: s3.BucketEncryption.S3_MANAGED,
     })
 
     const sslOnly = new iam.PolicyStatement({
       sid: 'AllowSSLRequestsOnly',
       actions: ['s3:*'],
       effect: iam.Effect.DENY,
-      resources: [bucket.bucketArn, bucket.bucketArn + '/*']
+      resources: [bucket.bucketArn, bucket.bucketArn + '/*'],
     })
     sslOnly.addAnyPrincipal()
     sslOnly.addCondition('Bool', { 'aws:SecureTransport': 'false' })
@@ -35,7 +35,7 @@ export class DilbertFeedStack extends cdk.Stack {
     bucket.addLifecycleRule({
       id: 'DeleteStripsAfter30Days',
       prefix: `${stripsDir}/`,
-      expiration: cdk.Duration.days(30)
+      expiration: cdk.Duration.days(30),
     })
 
     const getStrip = new lambda.Function(this, 'GetStripFunc', {
@@ -48,8 +48,8 @@ export class DilbertFeedStack extends cdk.Stack {
       logRetention: logs.RetentionDays.ONE_MONTH,
       environment: {
         BUCKET_NAME: bucket.bucketName,
-        STRIPS_DIR: stripsDir
-      }
+        STRIPS_DIR: stripsDir,
+      },
     })
     bucket.grantPut(getStrip)
 
@@ -64,8 +64,8 @@ export class DilbertFeedStack extends cdk.Stack {
       environment: {
         BUCKET_NAME: bucket.bucketName,
         STRIPS_DIR: stripsDir,
-        FEED_PATH: feedPath
-      }
+        FEED_PATH: feedPath,
+      },
     })
     bucket.grantReadWrite(genFeed)
 
@@ -79,43 +79,43 @@ export class DilbertFeedStack extends cdk.Stack {
       timeout: cdk.Duration.seconds(10),
       logRetention: logs.RetentionDays.ONE_MONTH,
       environment: {
-        HEARTBEAT_ENDPOINT: heartbeatEndpoint
-      }
+        HEARTBEAT_ENDPOINT: heartbeatEndpoint,
+      },
     })
 
     const retryProps = {
       errors: ['States.TaskFailed'],
       interval: cdk.Duration.seconds(10),
       maxAttempts: 2,
-      backoffRate: 2.0
+      backoffRate: 2.0,
     }
 
     const steps = new tasks.LambdaInvoke(this, 'GetStrip', {
       lambdaFunction: getStrip,
-      resultPath: '$.strip'
+      resultPath: '$.strip',
     })
       .addRetry(retryProps)
       .next(
         new tasks.LambdaInvoke(this, 'GenFeed', {
           lambdaFunction: genFeed,
-          resultPath: '$.feed'
+          resultPath: '$.feed',
         }).addRetry(retryProps)
       )
       .next(
         new tasks.LambdaInvoke(this, 'SendHeartbeat', {
           lambdaFunction: heartbeat,
-          resultPath: '$.heartbeat'
+          resultPath: '$.heartbeat',
         }).addRetry(retryProps)
       )
 
     const sm = new sfn.StateMachine(this, 'StateMachine', {
       stateMachineName: id,
-      definition: steps
+      definition: steps,
     })
 
     const cron = new events.Rule(this, 'Cron', {
       description: 'Update Dilbert feed',
-      schedule: events.Schedule.expression('cron(0 8 * * ? *)')
+      schedule: events.Schedule.expression('cron(0 8 * * ? *)'),
     })
     cron.addTarget(new targets.SfnStateMachine(sm))
 
