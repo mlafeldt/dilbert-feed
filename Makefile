@@ -1,6 +1,6 @@
 ENV   ?= dev
 STACK  = dilbert-feed-$(ENV)
-CDK   ?= npx cdk
+CDK   ?= yarn cdk
 GOX   ?= gox
 
 dev: ENV=dev
@@ -21,10 +21,10 @@ bootstrap: build transpile
 	@$(CDK) bootstrap --cloudformation-execution-policies arn:aws:iam::aws:policy/AdministratorAccess
 
 transpile: node_modules
-	@npm run build
+	@yarn run build
 
 node_modules:
-	npm install
+	yarn install
 
 build:
 	@GOFLAGS=-trimpath $(GOX) -os=linux -arch=amd64 -ldflags=-s -output="bin/{{.Dir}}/handler" ./...
