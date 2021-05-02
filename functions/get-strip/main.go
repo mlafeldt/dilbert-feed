@@ -14,7 +14,7 @@ import (
 	"github.com/aws/aws-sdk-go/service/s3/s3manager/s3manageriface"
 	"github.com/kelseyhightower/envconfig"
 
-	"github.com/mlafeldt/dilbert-feed/dilbert"
+	"github.com/mlafeldt/dilbert-feed/functions/internal/dilbert"
 )
 
 // Input is the input passed to the Lambda function.

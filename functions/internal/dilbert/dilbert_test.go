@@ -8,7 +8,7 @@ import (
 
 	"github.com/google/go-cmp/cmp"
 
-	"github.com/mlafeldt/dilbert-feed/dilbert"
+	"github.com/mlafeldt/dilbert-feed/functions/internal/dilbert"
 )
 
 func TestScrapeComic(t *testing.T) {

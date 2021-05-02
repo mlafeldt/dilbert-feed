@@ -60,7 +60,7 @@ export class DilbertFeedStack extends cdk.Stack {
     const heartbeatEndpoint = ssm.StringParameter.valueForStringParameter(this, `/${id}/heartbeat-endpoint`)
     const heartbeat = new lambda.Function(this, 'HeartbeatFunc', {
       functionName: `${id}-heartbeat`,
-      code: lambda.Code.fromAsset('heartbeat'),
+      code: lambda.Code.fromAsset('functions/heartbeat'),
       handler: 'lambda.handler',
       runtime: lambda.Runtime.NODEJS_12_X,
       memorySize: 128,
