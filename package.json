@@ -7,7 +7,8 @@
     "build": "tsc",
     "watch": "tsc -w",
     "test": "echo ok",
-    "cdk": "cdk"
+    "cdk": "cdk",
+    "postinstall": "rm -rf node_modules/aws-cdk/lib/init-templates"
   },
   "author": {
     "name": "Mathias Lafeldt"
