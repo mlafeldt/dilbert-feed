@@ -90,7 +90,12 @@ type StripCopier struct {
 
 // Copy copies a comic strip from dilbert.com to S3.
 func (cp *StripCopier) Copy(ctx context.Context, comic *dilbert.Comic) (string, error) {
-	resp, err := cp.HTTPClient.Get(comic.ImageURL)
+	req, err := http.NewRequestWithContext(ctx, "GET", comic.ImageURL, nil)
+	if err != nil {
+		return "", err
+	}
+
+	resp, err := cp.HTTPClient.Do(req)
 	if err != nil {
 		return "", err
 	}
