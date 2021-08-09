@@ -26,7 +26,7 @@ transpile: node_modules
 node_modules:
 	yarn install
 
-build:
+build: rust
 	@GOFLAGS=-trimpath $(GOX) -os=linux -arch=amd64 -ldflags=-s -output="bin/{{.Dir}}/handler" ./...
 
 lint:
@@ -35,3 +35,14 @@ lint:
 
 test:
 	go test -v -cover ./...
+
+RUST_FUNCS := $(subst /,,$(dir $(wildcard */lambda.rs)))
+
+rust_funcs := $(RUST_FUNCS:%=rust-%)
+
+rust: $(rust_funcs)
+
+$(rust_funcs):
+	RUSTFLAGS="-C link-arg=-s" cargo build --release --target x86_64-unknown-linux-musl --bin $(@:rust-%=%)
+	mkdir -p bin/$(@:rust-%=%)
+	cp -f target/x86_64-unknown-linux-musl/release/$(@:rust-%=%) bin/$(@:rust-%=%)/bootstrap
