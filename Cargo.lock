@@ -80,6 +80,7 @@ dependencies = [
 name = "dilbert-feed"
 version = "0.1.0"
 dependencies = [
+ "hyper",
  "lambda_runtime",
  "log",
  "serde_json",

@@ -12,7 +12,12 @@ edition = "2018"
 name = "echo"
 path = "echo/lambda.rs"
 
+[[bin]]
+name = "heartbeat"
+path = "heartbeat/lambda.rs"
+
 [dependencies]
+hyper = "0.14"
 lambda_runtime = "0.4"
 log = "0.4"
 serde_json = "1.0"
