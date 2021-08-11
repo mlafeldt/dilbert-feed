@@ -1,30 +1,27 @@
-use hyper::{Body, Client, Request, Uri};
 use lambda_runtime::{handler_fn, Context, Error};
+use log::info;
+use reqwest::header::USER_AGENT;
 use serde_json::Value;
 use std::env;
 
 #[tokio::main]
 async fn main() -> Result<(), Error> {
-    simple_logger::init_with_level(log::Level::Trace)?;
+    simple_logger::init_with_level(log::Level::Info)?;
     lambda_runtime::run(handler_fn(handler)).await?;
     Ok(())
 }
 
 async fn handler(_: Value, _: Context) -> Result<(), Error> {
-    let endpoint: Uri = env::var("HEARTBEAT_ENDPOINT")
-        .expect("heartbeat endpoint must be set")
-        .parse()
-        .unwrap();
+    let ep = env::var("HEARTBEAT_ENDPOINT").expect("HEARTBEAT_ENDPOINT not found");
 
-    let req = Request::get(endpoint)
-        .header("User-Agent", "dilbert-feed-rust")
-        .body(Body::empty())
-        .unwrap();
+    info!("Sending ping to {}", ep);
 
-    let resp = Client::new().request(req).await?;
-    if !resp.status().is_success() {
-        return Err(format!("HTTP error: {}", resp.status()).into());
-    };
+    reqwest::Client::new()
+        .get(ep)
+        .header(USER_AGENT, "dilbert-feed")
+        .send()
+        .await?
+        .error_for_status()?;
 
     Ok(())
 }
