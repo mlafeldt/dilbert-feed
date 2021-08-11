@@ -9,10 +9,6 @@ repository = "https://github.com/mlafeldt/dilbert-feed"
 edition = "2018"
 
 [[bin]]
-name = "echo"
-path = "echo/lambda.rs"
-
-[[bin]]
 name = "heartbeat"
 path = "heartbeat/lambda.rs"
 
