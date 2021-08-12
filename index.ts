@@ -68,6 +68,7 @@ export class DilbertFeedStack extends cdk.Stack {
       logRetention: logs.RetentionDays.ONE_MONTH,
       environment: {
         HEARTBEAT_ENDPOINT: heartbeatEndpoint,
+        RUST_LOG: 'debug',
       },
     })
 
