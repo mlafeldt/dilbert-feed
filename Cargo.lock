@@ -124,6 +124,7 @@ dependencies = [
  "log",
  "openssl",
  "reqwest",
+ "serde",
  "serde_json",
  "simple_logger",
  "tokio",

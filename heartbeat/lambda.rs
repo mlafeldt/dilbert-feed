@@ -1,8 +1,24 @@
 use lambda_runtime::{handler_fn, Context, Error};
 use log::{debug, info};
-use reqwest::header::USER_AGENT;
+use reqwest::{redirect, Client};
+use serde::{Deserialize, Serialize};
 use serde_json::Value;
+use std::collections::HashMap;
 use std::env;
+
+#[derive(Deserialize, Debug)]
+struct Input {
+    endpoint: Option<String>,
+
+    #[serde(flatten)]
+    extra: HashMap<String, Value>,
+}
+
+#[derive(Serialize)]
+struct Output {
+    endpoint: String,
+    status: u16,
+}
 
 #[tokio::main]
 async fn main() -> Result<(), Error> {
@@ -11,19 +27,28 @@ async fn main() -> Result<(), Error> {
     Ok(())
 }
 
-async fn handler(event: Value, _: Context) -> Result<(), Error> {
-    debug!("Got event: {}", event);
+async fn handler(input: Input, _: Context) -> Result<Output, Error> {
+    debug!("Got input: {:?}", input);
 
-    let ep = env::var("HEARTBEAT_ENDPOINT").expect("HEARTBEAT_ENDPOINT not found");
+    let ep = input
+        .endpoint
+        .unwrap_or_else(|| env::var("HEARTBEAT_ENDPOINT").expect("HEARTBEAT_ENDPOINT not found"));
 
     info!("Sending ping to {}", ep);
 
-    reqwest::Client::new()
-        .get(ep)
-        .header(USER_AGENT, "dilbert-feed")
-        .send()
-        .await?
-        .error_for_status()?;
+    let client = Client::builder()
+        .user_agent("dilbert-feed")
+        .redirect(redirect::Policy::none())
+        .build()?;
 
-    Ok(())
+    let resp = client.get(&ep).send().await?;
+
+    if !resp.status().is_success() {
+        return Err(format!("HTTP status not 2xx: {}", resp.status()).into());
+    }
+
+    Ok(Output {
+        endpoint: ep,
+        status: resp.status().as_u16(),
+    })
 }
