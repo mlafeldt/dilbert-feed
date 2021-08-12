@@ -9,19 +9,16 @@ dev: deploy
 prod: ENV=prod
 prod: deploy
 
-deploy diff synth: build transpile
+deploy diff synth: build node_modules
 	@$(CDK) $@ $(STACK)
 
 deploy: test
 
-destroy: build transpile
+destroy: build node_modules
 	@$(CDK) destroy --force $(STACK)
 
-bootstrap: build transpile
+bootstrap: build node_modules
 	@$(CDK) bootstrap --cloudformation-execution-policies arn:aws:iam::aws:policy/AdministratorAccess
-
-transpile: node_modules
-	@yarn run build
 
 node_modules:
 	yarn install
