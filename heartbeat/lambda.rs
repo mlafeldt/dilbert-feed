@@ -14,7 +14,7 @@ struct Input {
     extra: HashMap<String, Value>,
 }
 
-#[derive(Serialize)]
+#[derive(Serialize, PartialEq, Debug)]
 struct Output {
     endpoint: String,
     status: u16,
@@ -51,4 +51,62 @@ async fn handler(input: Input, _: Context) -> Result<Output, Error> {
         endpoint: ep,
         status: resp.status().as_u16(),
     })
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use wiremock::matchers::method;
+    use wiremock::{Mock, MockServer, ResponseTemplate};
+
+    #[tokio::test]
+    async fn test_handler_200() {
+        let server = MockServer::start().await;
+
+        Mock::given(method("GET"))
+            .respond_with(ResponseTemplate::new(200))
+            .expect(1)
+            .mount(&server)
+            .await;
+
+        let resp = handler(
+            Input {
+                endpoint: Some(server.uri()),
+                extra: HashMap::new(),
+            },
+            Context::default(),
+        )
+        .await
+        .unwrap();
+
+        assert_eq!(
+            resp,
+            Output {
+                endpoint: server.uri(),
+                status: 200,
+            },
+        );
+    }
+
+    #[tokio::test]
+    #[should_panic(expected = "HTTP status not 2xx: 503 Service Unavailable")]
+    async fn test_handler_503() {
+        let server = MockServer::start().await;
+
+        Mock::given(method("GET"))
+            .respond_with(ResponseTemplate::new(503))
+            .expect(1)
+            .mount(&server)
+            .await;
+
+        handler(
+            Input {
+                endpoint: Some(server.uri()),
+                extra: HashMap::new(),
+            },
+            Context::default(),
+        )
+        .await
+        .unwrap();
+    }
 }
