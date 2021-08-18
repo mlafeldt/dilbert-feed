@@ -29,8 +29,8 @@ async fn main() -> Result<(), Error> {
         json!(
             handler(
                 Input {
-                    date: Some("2000-07-15".to_string()),
-                    // date: None,
+                    // date: Some("2000-07-15".to_string()),
+                    date: None,
                 },
                 Context::default(),
             )
@@ -85,18 +85,52 @@ impl Dilbert {
         let strip_url = format!("{}/strip/{}", self.base_url, date);
         let resp = reqwest::get(&strip_url).await?.error_for_status()?;
         let body = resp.text().await?;
+
         let document = Document::from(body.as_ref());
         let container = document.find(Class("comic-item-container")).next().unwrap();
 
-        // info!("{}", container.attr("data-id").unwrap());
-        let title = container.attr("data-title").unwrap();
-        let image_url = container.attr("data-image").unwrap();
+        if container.attr("data-id").unwrap_or_default() != date {
+            return Err("comic not found for date".into());
+        }
+
+        let title = container
+            .attr("data-title")
+            .ok_or("title not found")?
+            .trim()
+            .to_string();
+        let image_url = container
+            .attr("data-image")
+            .ok_or("image URL not found")?
+            .trim()
+            .to_string();
 
         Ok(Comic {
             date,
-            title: title.to_string(),
-            image_url: image_url.to_string(),
+            title,
+            image_url,
             strip_url,
         })
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[tokio::test]
+    async fn test_scrape_comic() {
+        let date = "2021-08-17";
+        // TODO: use local fileserver
+        let comic = Dilbert::default().scrape_comic(Some(date.to_string())).await.unwrap();
+
+        assert_eq!(
+            comic,
+            Comic {
+                date: date.to_string(),
+                title: "Employee Tails".to_string(),
+                image_url: "https://assets.amuniversal.com/4c0da9a0d6aa01396f56005056a9545d".to_string(),
+                strip_url: "https://dilbert.com/strip/2021-08-17".to_string(),
+            },
+        );
     }
 }
