@@ -33,6 +33,14 @@ lint:
 test:
 	go test -v -cover ./...
 
+# https://github.com/messense/homebrew-macos-cross-toolchains
+TARGET := x86_64-unknown-linux-gnu
+export CC_x86_64_unknown_linux_gnu  = $(TARGET)-gcc
+export CXX_x86_64_unknown_linux_gnu = $(TARGET)-g++
+export AR_x86_64_unknown_linux_gnu  = $(TARGET)-ar
+export CARGO_TARGET_X86_64_UNKNOWN_LINUX_GNU_LINKER = $(TARGET)-gcc
+export RUSTFLAGS = -C link-arg=-s
+
 RUST_FUNCS := $(subst /,,$(dir $(wildcard */lambda.rs)))
 
 rust_funcs := $(RUST_FUNCS:%=rust-%)
@@ -40,6 +48,6 @@ rust_funcs := $(RUST_FUNCS:%=rust-%)
 rust: $(rust_funcs)
 
 $(rust_funcs):
-	RUSTFLAGS="-C link-arg=-s" cargo build --release --target x86_64-unknown-linux-musl --bin $(@:rust-%=%)
+	cargo build --release --target $(TARGET) --bin $(@:rust-%=%)
 	mkdir -p bin/$(@:rust-%=%)
-	cp -f target/x86_64-unknown-linux-musl/release/$(@:rust-%=%) bin/$(@:rust-%=%)/bootstrap
+	cp -f target/$(TARGET)/release/$(@:rust-%=%) bin/$(@:rust-%=%)/bootstrap

@@ -62,7 +62,7 @@ export class DilbertFeedStack extends cdk.Stack {
       functionName: `${id}-heartbeat`,
       code: lambda.Code.fromAsset('bin/heartbeat'),
       handler: 'bootstrap',
-      runtime: lambda.Runtime.PROVIDED,
+      runtime: lambda.Runtime.PROVIDED_AL2,
       memorySize: 128,
       timeout: cdk.Duration.seconds(10),
       logRetention: logs.RetentionDays.ONE_MONTH,
