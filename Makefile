@@ -41,7 +41,7 @@ export AR_x86_64_unknown_linux_gnu  = $(TARGET)-ar
 export CARGO_TARGET_X86_64_UNKNOWN_LINUX_GNU_LINKER = $(TARGET)-gcc
 export RUSTFLAGS = -C link-arg=-s
 
-RUST_FUNCS := $(subst /,,$(dir $(wildcard */lambda.rs)))
+RUST_FUNCS := $(subst src/bin/,,$(dir $(wildcard src/bin/*/main.rs)))
 
 rust_funcs := $(RUST_FUNCS:%=rust-%)
 

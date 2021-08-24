@@ -8,14 +8,6 @@ readme = "README.md"
 repository = "https://github.com/mlafeldt/dilbert-feed"
 edition = "2018"
 
-[[bin]]
-name = "heartbeat"
-path = "heartbeat/lambda.rs"
-
-[[bin]]
-name = "get-strip"
-path = "get-strip/lambda.rs"
-
 [dependencies]
 aws-sdk-s3 = { git = "https://github.com/awslabs/aws-sdk-rust", tag = "v0.0.16-alpha", package = "aws-sdk-s3" }
 chrono = "0.4"
