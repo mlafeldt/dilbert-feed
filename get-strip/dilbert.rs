@@ -12,6 +12,7 @@ pub struct Comic {
     pub strip_url: String,
 }
 
+#[derive(Debug)]
 pub struct Dilbert {
     base_url: String,
 }

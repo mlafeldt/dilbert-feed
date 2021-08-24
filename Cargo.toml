@@ -17,11 +17,12 @@ name = "get-strip"
 path = "get-strip/lambda.rs"
 
 [dependencies]
+aws-sdk-s3 = { git = "https://github.com/awslabs/aws-sdk-rust", tag = "v0.0.16-alpha", package = "aws-sdk-s3" }
 chrono = "0.4"
 lambda_runtime = "0.4"
 log = "0.4"
 openssl = { version = "0.10", features = ["vendored"] }
-reqwest = "0.11"
+reqwest = { version = "0.11", features = ["stream"] }
 select = "0.5"
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"

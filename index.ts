@@ -29,14 +29,15 @@ export class DilbertFeedStack extends cdk.Stack {
     const getStrip = new lambda.Function(this, 'GetStripFunc', {
       functionName: `${id}-get-strip`,
       code: lambda.Code.fromAsset('bin/get-strip'),
-      handler: 'handler',
-      runtime: lambda.Runtime.GO_1_X,
+      handler: 'bootstrap',
+      runtime: lambda.Runtime.PROVIDED_AL2,
       memorySize: 128,
       timeout: cdk.Duration.seconds(10),
       logRetention: logs.RetentionDays.ONE_MONTH,
       environment: {
         BUCKET_NAME: bucket.bucketName,
         STRIPS_DIR: stripsDir,
+        RUST_LOG: 'debug',
       },
     })
     bucket.grantPut(getStrip)
