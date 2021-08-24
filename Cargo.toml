@@ -9,12 +9,11 @@ repository = "https://github.com/mlafeldt/dilbert-feed"
 edition = "2018"
 
 [dependencies]
-aws-sdk-s3 = { git = "https://github.com/awslabs/aws-sdk-rust", tag = "v0.0.16-alpha", package = "aws-sdk-s3" }
+aws-sdk-s3 = { git = "https://github.com/awslabs/aws-sdk-rust", tag = "v0.0.16-alpha", package = "aws-sdk-s3", features = ["rustls"] }
 chrono = "0.4"
 lambda_runtime = "0.4"
 log = "0.4"
-openssl = { version = "0.10", features = ["vendored"] }
-reqwest = { version = "0.11", features = ["stream"] }
+reqwest = { version = "0.11", default-features = false, features = ["rustls-tls"] }
 select = "0.5"
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
