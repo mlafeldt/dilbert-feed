@@ -37,7 +37,7 @@ export class DilbertFeedStack extends cdk.Stack {
       environment: {
         BUCKET_NAME: bucket.bucketName,
         STRIPS_DIR: stripsDir,
-        RUST_LOG: 'debug',
+        RUST_LOG: 'info',
       },
     })
     bucket.grantPut(getStrip)
@@ -69,7 +69,7 @@ export class DilbertFeedStack extends cdk.Stack {
       logRetention: logs.RetentionDays.ONE_MONTH,
       environment: {
         HEARTBEAT_ENDPOINT: heartbeatEndpoint,
-        RUST_LOG: 'debug',
+        RUST_LOG: 'info',
       },
     })
 
