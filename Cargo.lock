@@ -390,6 +390,7 @@ dependencies = [
  "chrono",
  "lambda_runtime",
  "log",
+ "regex",
  "reqwest",
  "select",
  "serde",

@@ -1,5 +1,6 @@
 use chrono::Datelike;
 use lambda_runtime::Error;
+use regex::Regex;
 use select::document::Document;
 use select::predicate::Class;
 use serde::{Deserialize, Serialize};
@@ -31,11 +32,7 @@ impl Dilbert {
     }
 
     pub async fn scrape_comic(self, date: Option<String>) -> Result<Comic, Error> {
-        let date = date.unwrap_or_else(|| {
-            let now = chrono::Utc::now();
-            format!("{}-{:02}-{:02}", now.year(), now.month(), now.day())
-        });
-
+        let date = Self::date_or_today(date)?;
         let strip_url = self.strip_url(&date);
         let resp = reqwest::get(&strip_url).await?.error_for_status()?;
         let body = resp.text().await?;
@@ -67,6 +64,22 @@ impl Dilbert {
             image_url,
             strip_url,
         })
+    }
+
+    fn date_or_today(date: Option<String>) -> Result<String, Error> {
+        match date {
+            Some(date) => {
+                let re = Regex::new(r"^\d{4}-\d{2}-\d{2}$").unwrap();
+                if !re.is_match(&date) {
+                    return Err(format!("invalid date format: {}", date).into());
+                }
+                Ok(date)
+            }
+            None => {
+                let now = chrono::Utc::now();
+                Ok(format!("{}-{:02}-{:02}", now.year(), now.month(), now.day()))
+            }
+        }
     }
 
     fn strip_url(self, date: &str) -> String {
