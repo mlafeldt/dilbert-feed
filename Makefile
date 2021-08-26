@@ -24,7 +24,7 @@ node_modules:
 	yarn install
 
 build: rust
-	@GOFLAGS=-trimpath $(GOX) -os=linux -arch=amd64 -ldflags=-s -output="bin/{{.Dir}}/handler" ./...
+	@GOFLAGS=-trimpath $(GOX) -os=linux -arch=amd64 -ldflags=-s -output="bin/{{.Dir}}/handler" ./gen-feed
 
 lint:
 	go vet ./...
