@@ -90,35 +90,51 @@ impl Dilbert {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use std::fs;
     use wiremock::matchers::{method, path};
     use wiremock::{Mock, MockServer, ResponseTemplate};
 
-    fn testdata(base_url: &str) -> Vec<Comic> {
+    struct Test {
+        comic: Comic,
+        html: &'static str,
+    }
+
+    fn tests(base_url: &str) -> Vec<Test> {
         vec![
-            Comic {
-                date: "2000-01-01".to_string(),
-                title: "Dilbert Comic for 2000-01-01".to_string(),
-                image_url: "https://assets.amuniversal.com/bdc8a4d06d6401301d80001dd8b71c47".to_string(),
-                strip_url: format!("{}/strip/2000-01-01", base_url),
+            Test {
+                comic: Comic {
+                    date: "2000-01-01".to_string(),
+                    title: "Dilbert Comic for 2000-01-01".to_string(),
+                    image_url: "https://assets.amuniversal.com/bdc8a4d06d6401301d80001dd8b71c47".to_string(),
+                    strip_url: format!("{}/strip/2000-01-01", base_url),
+                },
+                html: include_str!("testdata/strip/2000-01-01"),
             },
-            Comic {
-                date: "2018-10-30".to_string(),
-                title: "Intentionally Underbidding".to_string(),
-                image_url: "https://assets.amuniversal.com/cda546d0a88c01365b26005056a9545d".to_string(),
-                strip_url: format!("{}/strip/2018-10-30", base_url),
+            Test {
+                comic: Comic {
+                    date: "2018-10-30".to_string(),
+                    title: "Intentionally Underbidding".to_string(),
+                    image_url: "https://assets.amuniversal.com/cda546d0a88c01365b26005056a9545d".to_string(),
+                    strip_url: format!("{}/strip/2018-10-30", base_url),
+                },
+                html: include_str!("testdata/strip/2018-10-30"),
             },
-            Comic {
-                date: "2019-11-02".to_string(),
-                title: "Multiple Choice".to_string(),
-                image_url: "https://assets.amuniversal.com/ce7ec130d6480137c832005056a9545d".to_string(),
-                strip_url: format!("{}/strip/2019-11-02", base_url),
+            Test {
+                comic: Comic {
+                    date: "2019-11-02".to_string(),
+                    title: "Multiple Choice".to_string(),
+                    image_url: "https://assets.amuniversal.com/ce7ec130d6480137c832005056a9545d".to_string(),
+                    strip_url: format!("{}/strip/2019-11-02", base_url),
+                },
+                html: include_str!("testdata/strip/2019-11-02"),
             },
-            Comic {
-                date: "2020-11-11".to_string(),
-                title: "Elbonian Words".to_string(),
-                image_url: "https://assets.amuniversal.com/f25312c0fb5b01382ef9005056a9545d".to_string(),
-                strip_url: format!("{}/strip/2020-11-11", base_url),
+            Test {
+                comic: Comic {
+                    date: "2020-11-11".to_string(),
+                    title: "Elbonian Words".to_string(),
+                    image_url: "https://assets.amuniversal.com/f25312c0fb5b01382ef9005056a9545d".to_string(),
+                    strip_url: format!("{}/strip/2020-11-11", base_url),
+                },
+                html: include_str!("testdata/strip/2020-11-11"),
             },
         ]
     }
@@ -127,23 +143,22 @@ mod tests {
     async fn test_scrape_comic() {
         let server = MockServer::start().await;
 
-        for td in testdata(&server.uri()).iter() {
-            let body = fs::read_to_string(format!("dilbert/testdata/strip/{}", td.date)).unwrap();
-            let resp = ResponseTemplate::new(200).set_body_raw(body, "text/html");
+        for t in tests(&server.uri()).iter() {
+            let resp = ResponseTemplate::new(200).set_body_raw(t.html, "text/html");
 
             Mock::given(method("GET"))
-                .and(path(format!("/strip/{}", td.date)))
+                .and(path(format!("/strip/{}", t.comic.date)))
                 .respond_with(resp)
                 .expect(1)
                 .mount(&server)
                 .await;
 
             let comic = Dilbert::new(&server.uri())
-                .scrape_comic(Some(td.date.to_owned()))
+                .scrape_comic(Some(t.comic.date.to_owned()))
                 .await
                 .unwrap();
 
-            assert_eq!(&comic, td);
+            assert_eq!(comic, t.comic);
 
             server.reset().await;
         }
