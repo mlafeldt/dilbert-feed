@@ -53,7 +53,7 @@ async fn handler(input: Input, _: Context) -> Result<Output, Error> {
         .key(&key)
         .body(ByteStream::from(image))
         .content_type("image/gif")
-        .metadata("Title", &comic.title)
+        .metadata("title", &comic.title)
         .send()
         .await?;
 

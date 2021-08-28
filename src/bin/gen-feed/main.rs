@@ -1,7 +1,8 @@
 use aws_sdk_s3::ByteStream;
-use chrono::{Duration, Utc};
+use chrono::{DateTime, Duration, NaiveDate, Utc};
+use derive_builder::Builder;
 use lambda_runtime::{Context, Error};
-use log::{debug, info};
+use log::info;
 use rss::ItemBuilder;
 use serde::{Deserialize, Serialize};
 use serde_json::json;
@@ -28,40 +29,16 @@ async fn handler(_: Input, _: Context) -> Result<Output, Error> {
     let strips_dir = env::var("STRIPS_DIR").expect("STRIPS_DIR not found");
     let feed_path = env::var("FEED_PATH").expect("FEED_PATH not found");
 
-    let now = Utc::now();
+    let today = Utc::today().naive_utc();
 
-    info!("Generating feed for date {} ...", now);
+    info!("Generating feed for date {} ...", today);
 
-    let items: Vec<_> = (0..30)
-        .map(|i| now - Duration::days(i))
-        .map(|dt| {
-            let url = format!(
-                "https://{}.s3.amazonaws.com/{}/{}.gif",
-                bucket_name,
-                strips_dir,
-                dt.naive_utc().date(),
-            );
-            ItemBuilder::default()
-                .title(format!("Dilbert - {}", dt.naive_utc().date())) // FIXME
-                .link(url.to_owned())
-                .description(format!(r#"<img src="{}">"#, url))
-                .guid(rss::GuidBuilder::default().value(url).build().unwrap())
-                .pub_date(dt.to_rfc2822())
-                .build()
-                .unwrap() // FIXME
-        })
-        .collect();
-
-    debug!("{:#?}", &items);
-
-    let channel = rss::ChannelBuilder::default()
-        .title("Dilbert")
-        .link("https://dilbert.com")
-        .description("Dilbert Daily Strip")
-        .items(items)
-        .build()?;
-
-    let xml = channel.to_string();
+    let xml = FeedBuilder::default()
+        .bucket_name(&bucket_name)
+        .strips_dir(&strips_dir)
+        .start_date(today)
+        .build()?
+        .xml()?;
 
     info!("Uploading feed to bucket {} with path {} ...", bucket_name, feed_path);
 
@@ -81,14 +58,45 @@ async fn handler(_: Input, _: Context) -> Result<Output, Error> {
     Ok(Output { feed_url })
 }
 
-// struct FeedBuilder {}
+#[derive(Builder, Debug)]
+#[builder(setter(into))]
+struct Feed {
+    bucket_name: String,
+    strips_dir: String,
+    start_date: NaiveDate,
+    #[builder(default = "30")]
+    feed_length: usize,
+}
 
-// impl Default for FeedBuilder {
-//     fn default() -> Self {
-//         FeedBuilder {}
-//     }
-// }
+impl Feed {
+    pub fn xml(&self) -> Result<String, Error> {
+        let items: Vec<_> = (0..self.feed_length)
+            .map(|i| self.start_date - Duration::days(i as i64))
+            .map(|date| {
+                let url = format!(
+                    "https://{}.s3.amazonaws.com/{}/{}.gif",
+                    self.bucket_name, self.strips_dir, date
+                );
+                ItemBuilder::default()
+                    .title(format!("Dilbert - {}", date)) // FIXME
+                    .link(url.to_owned())
+                    .description(format!(r#"<img src="{}">"#, url))
+                    .guid(rss::GuidBuilder::default().value(url).build().unwrap())
+                    .pub_date(DateTime::<Utc>::from_utc(date.and_hms(0, 0, 0), Utc).to_rfc2822())
+                    .build()
+                    .unwrap() // FIXME
+            })
+            .collect();
 
-// impl FeedBuilder {
-//     pub fn build() {}
-// }
+        dbg!(&items[0]);
+
+        let channel = rss::ChannelBuilder::default()
+            .title("Dilbert")
+            .link("https://dilbert.com")
+            .description("Dilbert Daily Strip")
+            .items(items)
+            .build()?;
+
+        Ok(channel.to_string())
+    }
+}
