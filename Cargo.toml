@@ -14,7 +14,6 @@ chrono = "0.4"
 derive_builder = "0.10"
 lambda_runtime = "0.4"
 log = "0.4"
-regex = "1.5"
 reqwest = { version = "0.11", default-features = false, features = ["rustls-tls"] }
 rss = "1.0"
 select = "0.5"

@@ -529,7 +529,6 @@ dependencies = [
  "derive_builder 0.10.2",
  "lambda_runtime",
  "log",
- "regex",
  "reqwest",
  "rss",
  "select",

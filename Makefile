@@ -27,11 +27,11 @@ build: rust
 	@GOFLAGS=-trimpath $(GOX) -os=linux -arch=amd64 -ldflags=-s -output="bin/{{.Dir}}/handler" ./gen-feed
 
 lint:
-	go vet ./...
-	golint -set_exit_status $$(go list ./...)
+#	go vet ./...
+#	golint -set_exit_status $$(go list ./...)
 
 test:
-	go test -v -cover ./...
+#	go test -v -cover ./...
 
 # https://github.com/messense/homebrew-macos-cross-toolchains
 TARGET := x86_64-unknown-linux-gnu
