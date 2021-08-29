@@ -30,7 +30,7 @@ impl Dilbert {
         }
     }
 
-    pub async fn scrape_comic(self, date: Option<String>) -> Result<Comic, Error> {
+    pub async fn scrape_comic(&self, date: Option<String>) -> Result<Comic, Error> {
         let date = Self::date_or_today(date)?;
         let strip_url = self.strip_url(date);
         let resp = reqwest::get(&strip_url).await?.error_for_status()?;
@@ -65,15 +65,15 @@ impl Dilbert {
         })
     }
 
+    fn strip_url(&self, date: NaiveDate) -> String {
+        format!("{}/strip/{}", self.base_url, date)
+    }
+
     fn date_or_today(date: Option<String>) -> Result<NaiveDate, Error> {
         match date {
             Some(date) => Ok(NaiveDate::parse_from_str(&date, "%Y-%m-%d").or(Err("invalid date format"))?),
             None => Ok(Utc::now().naive_utc().date()),
         }
-    }
-
-    fn strip_url(self, date: NaiveDate) -> String {
-        format!("{}/strip/{}", self.base_url, date)
     }
 }
 
