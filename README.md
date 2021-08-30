@@ -33,7 +33,7 @@ aws ssm put-parameter --overwrite --name /dilbert-feed-dev/heartbeat-endpoint --
 aws ssm put-parameter --overwrite --name /dilbert-feed-prod/heartbeat-endpoint --type String --value <url>
 ```
 
-Deploy the stack (requires Node.js, Go, and [Gox](https://github.com/mitchellh/gox) to be installed):
+Deploy the stack (requires Node.js and Rust + [x86_64-unknown-linux-gnu toolchain](https://github.com/messense/homebrew-macos-cross-toolchains) to be installed):
 
 ```console
 # Bootstrap AWS CDK once

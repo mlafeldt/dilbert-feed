@@ -1,9 +1,9 @@
 [package]
 name = "dilbert-feed"
-version = "0.1.0"
+version = "1.0.0"
 description = "Enjoy Dilbert in your RSS feed reader without any ads"
 authors = ["Mathias Lafeldt <mathias.lafeldt@gmail.com>"]
-license = "MIT OR Apache-2.0"
+license = "Apache-2.0"
 readme = "README.md"
 repository = "https://github.com/mlafeldt/dilbert-feed"
 edition = "2018"
