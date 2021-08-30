@@ -56,6 +56,7 @@ async fn handler(input: Input, _: Context) -> Result<Output, Error> {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use pretty_assertions::assert_eq;
     use wiremock::matchers::method;
     use wiremock::{Mock, MockServer, ResponseTemplate};
 
