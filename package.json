@@ -7,8 +7,7 @@
     "build": "tsc",
     "watch": "tsc -w",
     "test": "echo ok",
-    "cdk": "cdk",
-    "postinstall": "rm -rf node_modules/aws-cdk/lib/init-templates/*/app/go"
+    "cdk": "cdk"
   },
   "author": {
     "name": "Mathias Lafeldt"
