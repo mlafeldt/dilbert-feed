@@ -1,6 +1,6 @@
 ENV   ?= dev
 STACK  = dilbert-feed-$(ENV)
-CDK   ?= yarn cdk
+CDK   ?= yarn --silent cdk
 CARGO ?= cargo
 
 ifeq ("$(origin V)", "command line")

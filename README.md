@@ -10,6 +10,8 @@ This serverless application provides a custom feed with direct access to Dilbert
 
 For some background information, check out my article on [Recreational Programming with Serverless](https://sharpend.io/recreational-programming-with-serverless/).
 
+PS: The Lambda functions used to be [written in Go](https://github.com/mlafeldt/dilbert-feed/tree/golang), now they're [powered by Rust](https://github.com/mlafeldt/dilbert-feed/pull/6). 💪
+
 ## Architecture
 
 ![](architecture.png)

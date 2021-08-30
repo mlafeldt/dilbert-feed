@@ -1,4 +1,4 @@
-use aws_sdk_s3::ByteStream;
+use aws_sdk_s3::{ByteStream, Client};
 use lambda_runtime::{handler_fn, Context, Error};
 use log::{debug, info};
 use serde::{Deserialize, Serialize};
@@ -47,7 +47,7 @@ async fn handler(input: Input, _: Context) -> Result<Output, Error> {
 
     let key = format!("{}/{}.gif", strips_dir, comic.date);
 
-    let _ = aws_sdk_s3::Client::from_env()
+    let _ = Client::from_env()
         .put_object()
         .bucket(&bucket_name)
         .key(&key)
