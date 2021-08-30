@@ -1,9 +1,8 @@
 use aws_sdk_s3::{ByteStream, Client};
 use chrono::Utc;
-use lambda_runtime::{Context, Error};
+use lambda_runtime::{handler_fn, Context, Error};
 use log::info;
 use serde::{Deserialize, Serialize};
-use serde_json::json;
 use std::env;
 
 mod feed;
@@ -20,8 +19,7 @@ struct Output {
 #[tokio::main]
 async fn main() -> Result<(), Error> {
     simple_logger::init_with_env()?;
-    // lambda_runtime::run(handler_fn(handler)).await?;
-    info!("{}", json!(handler(Input {}, Context::default()).await?));
+    lambda_runtime::run(handler_fn(handler)).await?;
     Ok(())
 }
 

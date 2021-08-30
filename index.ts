@@ -45,8 +45,8 @@ export class DilbertFeedStack extends cdk.Stack {
     const genFeed = new lambda.Function(this, 'GenFeedFunc', {
       functionName: `${id}-gen-feed`,
       code: lambda.Code.fromAsset('bin/gen-feed'),
-      handler: 'handler',
-      runtime: lambda.Runtime.GO_1_X,
+      handler: 'bootstrap',
+      runtime: lambda.Runtime.PROVIDED_AL2,
       memorySize: 128,
       timeout: cdk.Duration.seconds(10),
       logRetention: logs.RetentionDays.ONE_MONTH,
@@ -54,6 +54,7 @@ export class DilbertFeedStack extends cdk.Stack {
         BUCKET_NAME: bucket.bucketName,
         STRIPS_DIR: stripsDir,
         FEED_PATH: feedPath,
+        RUST_LOG: 'info',
       },
     })
     bucket.grantReadWrite(genFeed)
