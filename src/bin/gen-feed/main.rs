@@ -1,12 +1,13 @@
-use aws_sdk_s3::ByteStream;
-use chrono::{DateTime, Duration, NaiveDate, Utc};
-use derive_builder::Builder;
+use aws_sdk_s3::{ByteStream, Client};
+use chrono::Utc;
 use lambda_runtime::{Context, Error};
 use log::info;
-use rss::ItemBuilder;
 use serde::{Deserialize, Serialize};
 use serde_json::json;
 use std::env;
+
+mod feed;
+use feed::FeedBuilder;
 
 #[derive(Deserialize, Debug)]
 struct Input {}
@@ -42,7 +43,7 @@ async fn handler(_: Input, _: Context) -> Result<Output, Error> {
 
     info!("Uploading feed to bucket {} with path {} ...", bucket_name, feed_path);
 
-    let _ = aws_sdk_s3::Client::from_env()
+    let _ = Client::from_env()
         .put_object()
         .bucket(&bucket_name)
         .key(&feed_path)
@@ -56,47 +57,4 @@ async fn handler(_: Input, _: Context) -> Result<Output, Error> {
     info!("Upload completed: {}", feed_url);
 
     Ok(Output { feed_url })
-}
-
-#[derive(Builder, Debug)]
-#[builder(setter(into))]
-struct Feed {
-    bucket_name: String,
-    strips_dir: String,
-    start_date: NaiveDate,
-    #[builder(default = "30")]
-    feed_length: usize,
-}
-
-impl Feed {
-    pub fn xml(&self) -> Result<String, Error> {
-        let items: Vec<_> = (0..self.feed_length)
-            .map(|i| self.start_date - Duration::days(i as i64))
-            .map(|date| {
-                let url = format!(
-                    "https://{}.s3.amazonaws.com/{}/{}.gif",
-                    self.bucket_name, self.strips_dir, date
-                );
-                ItemBuilder::default()
-                    .title(format!("Dilbert - {}", date)) // FIXME
-                    .link(url.to_owned())
-                    .description(format!(r#"<img src="{}">"#, url))
-                    .guid(rss::GuidBuilder::default().value(url).build().unwrap())
-                    .pub_date(DateTime::<Utc>::from_utc(date.and_hms(0, 0, 0), Utc).to_rfc2822())
-                    .build()
-                    .unwrap() // FIXME
-            })
-            .collect();
-
-        dbg!(&items[0]);
-
-        let channel = rss::ChannelBuilder::default()
-            .title("Dilbert")
-            .link("https://dilbert.com")
-            .description("Dilbert Daily Strip")
-            .items(items)
-            .build()?;
-
-        Ok(channel.to_string())
-    }
 }
