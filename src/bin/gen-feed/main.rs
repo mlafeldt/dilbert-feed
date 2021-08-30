@@ -34,16 +34,20 @@ async fn handler(_: Input, _: Context) -> Result<Output, Error> {
 
     info!("Generating feed for date {} ...", today);
 
+    let client = Client::from_env();
+
     let xml = FeedBuilder::default()
         .bucket_name(&bucket_name)
         .strips_dir(&strips_dir)
         .start_date(today)
+        .s3_client(&client)
         .build()?
-        .xml()?;
+        .xml()
+        .await?;
 
     info!("Uploading feed to bucket {} with path {} ...", bucket_name, feed_path);
 
-    let _ = Client::from_env()
+    let _ = client
         .put_object()
         .bucket(&bucket_name)
         .key(&feed_path)

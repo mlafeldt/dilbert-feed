@@ -552,6 +552,7 @@ dependencies = [
  "aws-sdk-s3",
  "chrono",
  "derive_builder 0.10.2",
+ "futures",
  "lambda_runtime",
  "log",
  "pretty_assertions",
