@@ -15,6 +15,7 @@ const LAMBDA_DEFAULTS = {
   memorySize: 128,
   timeout: cdk.Duration.seconds(10),
   logRetention: logs.RetentionDays.ONE_MONTH,
+  tracing: lambda.Tracing.ACTIVE,
 }
 
 export class DilbertFeedStack extends cdk.Stack {
@@ -98,6 +99,7 @@ export class DilbertFeedStack extends cdk.Stack {
     const sm = new sfn.StateMachine(this, 'StateMachine', {
       stateMachineName: id,
       definition: steps,
+      tracingEnabled: true,
     })
 
     const cron = new events.Rule(this, 'Cron', {
