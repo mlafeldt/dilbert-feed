@@ -77,6 +77,7 @@ mod tests {
     use chrono::NaiveDate;
     use pretty_assertions::assert_eq;
 
+    // TODO: figure out how to stub/mock S3 client
     #[tokio::test]
     async fn test_xml() {
         let feed = FeedBuilder::default()
