@@ -1,0 +1,28 @@
+[package]
+name = "dilbert-feed"
+version = "1.0.0"
+description = "Enjoy Dilbert in your RSS feed reader without any ads"
+authors = ["Mathias Lafeldt <mathias.lafeldt@gmail.com>"]
+license = "Apache-2.0"
+readme = "README.md"
+repository = "https://github.com/mlafeldt/dilbert-feed"
+edition = "2018"
+
+[dependencies]
+aws-sdk-s3 = { git = "https://github.com/awslabs/aws-sdk-rust", tag = "v0.0.16-alpha", package = "aws-sdk-s3", features = ["rustls"] }
+chrono = { version = "0.4", features = ["serde"] }
+derive_builder = "0.10"
+futures = "0.3"
+lambda_runtime = "0.4"
+log = "0.4"
+reqwest = { version = "0.11", default-features = false, features = ["rustls-tls"] }
+rss = "1.0"
+select = "0.5"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+simple_logger = "1.13"
+tokio = { version = "1.9", features = ["macros"] }
+
+[dev-dependencies]
+pretty_assertions = "0.7"
+wiremock = "0.5"

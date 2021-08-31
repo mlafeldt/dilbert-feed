@@ -9,12 +9,21 @@ import * as ssm from '@aws-cdk/aws-ssm'
 import * as targets from '@aws-cdk/aws-events-targets'
 import * as tasks from '@aws-cdk/aws-stepfunctions-tasks'
 
+const LAMBDA_DEFAULTS = {
+  handler: 'bootstrap',
+  runtime: lambda.Runtime.PROVIDED_AL2,
+  memorySize: 128,
+  timeout: cdk.Duration.seconds(10),
+  logRetention: logs.RetentionDays.ONE_MONTH,
+  tracing: lambda.Tracing.ACTIVE,
+}
+
 export class DilbertFeedStack extends cdk.Stack {
   constructor(scope: cdk.App, id: string, props: cdk.StackProps) {
     super(scope, id, props)
 
     const stripsDir = 'strips'
-    const feedPath = 'v1/rss.xml'
+    const feedPath = 'v2/rss.xml'
 
     const bucket = new s3.Bucket(this, 'Bucket', {
       publicReadAccess: true,
@@ -27,50 +36,38 @@ export class DilbertFeedStack extends cdk.Stack {
     })
 
     const getStrip = new lambda.Function(this, 'GetStripFunc', {
+      ...LAMBDA_DEFAULTS,
       functionName: `${id}-get-strip`,
       code: lambda.Code.fromAsset('bin/get-strip'),
-      handler: 'handler',
-      runtime: lambda.Runtime.GO_1_X,
-      memorySize: 128,
-      timeout: cdk.Duration.seconds(10),
-      logRetention: logs.RetentionDays.ONE_MONTH,
-      tracing: lambda.Tracing.ACTIVE,
       environment: {
         BUCKET_NAME: bucket.bucketName,
         STRIPS_DIR: stripsDir,
+        RUST_LOG: 'info',
       },
     })
     bucket.grantPut(getStrip)
 
     const genFeed = new lambda.Function(this, 'GenFeedFunc', {
+      ...LAMBDA_DEFAULTS,
       functionName: `${id}-gen-feed`,
       code: lambda.Code.fromAsset('bin/gen-feed'),
-      handler: 'handler',
-      runtime: lambda.Runtime.GO_1_X,
-      memorySize: 128,
-      timeout: cdk.Duration.seconds(10),
-      logRetention: logs.RetentionDays.ONE_MONTH,
-      tracing: lambda.Tracing.ACTIVE,
       environment: {
         BUCKET_NAME: bucket.bucketName,
         STRIPS_DIR: stripsDir,
         FEED_PATH: feedPath,
+        RUST_LOG: 'info',
       },
     })
     bucket.grantReadWrite(genFeed)
 
     const heartbeatEndpoint = ssm.StringParameter.valueForStringParameter(this, `/${id}/heartbeat-endpoint`)
     const heartbeat = new lambda.Function(this, 'HeartbeatFunc', {
+      ...LAMBDA_DEFAULTS,
       functionName: `${id}-heartbeat`,
-      code: lambda.Code.fromAsset('heartbeat'),
-      handler: 'lambda.handler',
-      runtime: lambda.Runtime.NODEJS_12_X,
-      memorySize: 128,
-      timeout: cdk.Duration.seconds(10),
-      logRetention: logs.RetentionDays.ONE_MONTH,
-      tracing: lambda.Tracing.ACTIVE,
+      code: lambda.Code.fromAsset('bin/heartbeat'),
       environment: {
         HEARTBEAT_ENDPOINT: heartbeatEndpoint,
+        RUST_LOG: 'info',
       },
     })
 

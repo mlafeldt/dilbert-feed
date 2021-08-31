@@ -10,9 +10,20 @@ This serverless application provides a custom feed with direct access to Dilbert
 
 For some background information, check out my article on [Recreational Programming with Serverless](https://sharpend.io/recreational-programming-with-serverless/).
 
+PS: The Lambda functions used to be [written in Go](https://github.com/mlafeldt/dilbert-feed/tree/golang), now they're [powered by Rust](https://github.com/mlafeldt/dilbert-feed/pull/6). 💪
+
 ## Architecture
 
 ![](architecture.png)
+
+## Requirements
+
+You need the following to build and deploy dilbert-feed:
+
+- Node.js + Yarn
+- Rust + `rustup target add x86_64-unknown-linux-gnu`
+- (On macOS, you also need the corresponding [cross compiler toolchain](https://github.com/messense/homebrew-macos-cross-toolchains))
+- Make
 
 ## Deployment
 
@@ -33,7 +44,7 @@ aws ssm put-parameter --overwrite --name /dilbert-feed-dev/heartbeat-endpoint --
 aws ssm put-parameter --overwrite --name /dilbert-feed-prod/heartbeat-endpoint --type String --value <url>
 ```
 
-Deploy the stack (requires Node.js, Go, and [Gox](https://github.com/mitchellh/gox) to be installed):
+Build the Lambdas and deploy the CDK stack:
 
 ```console
 # Bootstrap AWS CDK once

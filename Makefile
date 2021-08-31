@@ -1,7 +1,14 @@
 ENV   ?= dev
 STACK  = dilbert-feed-$(ENV)
-CDK   ?= yarn cdk
-GOX   ?= gox
+CDK   ?= yarn --silent cdk
+CARGO ?= cargo
+
+ifeq ("$(origin V)", "command line")
+  VERBOSE = $(V)
+endif
+ifneq ($(VERBOSE),1)
+.SILENT:
+endif
 
 dev: ENV=dev
 dev: deploy
@@ -9,29 +16,39 @@ dev: deploy
 prod: ENV=prod
 prod: deploy
 
-deploy diff synth: build transpile
-	@$(CDK) $@ $(STACK)
+deploy: lint test build node_modules
+	$(CDK) $@ -e $(STACK)
 
-deploy: test
+diff synth: build node_modules
+	$(CDK) $@ -e $(STACK)
 
-destroy: build transpile
-	@$(CDK) destroy --force $(STACK)
+destroy: build node_modules
+	$(CDK) destroy --force $(STACK)
 
-bootstrap: build transpile
-	@$(CDK) bootstrap --cloudformation-execution-policies arn:aws:iam::aws:policy/AdministratorAccess
-
-transpile: node_modules
-	@yarn run build
+bootstrap: build node_modules
+	$(CDK) bootstrap --cloudformation-execution-policies arn:aws:iam::aws:policy/AdministratorAccess
 
 node_modules:
 	yarn install
 
-build:
-	@GOFLAGS=-trimpath $(GOX) -os=linux -arch=amd64 -ldflags=-s -output="bin/{{.Dir}}/handler" ./...
+TARGET := x86_64-unknown-linux-gnu
+export CC_x86_64_unknown_linux_gnu  = $(TARGET)-gcc
+export CXX_x86_64_unknown_linux_gnu = $(TARGET)-g++
+export AR_x86_64_unknown_linux_gnu  = $(TARGET)-ar
+export CARGO_TARGET_X86_64_UNKNOWN_LINUX_GNU_LINKER = $(TARGET)-gcc
+
+RUST_FUNCS := $(subst src/bin/,,$(dir $(wildcard src/bin/*/main.rs)))
+rust_funcs := $(RUST_FUNCS:%=rust-%)
+
+build: $(rust_funcs)
+
+$(rust_funcs):
+	RUSTFLAGS="-C link-arg=-s" $(CARGO) build --release --target $(TARGET) --bin $(@:rust-%=%)
+	mkdir -p bin/$(@:rust-%=%)
+	cp -f target/$(TARGET)/release/$(@:rust-%=%) bin/$(@:rust-%=%)/bootstrap
 
 lint:
-	go vet ./...
-	golint -set_exit_status $$(go list ./...)
+	$(CARGO) clippy --workspace
 
 test:
-	go test -v -cover ./...
+	$(CARGO) test --workspace

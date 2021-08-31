@@ -1,26 +1,33 @@
-<?xml version="1.0" encoding="UTF-8"?><rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0">
   <channel>
     <title>Dilbert</title>
     <link>https://dilbert.com</link>
     <description>Dilbert Daily Strip</description>
     <item>
-      <title>Use Company Products</title>
+      <title>Dilbert - 2018-10-01</title>
       <link>https://dilbert-feed-test.s3.amazonaws.com/strips/2018-10-01.gif</link>
-      <description>&lt;img src=&#34;https://dilbert-feed-test.s3.amazonaws.com/strips/2018-10-01.gif&#34;&gt;</description>
+      <description>
+        <![CDATA[<img src="https://dilbert-feed-test.s3.amazonaws.com/strips/2018-10-01.gif">]]>
+      </description>
       <guid>https://dilbert-feed-test.s3.amazonaws.com/strips/2018-10-01.gif</guid>
       <pubDate>Mon, 01 Oct 2018 00:00:00 +0000</pubDate>
     </item>
     <item>
       <title>Dilbert - 2018-09-30</title>
       <link>https://dilbert-feed-test.s3.amazonaws.com/strips/2018-09-30.gif</link>
-      <description>&lt;img src=&#34;https://dilbert-feed-test.s3.amazonaws.com/strips/2018-09-30.gif&#34;&gt;</description>
+      <description>
+        <![CDATA[<img src="https://dilbert-feed-test.s3.amazonaws.com/strips/2018-09-30.gif">]]>
+      </description>
       <guid>https://dilbert-feed-test.s3.amazonaws.com/strips/2018-09-30.gif</guid>
       <pubDate>Sun, 30 Sep 2018 00:00:00 +0000</pubDate>
     </item>
     <item>
-      <title>Fine Lines</title>
+      <title>Dilbert - 2018-09-29</title>
       <link>https://dilbert-feed-test.s3.amazonaws.com/strips/2018-09-29.gif</link>
-      <description>&lt;img src=&#34;https://dilbert-feed-test.s3.amazonaws.com/strips/2018-09-29.gif&#34;&gt;</description>
+      <description>
+        <![CDATA[<img src="https://dilbert-feed-test.s3.amazonaws.com/strips/2018-09-29.gif">]]>
+      </description>
       <guid>https://dilbert-feed-test.s3.amazonaws.com/strips/2018-09-29.gif</guid>
       <pubDate>Sat, 29 Sep 2018 00:00:00 +0000</pubDate>
     </item>
