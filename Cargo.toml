@@ -10,7 +10,7 @@ edition = "2018"
 
 [dependencies]
 aws-sdk-s3 = { git = "https://github.com/awslabs/aws-sdk-rust", tag = "v0.0.16-alpha", package = "aws-sdk-s3", features = ["rustls"] }
-chrono = "0.4"
+chrono = { version = "0.4", features = ["serde"] }
 derive_builder = "0.10"
 futures = "0.3"
 lambda_runtime = "0.4"

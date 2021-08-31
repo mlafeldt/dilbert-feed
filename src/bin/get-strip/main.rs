@@ -1,4 +1,5 @@
 use aws_sdk_s3::{ByteStream, Client};
+use chrono::NaiveDate;
 use lambda_runtime::{handler_fn, Context, Error};
 use log::{debug, info};
 use serde::{Deserialize, Serialize};
@@ -9,7 +10,7 @@ use dilbert::{Comic, Dilbert};
 
 #[derive(Deserialize, Debug)]
 struct Input {
-    date: Option<String>,
+    date: Option<NaiveDate>,
 }
 
 #[derive(Serialize, PartialEq, Debug)]

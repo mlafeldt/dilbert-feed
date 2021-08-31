@@ -6,7 +6,7 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 pub struct Comic {
-    pub date: String,
+    pub date: NaiveDate,
     pub title: String,
     pub image_url: String,
     pub strip_url: String,
@@ -30,8 +30,8 @@ impl Dilbert {
         }
     }
 
-    pub async fn scrape_comic(&self, date: Option<String>) -> Result<Comic, Error> {
-        let date = Self::date_or_today(date)?;
+    pub async fn scrape_comic(&self, date: Option<NaiveDate>) -> Result<Comic, Error> {
+        let date = date.unwrap_or_else(|| Utc::today().naive_utc());
         let strip_url = self.strip_url(date);
         let resp = reqwest::get(&strip_url).await?.error_for_status()?;
         let body = resp.text().await?;
@@ -43,7 +43,7 @@ impl Dilbert {
             .ok_or("comic metadata not found")?;
 
         if container.attr("data-id").unwrap_or_default() != date.to_string() {
-            return Err("comic not found for date".into());
+            return Err(format!("no comic found for date {}", date).into());
         }
 
         let title = container
@@ -58,7 +58,7 @@ impl Dilbert {
             .to_string();
 
         Ok(Comic {
-            date: date.to_string(),
+            date,
             title,
             image_url,
             strip_url,
@@ -67,13 +67,6 @@ impl Dilbert {
 
     fn strip_url(&self, date: NaiveDate) -> String {
         format!("{}/strip/{}", self.base_url, date)
-    }
-
-    fn date_or_today(date: Option<String>) -> Result<NaiveDate, Error> {
-        match date {
-            Some(date) => Ok(NaiveDate::parse_from_str(&date, "%Y-%m-%d").or(Err("invalid date format"))?),
-            None => Ok(Utc::now().naive_utc().date()),
-        }
     }
 }
 
@@ -93,7 +86,7 @@ mod tests {
         vec![
             Test {
                 comic: Comic {
-                    date: "2000-01-01".to_string(),
+                    date: NaiveDate::from_ymd(2000, 1, 1),
                     title: "Dilbert Comic for 2000-01-01".to_string(),
                     image_url: "https://assets.amuniversal.com/bdc8a4d06d6401301d80001dd8b71c47".to_string(),
                     strip_url: format!("{}/strip/2000-01-01", base_url),
@@ -102,7 +95,7 @@ mod tests {
             },
             Test {
                 comic: Comic {
-                    date: "2018-10-30".to_string(),
+                    date: NaiveDate::from_ymd(2018, 10, 30),
                     title: "Intentionally Underbidding".to_string(),
                     image_url: "https://assets.amuniversal.com/cda546d0a88c01365b26005056a9545d".to_string(),
                     strip_url: format!("{}/strip/2018-10-30", base_url),
@@ -111,7 +104,7 @@ mod tests {
             },
             Test {
                 comic: Comic {
-                    date: "2019-11-02".to_string(),
+                    date: NaiveDate::from_ymd(2019, 11, 2),
                     title: "Multiple Choice".to_string(),
                     image_url: "https://assets.amuniversal.com/ce7ec130d6480137c832005056a9545d".to_string(),
                     strip_url: format!("{}/strip/2019-11-02", base_url),
@@ -120,7 +113,7 @@ mod tests {
             },
             Test {
                 comic: Comic {
-                    date: "2020-11-11".to_string(),
+                    date: NaiveDate::from_ymd(2020, 11, 11),
                     title: "Elbonian Words".to_string(),
                     image_url: "https://assets.amuniversal.com/f25312c0fb5b01382ef9005056a9545d".to_string(),
                     strip_url: format!("{}/strip/2020-11-11", base_url),
