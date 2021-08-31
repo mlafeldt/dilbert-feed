@@ -34,6 +34,7 @@ export class DilbertFeedStack extends cdk.Stack {
       memorySize: 128,
       timeout: cdk.Duration.seconds(10),
       logRetention: logs.RetentionDays.ONE_MONTH,
+      tracing: lambda.Tracing.ACTIVE,
       environment: {
         BUCKET_NAME: bucket.bucketName,
         STRIPS_DIR: stripsDir,
@@ -49,6 +50,7 @@ export class DilbertFeedStack extends cdk.Stack {
       memorySize: 128,
       timeout: cdk.Duration.seconds(10),
       logRetention: logs.RetentionDays.ONE_MONTH,
+      tracing: lambda.Tracing.ACTIVE,
       environment: {
         BUCKET_NAME: bucket.bucketName,
         STRIPS_DIR: stripsDir,
@@ -66,6 +68,7 @@ export class DilbertFeedStack extends cdk.Stack {
       memorySize: 128,
       timeout: cdk.Duration.seconds(10),
       logRetention: logs.RetentionDays.ONE_MONTH,
+      tracing: lambda.Tracing.ACTIVE,
       environment: {
         HEARTBEAT_ENDPOINT: heartbeatEndpoint,
       },
@@ -99,6 +102,7 @@ export class DilbertFeedStack extends cdk.Stack {
     const sm = new sfn.StateMachine(this, 'StateMachine', {
       stateMachineName: id,
       definition: steps,
+      tracingEnabled: true,
     })
 
     const cron = new events.Rule(this, 'Cron', {
