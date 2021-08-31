@@ -1,5 +1,7 @@
 # dilbert-feed
 
+[![CI](https://github.com/mlafeldt/dilbert-feed/workflows/Rust/badge.svg)](https://github.com/mlafeldt/dilbert-feed/actions)
+
 Enjoy [Dilbert](https://dilbert.com/) in your RSS feed reader without any ads!
 
 Unfortunetly, Dilbert's official feed now forces you to go to the website:
