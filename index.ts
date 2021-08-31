@@ -9,6 +9,14 @@ import * as ssm from '@aws-cdk/aws-ssm'
 import * as targets from '@aws-cdk/aws-events-targets'
 import * as tasks from '@aws-cdk/aws-stepfunctions-tasks'
 
+const LAMBDA_DEFAULTS = {
+  handler: 'bootstrap',
+  runtime: lambda.Runtime.PROVIDED_AL2,
+  memorySize: 128,
+  timeout: cdk.Duration.seconds(10),
+  logRetention: logs.RetentionDays.ONE_MONTH,
+}
+
 export class DilbertFeedStack extends cdk.Stack {
   constructor(scope: cdk.App, id: string, props: cdk.StackProps) {
     super(scope, id, props)
@@ -27,13 +35,9 @@ export class DilbertFeedStack extends cdk.Stack {
     })
 
     const getStrip = new lambda.Function(this, 'GetStripFunc', {
+      ...LAMBDA_DEFAULTS,
       functionName: `${id}-get-strip`,
       code: lambda.Code.fromAsset('bin/get-strip'),
-      handler: 'bootstrap',
-      runtime: lambda.Runtime.PROVIDED_AL2,
-      memorySize: 128,
-      timeout: cdk.Duration.seconds(10),
-      logRetention: logs.RetentionDays.ONE_MONTH,
       environment: {
         BUCKET_NAME: bucket.bucketName,
         STRIPS_DIR: stripsDir,
@@ -43,13 +47,9 @@ export class DilbertFeedStack extends cdk.Stack {
     bucket.grantPut(getStrip)
 
     const genFeed = new lambda.Function(this, 'GenFeedFunc', {
+      ...LAMBDA_DEFAULTS,
       functionName: `${id}-gen-feed`,
       code: lambda.Code.fromAsset('bin/gen-feed'),
-      handler: 'bootstrap',
-      runtime: lambda.Runtime.PROVIDED_AL2,
-      memorySize: 128,
-      timeout: cdk.Duration.seconds(10),
-      logRetention: logs.RetentionDays.ONE_MONTH,
       environment: {
         BUCKET_NAME: bucket.bucketName,
         STRIPS_DIR: stripsDir,
@@ -61,13 +61,9 @@ export class DilbertFeedStack extends cdk.Stack {
 
     const heartbeatEndpoint = ssm.StringParameter.valueForStringParameter(this, `/${id}/heartbeat-endpoint`)
     const heartbeat = new lambda.Function(this, 'HeartbeatFunc', {
+      ...LAMBDA_DEFAULTS,
       functionName: `${id}-heartbeat`,
       code: lambda.Code.fromAsset('bin/heartbeat'),
-      handler: 'bootstrap',
-      runtime: lambda.Runtime.PROVIDED_AL2,
-      memorySize: 128,
-      timeout: cdk.Duration.seconds(10),
-      logRetention: logs.RetentionDays.ONE_MONTH,
       environment: {
         HEARTBEAT_ENDPOINT: heartbeatEndpoint,
         RUST_LOG: 'info',
