@@ -1,3 +1,6 @@
+#![deny(clippy::all, clippy::nursery)]
+#![deny(nonstandard_style, rust_2018_idioms)]
+
 use aws_sdk_s3::{ByteStream, Client};
 use chrono::Utc;
 use lambda_runtime::{handler_fn, Context, Error};
@@ -45,7 +48,7 @@ async fn handler(_: Input, _: Context) -> Result<Output, Error> {
 
     info!("Uploading feed to bucket {} with path {} ...", bucket_name, feed_path);
 
-    let _ = client
+    client
         .put_object()
         .bucket(&bucket_name)
         .key(&feed_path)

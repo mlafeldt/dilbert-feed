@@ -1,3 +1,6 @@
+#![deny(clippy::all, clippy::nursery)]
+#![deny(nonstandard_style, rust_2018_idioms)]
+
 use aws_sdk_s3::{ByteStream, Client};
 use chrono::NaiveDate;
 use lambda_runtime::{handler_fn, Context, Error};
@@ -49,7 +52,7 @@ async fn handler(input: Input, _: Context) -> Result<Output, Error> {
 
     let key = format!("{}/{}.gif", strips_dir, comic.date);
 
-    let _ = Client::from_env()
+    Client::from_env()
         .put_object()
         .bucket(&bucket_name)
         .key(&key)

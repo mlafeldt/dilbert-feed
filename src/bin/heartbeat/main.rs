@@ -1,3 +1,6 @@
+#![deny(clippy::all, clippy::nursery)]
+#![deny(nonstandard_style, rust_2018_idioms)]
+
 use lambda_runtime::{handler_fn, Context, Error};
 use log::{debug, info};
 use reqwest::{redirect, Client};

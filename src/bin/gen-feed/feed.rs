@@ -29,7 +29,7 @@ impl Feed<'_> {
                     );
                     ItemBuilder::default()
                         .title(self.title(date).await.unwrap()) // XXX: how to avoid unwrap here?
-                        .link(url.to_owned())
+                        .link(url.clone())
                         .description(format!(r#"<img src="{}">"#, url))
                         .guid(GuidBuilder::default().value(url).build()?)
                         .pub_date(DateTime::<Utc>::from_utc(date.and_hms(0, 0, 0), Utc).to_rfc2822())
