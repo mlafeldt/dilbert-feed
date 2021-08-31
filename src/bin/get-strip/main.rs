@@ -36,15 +36,16 @@ async fn handler(input: Input, _: Context) -> Result<Output, Error> {
 
     let comic = Dilbert::default().scrape_comic(input.date).await?;
 
-    debug!("Scraped comic: {:?}", comic);
-
-    info!("Uploading strip {} to bucket {} ...", comic.strip_url, bucket_name);
+    info!("Scraping done: {:?}", comic);
+    info!("Downloading strip from {} ...", comic.strip_url);
 
     let image = reqwest::get(&comic.image_url)
         .await?
         .error_for_status()?
         .bytes()
         .await?;
+
+    info!("Uploading strip to bucket {} ...", bucket_name);
 
     let key = format!("{}/{}.gif", strips_dir, comic.date);
 
