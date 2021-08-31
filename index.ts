@@ -23,7 +23,7 @@ export class DilbertFeedStack extends cdk.Stack {
     super(scope, id, props)
 
     const stripsDir = 'strips'
-    const feedPath = 'v1/rss.xml'
+    const feedPath = 'v2/rss.xml'
 
     const bucket = new s3.Bucket(this, 'Bucket', {
       publicReadAccess: true,
