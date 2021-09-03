@@ -1,5 +1,5 @@
+use anyhow::{anyhow, bail, Result};
 use chrono::{NaiveDate, Utc};
-use lambda_runtime::Error;
 use select::document::Document;
 use select::predicate::Class;
 use serde::{Deserialize, Serialize};
@@ -30,7 +30,7 @@ impl Dilbert {
         }
     }
 
-    pub async fn scrape_comic(&self, date: Option<NaiveDate>) -> Result<Comic, Error> {
+    pub async fn scrape_comic(&self, date: Option<NaiveDate>) -> Result<Comic> {
         let date = date.unwrap_or_else(|| Utc::today().naive_utc());
         let strip_url = self.strip_url(date);
         let resp = reqwest::get(&strip_url).await?.error_for_status()?;
@@ -40,20 +40,20 @@ impl Dilbert {
         let container = document
             .find(Class("comic-item-container"))
             .next()
-            .ok_or("comic metadata not found")?;
+            .ok_or_else(|| anyhow!("comic metadata not found"))?;
 
         if container.attr("data-id").unwrap_or_default() != date.to_string() {
-            return Err(format!("no comic found for date {}", date).into());
+            bail!("no comic found for date {}", date);
         }
 
         let title = container
             .attr("data-title")
-            .ok_or("title not found")?
+            .ok_or_else(|| anyhow!("title not found"))?
             .trim()
             .to_string();
         let image_url = container
             .attr("data-image")
-            .ok_or("image URL not found")?
+            .ok_or_else(|| anyhow!("image URL not found"))?
             .trim()
             .to_string();
 

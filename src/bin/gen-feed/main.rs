@@ -1,6 +1,7 @@
 #![deny(clippy::all, clippy::nursery)]
 #![deny(nonstandard_style, rust_2018_idioms)]
 
+use anyhow::Result;
 use aws_sdk_s3::{ByteStream, Client};
 use chrono::Utc;
 use lambda_runtime::{handler_fn, Context, Error};
@@ -26,7 +27,7 @@ async fn main() -> Result<(), Error> {
     Ok(())
 }
 
-async fn handler(_: Input, _: Context) -> Result<Output, Error> {
+async fn handler(_: Input, _: Context) -> Result<Output> {
     let bucket_name = env::var("BUCKET_NAME").expect("BUCKET_NAME not found");
     let strips_dir = env::var("STRIPS_DIR").expect("STRIPS_DIR not found");
     let feed_path = env::var("FEED_PATH").expect("FEED_PATH not found");

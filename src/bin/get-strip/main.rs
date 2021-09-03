@@ -1,6 +1,7 @@
 #![deny(clippy::all, clippy::nursery)]
 #![deny(nonstandard_style, rust_2018_idioms)]
 
+use anyhow::Result;
 use aws_sdk_s3::{ByteStream, Client};
 use chrono::NaiveDate;
 use lambda_runtime::{handler_fn, Context, Error};
@@ -31,7 +32,7 @@ async fn main() -> Result<(), Error> {
     Ok(())
 }
 
-async fn handler(input: Input, _: Context) -> Result<Output, Error> {
+async fn handler(input: Input, _: Context) -> Result<Output> {
     debug!("Got input: {:?}", input);
 
     let bucket_name = env::var("BUCKET_NAME").expect("BUCKET_NAME not found");

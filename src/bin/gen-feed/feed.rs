@@ -1,8 +1,8 @@
+use anyhow::{anyhow, Error, Result};
 use aws_sdk_s3::Client;
 use chrono::{DateTime, Duration, NaiveDate, Utc};
 use derive_builder::Builder;
 use futures::future;
-use lambda_runtime::Error;
 use rss::{ChannelBuilder, GuidBuilder, ItemBuilder};
 
 #[derive(Builder, Debug)]
@@ -18,7 +18,7 @@ pub struct Feed<'a> {
 }
 
 impl Feed<'_> {
-    pub async fn xml(&self) -> Result<String, Error> {
+    pub async fn xml(&self) -> Result<String> {
         let items = future::try_join_all(
             (0..self.feed_length)
                 .map(|i| self.start_date - Duration::days(i.into()))
@@ -36,21 +36,23 @@ impl Feed<'_> {
                         .build()
                 }),
         )
-        .await?;
+        .await
+        .map_err(Error::msg)?;
 
         let channel = ChannelBuilder::default()
             .title("Dilbert")
             .link("https://dilbert.com")
             .description("Dilbert Daily Strip")
             .items(items)
-            .build()?;
+            .build()
+            .map_err(Error::msg)?;
 
         let buf = channel.pretty_write_to(Vec::new(), b' ', 2)?;
 
         Ok(String::from_utf8(buf)?)
     }
 
-    async fn title(&self, date: NaiveDate) -> Result<String, Error> {
+    async fn title(&self, date: NaiveDate) -> Result<String> {
         match &self.s3_client {
             Some(client) => {
                 let metadata = client
@@ -60,9 +62,11 @@ impl Feed<'_> {
                     .send()
                     .await?
                     .metadata
-                    .ok_or("metadata not found")?;
+                    .ok_or_else(|| anyhow!("metadata not found"))?;
 
-                let title = metadata.get("title").ok_or("title not found in metadata")?;
+                let title = metadata
+                    .get("title")
+                    .ok_or_else(|| anyhow!("title not found in metadata"))?;
 
                 Ok(title.into())
             }

@@ -1,6 +1,7 @@
 #![deny(clippy::all, clippy::nursery)]
 #![deny(nonstandard_style, rust_2018_idioms)]
 
+use anyhow::{bail, Result};
 use lambda_runtime::{handler_fn, Context, Error};
 use log::{debug, info};
 use reqwest::{redirect, Client};
@@ -30,7 +31,7 @@ async fn main() -> Result<(), Error> {
     Ok(())
 }
 
-async fn handler(input: Input, _: Context) -> Result<Output, Error> {
+async fn handler(input: Input, _: Context) -> Result<Output> {
     debug!("Got input: {:?}", input);
 
     let ep = input
@@ -47,7 +48,7 @@ async fn handler(input: Input, _: Context) -> Result<Output, Error> {
     let resp = client.get(&ep).send().await?;
 
     if !resp.status().is_success() {
-        return Err(format!("HTTP status not 2xx: {}", resp.status()).into());
+        bail!("HTTP status not 2xx: {}", resp.status());
     }
 
     Ok(Output {
