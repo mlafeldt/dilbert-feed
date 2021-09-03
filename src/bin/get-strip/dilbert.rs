@@ -138,7 +138,7 @@ mod tests {
                 .await;
 
             let comic = Dilbert::new(&server.uri())
-                .scrape_comic(Some(t.comic.date.to_owned()))
+                .scrape_comic(Some(t.comic.date))
                 .await
                 .unwrap();
 
