@@ -36,7 +36,7 @@ async fn handler(_: Input, _: Context) -> Result<Output> {
 
     info!("Generating feed for date {} ...", today);
 
-    let client = Client::from_env();
+    let client = Client::new(&aws_config::load_from_env().await);
 
     let xml = FeedBuilder::default()
         .bucket_name(&bucket_name)

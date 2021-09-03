@@ -53,7 +53,7 @@ async fn handler(input: Input, _: Context) -> Result<Output> {
 
     let key = format!("{}/{}.gif", strips_dir, comic.date);
 
-    Client::from_env()
+    Client::new(&aws_config::load_from_env().await)
         .put_object()
         .bucket(&bucket_name)
         .key(&key)
