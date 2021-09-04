@@ -28,16 +28,16 @@ impl Feed<'_> {
                         self.bucket_name, self.strips_dir, date
                     );
                     ItemBuilder::default()
-                        .title(self.title(date).await.unwrap()) // XXX: how to avoid unwrap here?
+                        .title(self.title(date).await?)
                         .link(url.clone())
                         .description(format!(r#"<img src="{}">"#, url))
-                        .guid(GuidBuilder::default().value(url).build()?)
+                        .guid(GuidBuilder::default().value(url).build().unwrap())
                         .pub_date(DateTime::<Utc>::from_utc(date.and_hms(0, 0, 0), Utc).to_rfc2822())
                         .build()
+                        .map_err(Error::msg)
                 }),
         )
-        .await
-        .map_err(Error::msg)?;
+        .await?;
 
         let channel = ChannelBuilder::default()
             .title("Dilbert")
