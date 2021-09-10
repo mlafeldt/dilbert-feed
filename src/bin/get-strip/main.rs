@@ -29,42 +29,57 @@ struct Output {
 #[tokio::main]
 async fn main() -> Result<(), Error> {
     simple_logger::init_with_env()?;
-    lambda_runtime::run(handler_fn(handler)).await?;
+
+    let client = Client::new(&aws_config::load_from_env().await);
+    let bucket_name = env::var("BUCKET_NAME").expect("BUCKET_NAME not found");
+    let repo = S3Repository::new(&bucket_name, &client);
+    // let repo = InMemRepository::default();
+
+    let h = Handler {
+        bucket_name: &bucket_name,
+        repo: Box::new(repo),
+    };
+
+    lambda_runtime::run(handler_fn(|input: Input, ctx: Context| async {
+        let output = h.handle(input, ctx).await?;
+        Ok::<Output, Error>(output)
+    }))
+    .await?;
+
     Ok(())
 }
 
-async fn handler(input: Input, _: Context) -> Result<Output> {
-    debug!("Got input: {:?}", input);
+struct Handler<'a> {
+    bucket_name: &'a str,
+    repo: Box<dyn Repository + Send + Sync + 'a>,
+}
 
-    let bucket_name = env::var("BUCKET_NAME").expect("BUCKET_NAME not found");
-    let strips_dir = env::var("STRIPS_DIR").expect("STRIPS_DIR not found");
+impl<'a> Handler<'a> {
+    async fn handle(&'a self, input: Input, _: Context) -> Result<Output> {
+        debug!("Got input: {:?}", input);
 
-    let comic = Dilbert::default().scrape_comic(input.date).await?;
+        let strips_dir = env::var("STRIPS_DIR").expect("STRIPS_DIR not found");
 
-    info!("Scraping done: {:?}", comic);
-    info!("Downloading strip from {} ...", comic.strip_url);
+        let comic = Dilbert::default().scrape_comic(input.date).await?;
 
-    let image = reqwest::get(&comic.image_url)
-        .await?
-        .error_for_status()?
-        .bytes()
-        .await?;
+        info!("Scraping done: {:?}", comic);
+        info!("Downloading strip from {} ...", comic.strip_url);
 
-    info!("Uploading strip to bucket {} ...", bucket_name);
+        let image = reqwest::get(&comic.image_url)
+            .await?
+            .error_for_status()?
+            .bytes()
+            .await?;
 
-    let client = Client::new(&aws_config::load_from_env().await);
-    let repo = S3Repository::new(bucket_name, &client);
+        info!("Uploading strip to bucket {} ...", self.bucket_name);
 
-    let key = format!("{}/{}.gif", strips_dir, comic.date);
-    let upload_url = repo.store(&key, image.to_vec(), &comic.title).await?;
+        let key = format!("{}/{}.gif", strips_dir, comic.date);
+        let upload_url = self.repo.store(&key, image.to_vec(), &comic.title).await?;
 
-    // let upload_url = InMemRepository::default()
-    //     .store(&key, image.to_vec(), &comic.title)
-    //     .await?;
+        info!("Upload completed: {}", upload_url);
 
-    info!("Upload completed: {}", upload_url);
-
-    Ok(Output { comic, upload_url })
+        Ok(Output { comic, upload_url })
+    }
 }
 
 #[async_trait]
@@ -74,12 +89,12 @@ trait Repository {
 
 #[derive(Debug)]
 struct S3Repository<'a> {
-    bucket_name: String,
+    bucket_name: &'a str,
     s3_client: &'a Client,
 }
 
 impl<'a> S3Repository<'a> {
-    const fn new(bucket_name: String, s3_client: &'a Client) -> Self {
+    const fn new(bucket_name: &'a str, s3_client: &'a Client) -> Self {
         Self { bucket_name, s3_client }
     }
 }
@@ -89,7 +104,7 @@ impl Repository for S3Repository<'_> {
     async fn store(&self, key: &str, body: Vec<u8>, title: &str) -> Result<String> {
         self.s3_client
             .put_object()
-            .bucket(&self.bucket_name)
+            .bucket(self.bucket_name)
             .key(key)
             .body(ByteStream::from(body))
             .content_type("image/gif")
