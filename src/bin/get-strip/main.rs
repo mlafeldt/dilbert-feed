@@ -2,6 +2,7 @@
 #![deny(nonstandard_style, rust_2018_idioms)]
 
 use anyhow::Result;
+use async_trait::async_trait;
 use aws_sdk_s3::{ByteStream, Client};
 use chrono::NaiveDate;
 use lambda_runtime::{handler_fn, Context, Error};
@@ -51,21 +52,63 @@ async fn handler(input: Input, _: Context) -> Result<Output> {
 
     info!("Uploading strip to bucket {} ...", bucket_name);
 
+    let client = Client::new(&aws_config::load_from_env().await);
+    let repo = S3Repository::new(bucket_name, &client);
+
     let key = format!("{}/{}.gif", strips_dir, comic.date);
+    let upload_url = repo.store(&key, image.to_vec(), &comic.title).await?;
 
-    Client::new(&aws_config::load_from_env().await)
-        .put_object()
-        .bucket(&bucket_name)
-        .key(&key)
-        .body(ByteStream::from(image))
-        .content_type("image/gif")
-        .metadata("title", &comic.title)
-        .send()
-        .await?;
-
-    let upload_url = format!("https://{}.s3.amazonaws.com/{}", bucket_name, key);
+    // let upload_url = InMemRepository::default()
+    //     .store(&key, image.to_vec(), &comic.title)
+    //     .await?;
 
     info!("Upload completed: {}", upload_url);
 
     Ok(Output { comic, upload_url })
+}
+
+#[async_trait]
+trait Repository {
+    async fn store(&self, key: &str, body: Vec<u8>, title: &str) -> Result<String>;
+}
+
+#[derive(Debug)]
+struct S3Repository<'a> {
+    bucket_name: String,
+    s3_client: &'a Client,
+}
+
+impl<'a> S3Repository<'a> {
+    const fn new(bucket_name: String, s3_client: &'a Client) -> Self {
+        Self { bucket_name, s3_client }
+    }
+}
+
+#[async_trait]
+impl Repository for S3Repository<'_> {
+    async fn store(&self, key: &str, body: Vec<u8>, title: &str) -> Result<String> {
+        self.s3_client
+            .put_object()
+            .bucket(&self.bucket_name)
+            .key(key)
+            .body(ByteStream::from(body))
+            .content_type("image/gif")
+            .metadata("title", title)
+            .send()
+            .await?;
+
+        let upload_url = format!("https://{}.s3.amazonaws.com/{}", self.bucket_name, key);
+
+        Ok(upload_url)
+    }
+}
+
+#[derive(Default, Debug)]
+struct InMemRepository {}
+
+#[async_trait]
+impl Repository for InMemRepository {
+    async fn store(&self, _key: &str, _body: Vec<u8>, _title: &str) -> Result<String> {
+        Ok(String::default())
+    }
 }
