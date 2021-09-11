@@ -27,11 +27,22 @@ struct Output {
 #[tokio::main]
 async fn main() -> Result<(), Error> {
     simple_logger::init_with_env()?;
-    lambda_runtime::run(handler_fn(handler)).await?;
+
+    let client = Client::builder()
+        .user_agent("dilbert-feed")
+        .redirect(redirect::Policy::none())
+        .build()?;
+
+    lambda_runtime::run(handler_fn(|input: Input, _: Context| async {
+        let output = handler(input, client.clone()).await?;
+        Ok(output) as Result<Output>
+    }))
+    .await?;
+
     Ok(())
 }
 
-async fn handler(input: Input, _: Context) -> Result<Output> {
+async fn handler(input: Input, client: Client) -> Result<Output> {
     debug!("Got input: {:?}", input);
 
     let ep = input
@@ -39,11 +50,6 @@ async fn handler(input: Input, _: Context) -> Result<Output> {
         .unwrap_or_else(|| env::var("HEARTBEAT_ENDPOINT").expect("HEARTBEAT_ENDPOINT not found"));
 
     info!("Sending ping to {}", ep);
-
-    let client = Client::builder()
-        .user_agent("dilbert-feed")
-        .redirect(redirect::Policy::none())
-        .build()?;
 
     let resp = client.get(&ep).send().await?;
 
@@ -61,6 +67,7 @@ async fn handler(input: Input, _: Context) -> Result<Output> {
 mod tests {
     use super::*;
     use pretty_assertions::assert_eq;
+    use reqwest::Client;
     use wiremock::matchers::method;
     use wiremock::{Mock, MockServer, ResponseTemplate};
 
@@ -79,7 +86,7 @@ mod tests {
                 endpoint: Some(server.uri()),
                 extra: HashMap::new(),
             },
-            Context::default(),
+            Client::new(),
         )
         .await
         .unwrap();
@@ -109,7 +116,7 @@ mod tests {
                 endpoint: Some(server.uri()),
                 extra: HashMap::new(),
             },
-            Context::default(),
+            Client::new(),
         )
         .await
         .unwrap();
