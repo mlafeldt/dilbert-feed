@@ -1,5 +1,6 @@
 use anyhow::{anyhow, bail, Result};
 use chrono::{NaiveDate, Utc};
+use derive_builder::Builder;
 use select::document::Document;
 use select::predicate::Class;
 use serde::{Deserialize, Serialize};
@@ -12,29 +13,32 @@ pub struct Comic {
     pub strip_url: String,
 }
 
-#[derive(Debug)]
-pub struct Dilbert {
+#[derive(Builder, Debug)]
+pub struct Client {
+    #[builder(default = "String::from(\"https://dilbert.com\")")]
     base_url: String,
+    #[builder(default)]
+    http_client: reqwest::Client,
 }
 
-impl Default for Dilbert {
+impl Default for Client {
     fn default() -> Self {
-        Self::new("https://dilbert.com")
+        ClientBuilder::default().build().unwrap()
     }
 }
 
-impl Dilbert {
-    pub fn new(base_url: &str) -> Self {
-        Self {
-            base_url: base_url.to_string(),
-        }
-    }
-
+impl Client {
     pub async fn scrape_comic(&self, date: Option<NaiveDate>) -> Result<Comic> {
         let date = date.unwrap_or_else(|| Utc::today().naive_utc());
         let strip_url = self.strip_url(date);
-        let resp = reqwest::get(&strip_url).await?.error_for_status()?;
-        let body = resp.text().await?;
+        let body = self
+            .http_client
+            .get(&strip_url)
+            .send()
+            .await?
+            .error_for_status()?
+            .text()
+            .await?;
 
         let document = Document::from(body.as_ref());
         let container = document
@@ -137,7 +141,10 @@ mod tests {
                 .mount(&server)
                 .await;
 
-            let comic = Dilbert::new(&server.uri())
+            let comic = ClientBuilder::default()
+                .base_url(server.uri())
+                .build()
+                .unwrap()
                 .scrape_comic(Some(t.comic.date))
                 .await
                 .unwrap();
