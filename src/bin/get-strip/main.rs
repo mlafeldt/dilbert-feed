@@ -10,7 +10,7 @@ use serde::{Deserialize, Serialize};
 use std::env;
 
 mod dilbert;
-use dilbert::{Comic, Dilbert};
+use dilbert::{ClientBuilder, Comic};
 
 #[derive(Deserialize, Debug)]
 struct Input {
@@ -28,22 +28,36 @@ struct Output {
 #[tokio::main]
 async fn main() -> Result<(), Error> {
     simple_logger::init_with_env()?;
-    lambda_runtime::run(handler_fn(handler)).await?;
+
+    let http_client = reqwest::Client::new();
+
+    lambda_runtime::run(handler_fn(|input: Input, _: Context| async {
+        let output = handler(input, http_client.clone()).await?;
+        Ok(output) as Result<Output>
+    }))
+    .await?;
+
     Ok(())
 }
 
-async fn handler(input: Input, _: Context) -> Result<Output> {
+async fn handler(input: Input, http_client: reqwest::Client) -> Result<Output> {
     debug!("Got input: {:?}", input);
 
     let bucket_name = env::var("BUCKET_NAME").expect("BUCKET_NAME not found");
     let strips_dir = env::var("STRIPS_DIR").expect("STRIPS_DIR not found");
 
-    let comic = Dilbert::default().scrape_comic(input.date).await?;
+    let comic = ClientBuilder::default()
+        .http_client(http_client.clone())
+        .build()?
+        .scrape_comic(input.date)
+        .await?;
 
     info!("Scraping done: {:?}", comic);
     info!("Downloading strip from {} ...", comic.strip_url);
 
-    let image = reqwest::get(&comic.image_url)
+    let image = http_client
+        .get(&comic.image_url)
+        .send()
         .await?
         .error_for_status()?
         .bytes()
