@@ -91,11 +91,11 @@ mod tests {
         .unwrap();
 
         assert_eq!(
+            resp,
             Output {
                 endpoint: server.uri(),
                 status: 200,
             },
-            resp,
         );
     }
 

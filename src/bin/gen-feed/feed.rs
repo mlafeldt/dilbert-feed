@@ -95,6 +95,6 @@ mod tests {
 
         let want = include_str!("testdata/feed.xml").trim();
 
-        assert_eq!(want, got);
+        assert_eq!(got, want);
     }
 }

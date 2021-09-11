@@ -149,7 +149,7 @@ mod tests {
                 .await
                 .unwrap();
 
-            assert_eq!(t.comic, comic);
+            assert_eq!(comic, t.comic);
 
             server.reset().await;
         }
