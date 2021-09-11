@@ -12,9 +12,10 @@ pub struct Comic {
     pub strip_url: String,
 }
 
-#[derive(Debug)]
+#[derive(Clone, Debug)]
 pub struct Dilbert {
     base_url: String,
+    http_client: reqwest::Client,
 }
 
 impl Default for Dilbert {
@@ -27,14 +28,26 @@ impl Dilbert {
     pub fn new(base_url: &str) -> Self {
         Self {
             base_url: base_url.to_string(),
+            http_client: reqwest::Client::new(),
         }
+    }
+
+    pub fn http_client(&mut self, client: reqwest::Client) -> &mut Self {
+        self.http_client = client;
+        self
     }
 
     pub async fn scrape_comic(&self, date: Option<NaiveDate>) -> Result<Comic> {
         let date = date.unwrap_or_else(|| Utc::today().naive_utc());
         let strip_url = self.strip_url(date);
-        let resp = reqwest::get(&strip_url).await?.error_for_status()?;
-        let body = resp.text().await?;
+        let body = self
+            .http_client
+            .get(&strip_url)
+            .send()
+            .await?
+            .error_for_status()?
+            .text()
+            .await?;
 
         let document = Document::from(body.as_ref());
         let container = document
