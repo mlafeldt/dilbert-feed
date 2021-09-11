@@ -27,11 +27,22 @@ struct Output {
 #[tokio::main]
 async fn main() -> Result<(), Error> {
     simple_logger::init_with_env()?;
-    lambda_runtime::run(handler_fn(handler)).await?;
+
+    let http_client = Client::builder()
+        .user_agent("dilbert-feed")
+        .redirect(redirect::Policy::none())
+        .build()?;
+
+    lambda_runtime::run(handler_fn(|input: Input, _: Context| async {
+        let output = handler(input, http_client.clone()).await?;
+        Ok(output) as Result<Output>
+    }))
+    .await?;
+
     Ok(())
 }
 
-async fn handler(input: Input, _: Context) -> Result<Output> {
+async fn handler(input: Input, http_client: Client) -> Result<Output> {
     debug!("Got input: {:?}", input);
 
     let ep = input
@@ -40,12 +51,7 @@ async fn handler(input: Input, _: Context) -> Result<Output> {
 
     info!("Sending ping to {}", ep);
 
-    let client = Client::builder()
-        .user_agent("dilbert-feed")
-        .redirect(redirect::Policy::none())
-        .build()?;
-
-    let resp = client.get(&ep).send().await?;
+    let resp = http_client.get(&ep).send().await?;
 
     if !resp.status().is_success() {
         bail!("HTTP status not 2xx: {}", resp.status());
@@ -79,7 +85,7 @@ mod tests {
                 endpoint: Some(server.uri()),
                 extra: HashMap::new(),
             },
-            Context::default(),
+            Client::default(),
         )
         .await
         .unwrap();
@@ -109,7 +115,7 @@ mod tests {
                 endpoint: Some(server.uri()),
                 extra: HashMap::new(),
             },
-            Context::default(),
+            Client::default(),
         )
         .await
         .unwrap();
