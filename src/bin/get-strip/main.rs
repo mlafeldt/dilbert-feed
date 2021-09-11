@@ -38,6 +38,7 @@ async fn main() -> Result<(), Error> {
     let h = Handler {
         bucket_name: &bucket_name,
         repo: Box::new(repo),
+        http_client: reqwest::Client::new(),
     };
 
     lambda_runtime::run(handler_fn(|input: Input, ctx: Context| async {
@@ -52,6 +53,7 @@ async fn main() -> Result<(), Error> {
 struct Handler<'a> {
     bucket_name: &'a str,
     repo: Box<dyn Repository + Send + Sync + 'a>,
+    http_client: reqwest::Client,
 }
 
 impl<'a> Handler<'a> {
@@ -60,12 +62,18 @@ impl<'a> Handler<'a> {
 
         let strips_dir = env::var("STRIPS_DIR").expect("STRIPS_DIR not found");
 
-        let comic = Dilbert::default().scrape_comic(input.date).await?;
+        let comic = Dilbert::default()
+            .http_client(self.http_client.clone())
+            .scrape_comic(input.date)
+            .await?;
 
         info!("Scraping done: {:?}", comic);
         info!("Downloading strip from {} ...", comic.strip_url);
 
-        let image = reqwest::get(&comic.image_url)
+        let image = self
+            .http_client
+            .get(&comic.image_url)
+            .send()
             .await?
             .error_for_status()?
             .bytes()
