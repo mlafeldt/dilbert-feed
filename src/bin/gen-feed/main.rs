@@ -22,7 +22,7 @@ struct Output {
 
 #[tokio::main]
 async fn main() -> Result<(), Error> {
-    simple_logger::init_with_env()?;
+    env_logger::try_init()?;
     lambda_runtime::run(handler_fn(handler)).await?;
     Ok(())
 }

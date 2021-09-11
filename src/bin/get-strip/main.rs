@@ -27,7 +27,7 @@ struct Output {
 
 #[tokio::main]
 async fn main() -> Result<(), Error> {
-    simple_logger::init_with_env()?;
+    env_logger::try_init()?;
 
     let http_client = reqwest::Client::new();
 
