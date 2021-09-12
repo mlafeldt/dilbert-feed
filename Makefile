@@ -32,12 +32,15 @@ node_modules:
 	yarn install
 
 TARGET := x86_64-unknown-linux-gnu
-export CC_x86_64_unknown_linux_gnu  = $(TARGET)-gcc
-export CXX_x86_64_unknown_linux_gnu = $(TARGET)-g++
-export AR_x86_64_unknown_linux_gnu  = $(TARGET)-ar
-export CARGO_TARGET_X86_64_UNKNOWN_LINUX_GNU_LINKER = $(TARGET)-gcc
 
-RUST_FUNCS := $(subst src/bin/,,$(dir $(wildcard src/bin/*/main.rs)))
+ifneq ($(shell uname -s),Linux)
+  export CC_x86_64_unknown_linux_gnu  = $(TARGET)-gcc
+  export CXX_x86_64_unknown_linux_gnu = $(TARGET)-g++
+  export AR_x86_64_unknown_linux_gnu  = $(TARGET)-ar
+  export CARGO_TARGET_X86_64_UNKNOWN_LINUX_GNU_LINKER = $(TARGET)-gcc
+endif
+
+RUST_FUNCS := $(notdir $(realpath $(dir $(wildcard src/bin/*/main.rs))))
 rust_funcs := $(RUST_FUNCS:%=rust-%)
 
 build: $(rust_funcs)
