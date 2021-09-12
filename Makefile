@@ -43,12 +43,12 @@ rust_funcs := $(RUST_FUNCS:%=rust-%)
 build: $(rust_funcs)
 
 $(rust_funcs):
-	RUSTFLAGS="-C link-arg=-s" $(CARGO) build --release --target $(TARGET) --bin $(@:rust-%=%)
+	RUSTFLAGS="-C link-arg=-s" $(CARGO) build --release --target $(TARGET) --bin $(@:rust-%=%) $(if $(VERBOSE),--verbose,)
 	mkdir -p bin/$(@:rust-%=%)
 	cp -f target/$(TARGET)/release/$(@:rust-%=%) bin/$(@:rust-%=%)/bootstrap
 
 lint:
-	$(CARGO) clippy --workspace
+	$(CARGO) clippy --workspace $(if $(VERBOSE),--verbose,)
 
 test:
-	$(CARGO) test --workspace
+	$(CARGO) test --workspace $(if $(VERBOSE),--verbose,)
