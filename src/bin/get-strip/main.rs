@@ -1,10 +1,10 @@
 #![deny(clippy::all, clippy::nursery)]
 #![deny(nonstandard_style, rust_2018_idioms)]
 
-use anyhow::Result;
+use anyhow::{Context, Result};
 use aws_sdk_s3::{ByteStream, Client};
 use chrono::NaiveDate;
-use lambda_runtime::{handler_fn, Context, Error};
+use lambda_runtime::{handler_fn, Context as LambdaContext, Error};
 use log::{debug, error, info};
 use serde::{Deserialize, Serialize};
 use std::env;
@@ -31,7 +31,7 @@ async fn main() -> Result<(), Error> {
 
     let http_client = reqwest::Client::new();
 
-    lambda_runtime::run(handler_fn(|input: Input, _: Context| async {
+    lambda_runtime::run(handler_fn(|input: Input, _: LambdaContext| async {
         let output = handler(input, http_client.clone()).await.map_err(|e| {
             error!("{:?}", e); // log error chain to CloudWatch
             e
@@ -78,7 +78,8 @@ async fn handler(input: Input, http_client: reqwest::Client) -> Result<Output> {
         .content_type("image/gif")
         .metadata("title", &comic.title.replace(|c: char| !c.is_ascii(), "?"))
         .send()
-        .await?;
+        .await
+        .with_context(|| format!("failed to put object {}", &key))?;
 
     let upload_url = format!("https://{}.s3.amazonaws.com/{}", bucket_name, key);
 

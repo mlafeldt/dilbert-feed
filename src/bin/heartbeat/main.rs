@@ -2,7 +2,7 @@
 #![deny(nonstandard_style, rust_2018_idioms)]
 
 use anyhow::{bail, Result};
-use lambda_runtime::{handler_fn, Context, Error};
+use lambda_runtime::{handler_fn, Context as LambdaContext, Error};
 use log::{debug, error, info};
 use reqwest::{redirect, Client};
 use serde::{Deserialize, Serialize};
@@ -33,7 +33,7 @@ async fn main() -> Result<(), Error> {
         .redirect(redirect::Policy::none())
         .build()?;
 
-    lambda_runtime::run(handler_fn(|input: Input, _: Context| async {
+    lambda_runtime::run(handler_fn(|input: Input, _: LambdaContext| async {
         let output = handler(input, http_client.clone()).await.map_err(|e| {
             error!("{:?}", e); // log error chain to CloudWatch
             e

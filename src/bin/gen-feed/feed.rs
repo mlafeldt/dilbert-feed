@@ -1,4 +1,4 @@
-use anyhow::{anyhow, Error, Result};
+use anyhow::{anyhow, Context, Error, Result};
 use aws_sdk_s3::Client;
 use chrono::{DateTime, Duration, NaiveDate, Utc};
 use derive_builder::Builder;
@@ -55,12 +55,14 @@ impl Feed<'_> {
     async fn title(&self, date: NaiveDate) -> Result<String> {
         match &self.s3_client {
             Some(client) => {
+                let key = format!("{}/{}.gif", self.strips_dir, date);
                 let metadata = client
                     .head_object()
                     .bucket(&self.bucket_name)
-                    .key(format!("{}/{}.gif", self.strips_dir, date))
+                    .key(&key)
                     .send()
-                    .await?
+                    .await
+                    .with_context(|| format!("failed to get metadata from object {}", &key))?
                     .metadata
                     .ok_or_else(|| anyhow!("metadata not found"))?;
 

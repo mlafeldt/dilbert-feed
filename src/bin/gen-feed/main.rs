@@ -1,10 +1,10 @@
 #![deny(clippy::all, clippy::nursery)]
 #![deny(nonstandard_style, rust_2018_idioms)]
 
-use anyhow::Result;
+use anyhow::{Context, Result};
 use aws_sdk_s3::{ByteStream, Client};
 use chrono::Utc;
-use lambda_runtime::{handler_fn, Context, Error};
+use lambda_runtime::{handler_fn, Context as LambdaContext, Error};
 use log::{error, info};
 use serde::{Deserialize, Serialize};
 use std::env;
@@ -24,7 +24,7 @@ struct Output {
 async fn main() -> Result<(), Error> {
     env_logger::try_init()?;
 
-    lambda_runtime::run(handler_fn(|_: Input, _: Context| async {
+    lambda_runtime::run(handler_fn(|_: Input, _: LambdaContext| async {
         let output = handler().await.map_err(|e| {
             error!("{:?}", e); // log error chain to CloudWatch
             e
@@ -65,7 +65,8 @@ async fn handler() -> Result<Output> {
         .body(ByteStream::from(xml.into_bytes()))
         .content_type("text/xml; charset=utf-8")
         .send()
-        .await?;
+        .await
+        .with_context(|| format!("failed to put object {}", &feed_path))?;
 
     let feed_url = format!("https://{}.s3.amazonaws.com/{}", bucket_name, feed_path);
 
