@@ -5,7 +5,7 @@ use anyhow::Result;
 use aws_sdk_s3::{ByteStream, Client};
 use chrono::Utc;
 use lambda_runtime::{handler_fn, Context, Error};
-use log::info;
+use log::{error, info};
 use serde::{Deserialize, Serialize};
 use std::env;
 
@@ -23,11 +23,20 @@ struct Output {
 #[tokio::main]
 async fn main() -> Result<(), Error> {
     env_logger::try_init()?;
-    lambda_runtime::run(handler_fn(handler)).await?;
+
+    lambda_runtime::run(handler_fn(|_: Input, _: Context| async {
+        let output = handler().await.map_err(|e| {
+            error!("{:?}", e); // log error chain to CloudWatch
+            e
+        })?;
+        Ok(output) as Result<Output>
+    }))
+    .await?;
+
     Ok(())
 }
 
-async fn handler(_: Input, _: Context) -> Result<Output> {
+async fn handler() -> Result<Output> {
     let bucket_name = env::var("BUCKET_NAME").expect("BUCKET_NAME not found");
     let strips_dir = env::var("STRIPS_DIR").expect("STRIPS_DIR not found");
     let feed_path = env::var("FEED_PATH").expect("FEED_PATH not found");

@@ -3,7 +3,7 @@
 
 use anyhow::{bail, Result};
 use lambda_runtime::{handler_fn, Context, Error};
-use log::{debug, info};
+use log::{debug, error, info};
 use reqwest::{redirect, Client};
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
@@ -34,7 +34,10 @@ async fn main() -> Result<(), Error> {
         .build()?;
 
     lambda_runtime::run(handler_fn(|input: Input, _: Context| async {
-        let output = handler(input, http_client.clone()).await?;
+        let output = handler(input, http_client.clone()).await.map_err(|e| {
+            error!("{:?}", e); // log error chain to CloudWatch
+            e
+        })?;
         Ok(output) as Result<Output>
     }))
     .await?;
