@@ -18,6 +18,13 @@ const LAMBDA_DEFAULTS = {
   tracing: lambda.Tracing.ACTIVE,
 }
 
+const RETRY_PROPS = {
+  errors: ['States.TaskFailed'],
+  interval: cdk.Duration.seconds(10),
+  maxAttempts: 2,
+  backoffRate: 2.0,
+}
+
 export class DilbertFeedStack extends cdk.Stack {
   constructor(scope: cdk.App, id: string, props: cdk.StackProps) {
     super(scope, id, props)
@@ -71,29 +78,22 @@ export class DilbertFeedStack extends cdk.Stack {
       },
     })
 
-    const retryProps = {
-      errors: ['States.TaskFailed'],
-      interval: cdk.Duration.seconds(10),
-      maxAttempts: 2,
-      backoffRate: 2.0,
-    }
-
     const steps = new tasks.LambdaInvoke(this, 'GetStrip', {
       lambdaFunction: getStrip,
       resultPath: '$.strip',
     })
-      .addRetry(retryProps)
+      .addRetry(RETRY_PROPS)
       .next(
         new tasks.LambdaInvoke(this, 'GenFeed', {
           lambdaFunction: genFeed,
           resultPath: '$.feed',
-        }).addRetry(retryProps)
+        }).addRetry(RETRY_PROPS)
       )
       .next(
         new tasks.LambdaInvoke(this, 'SendHeartbeat', {
           lambdaFunction: heartbeat,
           resultPath: '$.heartbeat',
-        }).addRetry(retryProps)
+        }).addRetry(RETRY_PROPS)
       )
 
     const sm = new sfn.StateMachine(this, 'StateMachine', {
