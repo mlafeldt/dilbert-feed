@@ -1,5 +1,5 @@
 {
-  "app": "yarn --silent ts-node --prefer-ts-exts index.ts",
+  "app": "yarn --silent ts-node --prefer-ts-exts infra.ts",
   "context": {
     "@aws-cdk/core:enableStackNameDuplicates": "true",
     "@aws-cdk/core:newStyleStackSynthesis": "true",
