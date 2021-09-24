@@ -11,13 +11,14 @@ ifneq ($(VERBOSE),1)
 endif
 
 dev: ENV=dev
+dev: HOTSWAP=1
 dev: deploy
 
 prod: ENV=prod
 prod: deploy
 
 deploy: lint test build node_modules
-	$(CDK) $@ -e $(STACK)
+	$(CDK) $@ -e $(STACK) $(if $(HOTSWAP),--hotswap,)
 
 diff synth: build node_modules
 	$(CDK) $@ -e $(STACK)
