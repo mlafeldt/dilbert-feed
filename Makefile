@@ -41,15 +41,11 @@ ifneq ($(shell uname -s),Linux)
   export CARGO_TARGET_X86_64_UNKNOWN_LINUX_GNU_LINKER = $(TARGET)-gcc
 endif
 
-RUST_FUNCS := $(notdir $(realpath $(dir $(wildcard src/bin/*/main.rs))))
-rust_funcs := $(RUST_FUNCS:%=rust-%)
+LAMBDA_FUNCS := $(notdir $(realpath $(dir $(wildcard src/bin/*/main.rs))))
 
-build: $(rust_funcs)
-
-$(rust_funcs):
-	RUSTFLAGS="-C link-arg=-s" $(CARGO) build --release --target $(TARGET) --bin $(@:rust-%=%) $(if $(VERBOSE),--verbose,)
-	mkdir -p bin/$(@:rust-%=%)
-	cp -f target/$(TARGET)/release/$(@:rust-%=%) bin/$(@:rust-%=%)/bootstrap
+build:
+	RUSTFLAGS="-C link-arg=-s" $(CARGO) build --release --target $(TARGET) --bins $(if $(VERBOSE),--verbose,)
+	for func in $(LAMBDA_FUNCS); do mkdir -p bin/$$func; cp -f target/$(TARGET)/release/$$func bin/$$func/bootstrap; done
 
 lint:
 	$(CARGO) clippy --workspace $(if $(VERBOSE),--verbose,)
