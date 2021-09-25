@@ -76,7 +76,7 @@ async fn handler(input: Input, http_client: reqwest::Client) -> Result<Output> {
         .key(&key)
         .body(ByteStream::from(image))
         .content_type("image/gif")
-        .metadata("title", &comic.title.replace(|c: char| !c.is_ascii(), "?"))
+        .metadata("title", &comic.title)
         .send()
         .await
         .with_context(|| format!("failed to put object {}", &key))?;
