@@ -12,6 +12,7 @@ import * as tasks from '@aws-cdk/aws-stepfunctions-tasks'
 const LAMBDA_DEFAULTS = {
   handler: 'bootstrap',
   runtime: lambda.Runtime.PROVIDED_AL2,
+  architectures: [lambda.Architecture.ARM_64],
   memorySize: 128,
   timeout: cdk.Duration.seconds(10),
   logRetention: logs.RetentionDays.ONE_MONTH,

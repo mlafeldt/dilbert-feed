@@ -23,7 +23,7 @@ PS: The Lambda functions used to be [written in Go](https://github.com/mlafeldt/
 You need the following to build and deploy dilbert-feed:
 
 - Node.js + Yarn
-- Rust + `rustup target add x86_64-unknown-linux-gnu`
+- Rust + `rustup target add aarch64-unknown-linux-gnu`
 - (On macOS, you also need the corresponding [cross compiler toolchain](https://github.com/messense/homebrew-macos-cross-toolchains))
 - Make
 
