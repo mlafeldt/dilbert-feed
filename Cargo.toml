@@ -23,8 +23,8 @@ rss = "1.0"
 select = "0.5"
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
-tokio = { version = "1.9", features = ["macros"] }
+tokio = { version = "1.12", features = ["macros"] }
 
 [dev-dependencies]
-pretty_assertions = "0.7"
+pretty_assertions = "1.0"
 wiremock = "0.5"
