@@ -32,13 +32,13 @@ bootstrap: build node_modules
 node_modules:
 	yarn install
 
-TARGET := x86_64-unknown-linux-gnu
+TARGET := aarch64-unknown-linux-gnu
 
 ifneq ($(shell uname -s),Linux)
-  export CC_x86_64_unknown_linux_gnu  = $(TARGET)-gcc
-  export CXX_x86_64_unknown_linux_gnu = $(TARGET)-g++
-  export AR_x86_64_unknown_linux_gnu  = $(TARGET)-ar
-  export CARGO_TARGET_X86_64_UNKNOWN_LINUX_GNU_LINKER = $(TARGET)-gcc
+  export CC_aarch64_unknown_linux_gnu  = $(TARGET)-gcc
+  export CXX_aarch64_unknown_linux_gnu = $(TARGET)-g++
+  export AR_aarch64_unknown_linux_gnu  = $(TARGET)-ar
+  export CARGO_TARGET_AARCH64_UNKNOWN_LINUX_GNU_LINKER = $(TARGET)-gcc
 endif
 
 LAMBDA_FUNCS := $(notdir $(realpath $(dir $(wildcard src/bin/*/main.rs))))
