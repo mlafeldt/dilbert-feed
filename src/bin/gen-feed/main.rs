@@ -5,7 +5,7 @@ use anyhow::{Context, Result};
 use aws_sdk_s3::{ByteStream, Client};
 use chrono::Utc;
 use lambda_runtime::{handler_fn, Context as LambdaContext, Error};
-use log::{error, info};
+use log::{debug, error, info};
 use serde::{Deserialize, Serialize};
 use std::env;
 
@@ -20,12 +20,26 @@ struct Output {
     feed_url: String,
 }
 
+#[derive(Debug)]
+struct Handler<'a> {
+    bucket_name: &'a str,
+    strips_dir: &'a str,
+    feed_path: &'a str,
+}
+
 #[tokio::main]
 async fn main() -> Result<(), Error> {
     env_logger::try_init()?;
 
+    let h = Handler {
+        bucket_name: &env::var("BUCKET_NAME").expect("BUCKET_NAME not found"),
+        strips_dir: &env::var("STRIPS_DIR").expect("STRIPS_DIR not found"),
+        feed_path: &env::var("FEED_PATH").expect("FEED_PATH not found"),
+    };
+    debug!("{:?}", h);
+
     lambda_runtime::run(handler_fn(|_: Input, _: LambdaContext| async {
-        let output = handler().await.map_err(|e| {
+        let output = h.handle().await.map_err(|e| {
             error!("{:?}", e); // log error chain to CloudWatch
             e
         })?;
@@ -36,41 +50,42 @@ async fn main() -> Result<(), Error> {
     Ok(())
 }
 
-async fn handler() -> Result<Output> {
-    let bucket_name = env::var("BUCKET_NAME").expect("BUCKET_NAME not found");
-    let strips_dir = env::var("STRIPS_DIR").expect("STRIPS_DIR not found");
-    let feed_path = env::var("FEED_PATH").expect("FEED_PATH not found");
+impl<'a> Handler<'a> {
+    async fn handle(&'a self) -> Result<Output> {
+        let today = Utc::today().naive_utc();
 
-    let today = Utc::today().naive_utc();
+        info!("Generating feed for date {} ...", today);
 
-    info!("Generating feed for date {} ...", today);
+        let client = Client::new(&aws_config::load_from_env().await);
 
-    let client = Client::new(&aws_config::load_from_env().await);
+        let xml = FeedBuilder::default()
+            .bucket_name(self.bucket_name)
+            .strips_dir(self.strips_dir)
+            .start_date(today)
+            .s3_client(&client)
+            .build()?
+            .xml()
+            .await?;
 
-    let xml = FeedBuilder::default()
-        .bucket_name(&bucket_name)
-        .strips_dir(&strips_dir)
-        .start_date(today)
-        .s3_client(&client)
-        .build()?
-        .xml()
-        .await?;
+        info!(
+            "Uploading feed to bucket {} with path {} ...",
+            self.bucket_name, self.feed_path
+        );
 
-    info!("Uploading feed to bucket {} with path {} ...", bucket_name, feed_path);
+        client
+            .put_object()
+            .bucket(self.bucket_name)
+            .key(self.feed_path)
+            .body(ByteStream::from(xml.into_bytes()))
+            .content_type("text/xml; charset=utf-8")
+            .send()
+            .await
+            .with_context(|| format!("failed to put object {}", self.feed_path))?;
 
-    client
-        .put_object()
-        .bucket(&bucket_name)
-        .key(&feed_path)
-        .body(ByteStream::from(xml.into_bytes()))
-        .content_type("text/xml; charset=utf-8")
-        .send()
-        .await
-        .with_context(|| format!("failed to put object {}", &feed_path))?;
+        let feed_url = format!("https://{}.s3.amazonaws.com/{}", self.bucket_name, self.feed_path);
 
-    let feed_url = format!("https://{}.s3.amazonaws.com/{}", bucket_name, feed_path);
+        info!("Upload completed: {}", feed_url);
 
-    info!("Upload completed: {}", feed_url);
-
-    Ok(Output { feed_url })
+        Ok(Output { feed_url })
+    }
 }

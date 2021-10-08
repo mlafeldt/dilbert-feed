@@ -46,7 +46,7 @@ async fn main() -> Result<(), Error> {
 }
 
 async fn handler(input: Input, http_client: Client) -> Result<Output> {
-    debug!("Got input: {:?}", input);
+    debug!("{:?}", input);
 
     let ep = input
         .endpoint
