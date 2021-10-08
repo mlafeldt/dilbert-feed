@@ -25,6 +25,7 @@ struct Handler<'a> {
     bucket_name: &'a str,
     strips_dir: &'a str,
     feed_path: &'a str,
+    s3_client: Client,
 }
 
 #[tokio::main]
@@ -35,6 +36,7 @@ async fn main() -> Result<(), Error> {
         bucket_name: &env::var("BUCKET_NAME").expect("BUCKET_NAME not found"),
         strips_dir: &env::var("STRIPS_DIR").expect("STRIPS_DIR not found"),
         feed_path: &env::var("FEED_PATH").expect("FEED_PATH not found"),
+        s3_client: Client::new(&aws_config::load_from_env().await),
     };
     debug!("{:?}", h);
 
@@ -56,13 +58,11 @@ impl<'a> Handler<'a> {
 
         info!("Generating feed for date {} ...", today);
 
-        let client = Client::new(&aws_config::load_from_env().await);
-
         let xml = FeedBuilder::default()
             .bucket_name(self.bucket_name)
             .strips_dir(self.strips_dir)
             .start_date(today)
-            .s3_client(&client)
+            .s3_client(self.s3_client.clone())
             .build()?
             .xml()
             .await?;
@@ -72,7 +72,7 @@ impl<'a> Handler<'a> {
             self.bucket_name, self.feed_path
         );
 
-        client
+        self.s3_client
             .put_object()
             .bucket(self.bucket_name)
             .key(self.feed_path)

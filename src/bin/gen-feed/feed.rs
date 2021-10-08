@@ -7,17 +7,17 @@ use rss::{ChannelBuilder, GuidBuilder, ItemBuilder};
 
 #[derive(Builder, Debug)]
 #[builder(setter(into))]
-pub struct Feed<'a> {
+pub struct Feed {
     bucket_name: String,
     strips_dir: String,
     start_date: NaiveDate,
     #[builder(default = "30")]
     feed_length: i32,
     #[builder(default)]
-    s3_client: Option<&'a Client>,
+    s3_client: Option<Client>,
 }
 
-impl Feed<'_> {
+impl Feed {
     pub async fn xml(&self) -> Result<String> {
         let items = future::try_join_all(
             (0..self.feed_length)

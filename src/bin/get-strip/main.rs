@@ -2,7 +2,7 @@
 #![deny(nonstandard_style, rust_2018_idioms)]
 
 use anyhow::{Context, Result};
-use aws_sdk_s3::{ByteStream, Client};
+use aws_sdk_s3::ByteStream;
 use chrono::NaiveDate;
 use lambda_runtime::{handler_fn, Context as LambdaContext, Error};
 use log::{debug, error, info};
@@ -29,6 +29,7 @@ struct Handler<'a> {
     bucket_name: &'a str,
     strips_dir: &'a str,
     http_client: reqwest::Client,
+    s3_client: aws_sdk_s3::Client,
 }
 
 #[tokio::main]
@@ -39,6 +40,7 @@ async fn main() -> Result<(), Error> {
         bucket_name: &env::var("BUCKET_NAME").expect("BUCKET_NAME not found"),
         strips_dir: &env::var("STRIPS_DIR").expect("STRIPS_DIR not found"),
         http_client: reqwest::Client::new(),
+        s3_client: aws_sdk_s3::Client::new(&aws_config::load_from_env().await),
     };
     debug!("{:?}", h);
 
@@ -80,7 +82,7 @@ impl<'a> Handler<'a> {
 
         let key = format!("{}/{}.gif", self.strips_dir, comic.date);
 
-        Client::new(&aws_config::load_from_env().await)
+        self.s3_client
             .put_object()
             .bucket(self.bucket_name)
             .key(&key)
