@@ -53,8 +53,10 @@ impl Client {
         let title = container
             .attr("data-title")
             .ok_or_else(|| anyhow!("title not found"))?
-            .trim()
-            .to_string();
+            .split_whitespace()
+            .collect::<Vec<&str>>()
+            .join(" ");
+
         let image_url = container
             .attr("data-image")
             .ok_or_else(|| anyhow!("image URL not found"))?
@@ -123,6 +125,15 @@ mod tests {
                     strip_url: format!("{}/strip/2020-11-11", base_url),
                 },
                 html: include_str!("testdata/strip/2020-11-11"),
+            },
+            Test {
+                comic: Comic {
+                    date: NaiveDate::from_ymd(2021, 10, 10),
+                    title: "Sunday Data Looks Two Ways".to_string(),
+                    image_url: "https://assets.amuniversal.com/4b9300d0f2400139769e005056a9545d".to_string(),
+                    strip_url: format!("{}/strip/2021-10-10", base_url),
+                },
+                html: include_str!("testdata/strip/2021-10-10"),
             },
         ]
     }
