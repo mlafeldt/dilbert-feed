@@ -1,9 +1,9 @@
-use anyhow::{anyhow, Context, Error, Result};
+use anyhow::{anyhow, Context, Result};
 use aws_sdk_s3::Client;
 use chrono::{DateTime, Duration, NaiveDate, Utc};
 use derive_builder::Builder;
 use futures::future;
-use rss::{ChannelBuilder, GuidBuilder, ItemBuilder};
+use rss::{ChannelBuilder, GuidBuilder, Item, ItemBuilder};
 
 #[derive(Builder, Debug)]
 #[builder(setter(into))]
@@ -27,14 +27,14 @@ impl Feed {
                         "https://{}.s3.amazonaws.com/{}/{}.gif",
                         self.bucket_name, self.strips_dir, date
                     );
-                    ItemBuilder::default()
+                    let item = ItemBuilder::default()
                         .title(self.title(date).await?)
                         .link(url.clone())
                         .description(format!(r#"<img src="{}">"#, url))
-                        .guid(GuidBuilder::default().value(url).build().unwrap())
+                        .guid(GuidBuilder::default().value(url).build())
                         .pub_date(DateTime::<Utc>::from_utc(date.and_hms(0, 0, 0), Utc).to_rfc2822())
-                        .build()
-                        .map_err(Error::msg)
+                        .build();
+                    Ok(item) as Result<Item>
                 }),
         )
         .await?;
@@ -44,8 +44,7 @@ impl Feed {
             .link("https://dilbert.com")
             .description("Dilbert Daily Strip")
             .items(items)
-            .build()
-            .map_err(Error::msg)?;
+            .build();
 
         let buf = channel.pretty_write_to(Vec::new(), b' ', 2)?;
 

@@ -19,7 +19,7 @@ futures = "0.3"
 lambda_runtime = "0.4"
 log = "0.4"
 reqwest = { version = "0.11", default-features = false, features = ["rustls-tls"] }
-rss = "1.0"
+rss = "2.0"
 select = "0.5"
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"

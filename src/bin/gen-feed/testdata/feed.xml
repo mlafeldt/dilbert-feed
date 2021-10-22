@@ -7,27 +7,21 @@
     <item>
       <title>Dilbert - 2018-10-01</title>
       <link>https://dilbert-feed-test.s3.amazonaws.com/strips/2018-10-01.gif</link>
-      <description>
-        <![CDATA[<img src="https://dilbert-feed-test.s3.amazonaws.com/strips/2018-10-01.gif">]]>
-      </description>
+      <description><![CDATA[<img src="https://dilbert-feed-test.s3.amazonaws.com/strips/2018-10-01.gif">]]></description>
       <guid>https://dilbert-feed-test.s3.amazonaws.com/strips/2018-10-01.gif</guid>
       <pubDate>Mon, 01 Oct 2018 00:00:00 +0000</pubDate>
     </item>
     <item>
       <title>Dilbert - 2018-09-30</title>
       <link>https://dilbert-feed-test.s3.amazonaws.com/strips/2018-09-30.gif</link>
-      <description>
-        <![CDATA[<img src="https://dilbert-feed-test.s3.amazonaws.com/strips/2018-09-30.gif">]]>
-      </description>
+      <description><![CDATA[<img src="https://dilbert-feed-test.s3.amazonaws.com/strips/2018-09-30.gif">]]></description>
       <guid>https://dilbert-feed-test.s3.amazonaws.com/strips/2018-09-30.gif</guid>
       <pubDate>Sun, 30 Sep 2018 00:00:00 +0000</pubDate>
     </item>
     <item>
       <title>Dilbert - 2018-09-29</title>
       <link>https://dilbert-feed-test.s3.amazonaws.com/strips/2018-09-29.gif</link>
-      <description>
-        <![CDATA[<img src="https://dilbert-feed-test.s3.amazonaws.com/strips/2018-09-29.gif">]]>
-      </description>
+      <description><![CDATA[<img src="https://dilbert-feed-test.s3.amazonaws.com/strips/2018-09-29.gif">]]></description>
       <guid>https://dilbert-feed-test.s3.amazonaws.com/strips/2018-09-29.gif</guid>
       <pubDate>Sat, 29 Sep 2018 00:00:00 +0000</pubDate>
     </item>
