@@ -9,9 +9,9 @@ repository = "https://github.com/mlafeldt/dilbert-feed"
 edition = "2021"
 
 [dependencies]
-anyhow = "1.0"
-aws-config = { git = "https://github.com/awslabs/aws-sdk-rust", tag = "v0.0.22-alpha", features = ["rustls"] }
-aws-sdk-s3 = { git = "https://github.com/awslabs/aws-sdk-rust", tag = "v0.0.22-alpha", features = ["rustls"] }
+anyhow = "1"
+aws-config = { version = "=0.0.23-alpha", features = ["rustls"] }
+aws-sdk-s3 = { version = "=0.0.23-alpha", features = ["rustls"] }
 chrono = { version = "0.4", features = ["serde"] }
 derive_builder = "0.10"
 env_logger = { version = "0.9", default-features = false, features = ["humantime"] }
@@ -19,12 +19,12 @@ futures = "0.3"
 lambda_runtime = "0.4"
 log = "0.4"
 reqwest = { version = "0.11", default-features = false, features = ["rustls-tls"] }
-rss = "2.0"
+rss = "2"
 select = "0.5"
-serde = { version = "1.0", features = ["derive"] }
-serde_json = "1.0"
-tokio = { version = "1.12", features = ["rt-multi-thread", "macros"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+tokio = { version = "1", features = ["rt-multi-thread", "macros"] }
 
 [dev-dependencies]
-pretty_assertions = "1.0"
+pretty_assertions = "1"
 wiremock = "0.5"
