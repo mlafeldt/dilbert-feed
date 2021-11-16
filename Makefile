@@ -34,13 +34,6 @@ node_modules:
 
 TARGET := aarch64-unknown-linux-gnu
 
-ifneq ($(shell uname -s),Linux)
-  export CC_aarch64_unknown_linux_gnu  = $(TARGET)-gcc
-  export CXX_aarch64_unknown_linux_gnu = $(TARGET)-g++
-  export AR_aarch64_unknown_linux_gnu  = $(TARGET)-ar
-  export CARGO_TARGET_AARCH64_UNKNOWN_LINUX_GNU_LINKER = $(TARGET)-gcc
-endif
-
 LAMBDA_FUNCS := $(notdir $(realpath $(dir $(wildcard src/bin/*/main.rs))))
 
 build:
