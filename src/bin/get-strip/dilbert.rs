@@ -23,7 +23,7 @@ pub struct Client {
 
 impl Default for Client {
     fn default() -> Self {
-        ClientBuilder::default().build().unwrap()
+        ClientBuilder::default().build().expect("failed to build client")
     }
 }
 
