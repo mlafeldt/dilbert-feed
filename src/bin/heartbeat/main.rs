@@ -1,14 +1,16 @@
 #![deny(clippy::all, clippy::nursery)]
 #![deny(nonstandard_style, rust_2018_idioms)]
 
+use std::collections::HashMap;
+use std::env;
+
 use anyhow::{bail, Result};
+use futures_util::TryFutureExt;
 use lambda_runtime::{handler_fn, Context as LambdaContext, Error};
 use log::{debug, error, info};
 use reqwest::{redirect, Client};
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
-use std::collections::HashMap;
-use std::env;
 
 #[derive(Deserialize, Debug)]
 struct Input {
@@ -33,16 +35,10 @@ async fn main() -> Result<(), Error> {
         .redirect(redirect::Policy::none())
         .build()?;
 
-    lambda_runtime::run(handler_fn(|input: Input, _: LambdaContext| async {
-        let output = handler(input, http_client.clone()).await.map_err(|e| {
-            error!("{:?}", e); // log error chain to CloudWatch
-            e
-        })?;
-        Ok(output) as Result<Output>
+    lambda_runtime::run(handler_fn(|input: Input, _: LambdaContext| {
+        handler(input, http_client.clone()).inspect_err(|e| error!("{:?}", e))
     }))
-    .await?;
-
-    Ok(())
+    .await
 }
 
 async fn handler(input: Input, http_client: Client) -> Result<Output> {

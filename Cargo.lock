@@ -645,6 +645,7 @@ dependencies = [
  "derive_builder",
  "env_logger",
  "futures",
+ "futures-util",
  "lambda_runtime",
  "log",
  "pretty_assertions",

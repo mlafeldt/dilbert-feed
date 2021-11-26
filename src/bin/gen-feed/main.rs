@@ -1,13 +1,15 @@
 #![deny(clippy::all, clippy::nursery)]
 #![deny(nonstandard_style, rust_2018_idioms)]
 
+use std::env;
+
 use anyhow::{Context, Result};
 use aws_sdk_s3::{ByteStream, Client};
 use chrono::Utc;
+use futures_util::TryFutureExt;
 use lambda_runtime::{handler_fn, Context as LambdaContext, Error};
 use log::{debug, error, info};
 use serde::{Deserialize, Serialize};
-use std::env;
 
 mod feed;
 use feed::FeedBuilder;
@@ -40,16 +42,10 @@ async fn main() -> Result<(), Error> {
     };
     debug!("{:?}", h);
 
-    lambda_runtime::run(handler_fn(|_: Input, _: LambdaContext| async {
-        let output = h.handle().await.map_err(|e| {
-            error!("{:?}", e); // log error chain to CloudWatch
-            e
-        })?;
-        Ok(output) as Result<Output>
+    lambda_runtime::run(handler_fn(|_: Input, _: LambdaContext| {
+        h.handle().inspect_err(|e| error!("{:?}", e))
     }))
-    .await?;
-
-    Ok(())
+    .await
 }
 
 impl<'a> Handler<'a> {
