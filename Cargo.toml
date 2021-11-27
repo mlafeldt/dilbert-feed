@@ -15,7 +15,6 @@ aws-sdk-s3 = { version = "=0.0.26-alpha", features = ["rustls"] }
 chrono = { version = "0.4", features = ["serde"] }
 derive_builder = "0.10"
 env_logger = { version = "0.9", default-features = false, features = ["humantime"] }
-futures = "0.3"
 futures-util = "0.3"
 lambda_runtime = "0.4"
 log = "0.4"
