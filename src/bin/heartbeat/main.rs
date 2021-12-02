@@ -16,6 +16,7 @@ use serde_json::Value;
 struct Input {
     endpoint: Option<String>,
 
+    #[allow(dead_code)]
     #[serde(flatten)]
     extra: HashMap<String, Value>,
 }
