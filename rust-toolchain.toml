@@ -1,0 +1,5 @@
+[toolchain]
+channel = "stable"
+targets = ["aarch64-unknown-linux-gnu"]
+components = ["rustfmt", "clippy"]
+profile = "minimal"
