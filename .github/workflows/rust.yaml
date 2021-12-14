@@ -29,6 +29,12 @@ jobs:
       - name: Set up Rust caching
         uses: Swatinem/rust-cache@v1
 
+      - name: Check formatting
+        uses: actions-rs/cargo@v1
+        with:
+          command: fmt
+          args: -- --check
+
       - name: Lint Lambda functions
         uses: actions-rs/cargo@v1
         with:
