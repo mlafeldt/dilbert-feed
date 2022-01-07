@@ -26,7 +26,7 @@ const RETRY_PROPS = {
   backoffRate: 2.0,
 }
 
-export class DilbertFeedStack extends cdk.Stack {
+class DilbertFeedStack extends cdk.Stack {
   constructor(scope: cdk.App, id: string, props: cdk.StackProps) {
     super(scope, id, props)
 
@@ -118,4 +118,3 @@ export class DilbertFeedStack extends cdk.Stack {
 const app = new cdk.App()
 new DilbertFeedStack(app, 'dilbert-feed-dev', { tags: { STAGE: 'dev' } })
 new DilbertFeedStack(app, 'dilbert-feed-prod', { tags: { STAGE: 'prod' } })
-app.synth()
