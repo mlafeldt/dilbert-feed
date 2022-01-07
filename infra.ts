@@ -1,13 +1,13 @@
 import 'source-map-support/register'
-import * as cdk from '@aws-cdk/core'
-import * as events from '@aws-cdk/aws-events'
-import * as lambda from '@aws-cdk/aws-lambda'
-import * as logs from '@aws-cdk/aws-logs'
-import * as s3 from '@aws-cdk/aws-s3'
-import * as sfn from '@aws-cdk/aws-stepfunctions'
-import * as ssm from '@aws-cdk/aws-ssm'
-import * as targets from '@aws-cdk/aws-events-targets'
-import * as tasks from '@aws-cdk/aws-stepfunctions-tasks'
+import * as cdk from 'aws-cdk-lib'
+import * as events from 'aws-cdk-lib/aws-events'
+import * as lambda from 'aws-cdk-lib/aws-lambda'
+import * as logs from 'aws-cdk-lib/aws-logs'
+import * as s3 from 'aws-cdk-lib/aws-s3'
+import * as sfn from 'aws-cdk-lib/aws-stepfunctions'
+import * as ssm from 'aws-cdk-lib/aws-ssm'
+import * as targets from 'aws-cdk-lib/aws-events-targets'
+import * as tasks from 'aws-cdk-lib/aws-stepfunctions-tasks'
 
 const LAMBDA_DEFAULTS = {
   handler: 'bootstrap',
