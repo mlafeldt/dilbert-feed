@@ -3,25 +3,25 @@
   "version": "1.0.0",
   "description": "Enjoy Dilbert in your RSS feed reader without any ads",
   "repository": "github:mlafeldt/dilbert-feed",
+  "license": "Apache-2.0",
+  "author": {
+    "name": "Mathias Lafeldt"
+  },
   "scripts": {
     "build": "tsc",
     "watch": "tsc -w",
     "test": "echo ok",
     "cdk": "cdk"
   },
-  "author": {
-    "name": "Mathias Lafeldt"
+  "dependencies": {
+    "aws-cdk-lib": "^2.4.0",
+    "constructs": "^10.0.27",
+    "source-map-support": "^0.5.21"
   },
-  "license": "Apache-2.0",
   "devDependencies": {
     "@types/node": "^17.0.8",
     "aws-cdk": "^2.4.0",
     "ts-node": "^10.4.0",
     "typescript": "~4.5.4"
-  },
-  "dependencies": {
-    "aws-cdk-lib": "^2.4.0",
-    "constructs": "^10.0.27",
-    "source-map-support": "^0.5.21"
   }
 }
