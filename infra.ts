@@ -1,5 +1,6 @@
 import 'source-map-support/register'
 import * as cdk from 'aws-cdk-lib'
+import { Construct } from 'constructs'
 import * as events from 'aws-cdk-lib/aws-events'
 import * as lambda from 'aws-cdk-lib/aws-lambda'
 import * as logs from 'aws-cdk-lib/aws-logs'
@@ -27,7 +28,7 @@ const RETRY_PROPS = {
 }
 
 class DilbertFeedStack extends cdk.Stack {
-  constructor(scope: cdk.App, id: string, props: cdk.StackProps) {
+  constructor(scope: Construct, id: string, props: cdk.StackProps) {
     super(scope, id, props)
 
     const stripsDir = 'strips'
