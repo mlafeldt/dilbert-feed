@@ -16,7 +16,6 @@ const LAMBDA_DEFAULTS = {
   architecture: lambda.Architecture.ARM_64,
   memorySize: 128,
   timeout: cdk.Duration.seconds(10),
-  logRetention: logs.RetentionDays.ONE_MONTH,
   tracing: lambda.Tracing.ACTIVE,
 }
 
@@ -27,8 +26,12 @@ const RETRY_PROPS = {
   backoffRate: 2.0,
 }
 
+interface DilbertFeedStackProps extends cdk.StackProps {
+  heartbeatEndpointParamName?: string
+}
+
 class DilbertFeedStack extends cdk.Stack {
-  constructor(scope: Construct, id: string, props: cdk.StackProps) {
+  constructor(scope: Construct, id: string, props: DilbertFeedStackProps) {
     super(scope, id, props)
 
     const stripsDir = 'strips'
@@ -37,6 +40,8 @@ class DilbertFeedStack extends cdk.Stack {
     const bucket = new s3.Bucket(this, 'Bucket', {
       publicReadAccess: true,
       encryption: s3.BucketEncryption.S3_MANAGED,
+      removalPolicy: cdk.RemovalPolicy.DESTROY,
+      autoDeleteObjects: true,
     })
     bucket.addLifecycleRule({
       id: 'DeleteStripsAfter30Days',
@@ -54,6 +59,11 @@ class DilbertFeedStack extends cdk.Stack {
         RUST_LOG: 'info,get_strip=debug',
       },
     })
+    new logs.LogGroup(this, 'GetStripLogGroup', {
+      logGroupName: `/aws/lambda/${getStrip.functionName}`,
+      retention: logs.RetentionDays.ONE_MONTH,
+      removalPolicy: cdk.RemovalPolicy.DESTROY,
+    })
     bucket.grantPut(getStrip)
 
     const genFeed = new lambda.Function(this, 'GenFeedFunc', {
@@ -67,9 +77,17 @@ class DilbertFeedStack extends cdk.Stack {
         RUST_LOG: 'info,gen_feed=debug',
       },
     })
+    new logs.LogGroup(this, 'GenFeedLogGroup', {
+      logGroupName: `/aws/lambda/${genFeed.functionName}`,
+      retention: logs.RetentionDays.ONE_MONTH,
+      removalPolicy: cdk.RemovalPolicy.DESTROY,
+    })
     bucket.grantReadWrite(genFeed)
 
-    const heartbeatEndpoint = ssm.StringParameter.valueForStringParameter(this, `/${id}/heartbeat-endpoint`)
+    const heartbeatEndpoint = ssm.StringParameter.valueForStringParameter(
+      this,
+      props.heartbeatEndpointParamName || `/${id}/heartbeat-endpoint`
+    )
     const heartbeat = new lambda.Function(this, 'HeartbeatFunc', {
       ...LAMBDA_DEFAULTS,
       functionName: `${id}-heartbeat`,
@@ -78,6 +96,11 @@ class DilbertFeedStack extends cdk.Stack {
         HEARTBEAT_ENDPOINT: heartbeatEndpoint,
         RUST_LOG: 'info,heartbeat=debug',
       },
+    })
+    new logs.LogGroup(this, 'HeartbeatLogGroup', {
+      logGroupName: `/aws/lambda/${heartbeat.functionName}`,
+      retention: logs.RetentionDays.ONE_MONTH,
+      removalPolicy: cdk.RemovalPolicy.DESTROY,
     })
 
     const steps = new tasks.LambdaInvoke(this, 'GetStrip', {
@@ -119,3 +142,11 @@ class DilbertFeedStack extends cdk.Stack {
 const app = new cdk.App()
 new DilbertFeedStack(app, 'dilbert-feed-dev', { tags: { STAGE: 'dev' } })
 new DilbertFeedStack(app, 'dilbert-feed-prod', { tags: { STAGE: 'prod' } })
+
+const app_env = process.env.APP_ENV
+if (app_env) {
+  new DilbertFeedStack(app, `dilbert-feed-${app_env}`, {
+    heartbeatEndpointParamName: '/dilbert-feed-dev/heartbeat-endpoint',
+    tags: { APP_ENV: app_env },
+  })
+}

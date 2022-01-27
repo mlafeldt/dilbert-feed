@@ -1,7 +1,7 @@
-ENV   ?= dev
-STACK  = dilbert-feed-$(ENV)
-CDK   ?= yarn --silent cdk
-CARGO ?= cargo
+APP_ENV ?= dev
+STACK    = dilbert-feed-$(APP_ENV)
+CDK     ?= yarn --silent cdk
+CARGO   ?= cargo
 
 ifeq ("$(origin V)", "command line")
   VERBOSE = $(V)
@@ -10,11 +10,11 @@ ifneq ($(VERBOSE),1)
 .SILENT:
 endif
 
-dev: ENV=dev
+dev: APP_ENV=dev
 dev: HOTSWAP=1
 dev: deploy
 
-prod: ENV=prod
+prod: APP_ENV=prod
 prod: deploy
 
 deploy: lint test build node_modules
