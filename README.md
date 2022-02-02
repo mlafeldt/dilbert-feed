@@ -24,7 +24,7 @@ You need the following to build and deploy dilbert-feed:
 
 - Node.js + Yarn
 - Rust + `rustup target add aarch64-unknown-linux-gnu`
-- (On macOS, you also need the corresponding [cross compiler toolchain](https://github.com/messense/homebrew-macos-cross-toolchains))
+- (On macOS, you also need the corresponding [cross compiler toolchain](https://artofserverless.com/rust-lambdas-macos/))
 - Make
 
 ## Deployment
