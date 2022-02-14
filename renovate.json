@@ -1,3 +1,7 @@
 {
-  "extends": ["config:base", ":disableDependencyDashboard", "schedule:weekly"]
+  "extends": [
+    "config:base",
+    "group:allNonMajor",
+    "schedule:weekly"
+  ]
 }
