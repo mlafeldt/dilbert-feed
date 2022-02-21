@@ -5,9 +5,8 @@ use std::collections::HashMap;
 use std::env;
 
 use anyhow::{bail, Result};
-use futures_util::TryFutureExt;
-use lambda_runtime::{handler_fn, Context as LambdaContext, Error};
-use log::{debug, error, info};
+use lambda_runtime::{service_fn, Error, LambdaEvent};
+use log::{debug, info};
 use reqwest::{redirect, Client};
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
@@ -36,16 +35,17 @@ async fn main() -> Result<(), Error> {
         .redirect(redirect::Policy::none())
         .build()?;
 
-    lambda_runtime::run(handler_fn(|input: Input, _: LambdaContext| {
-        handler(input, http_client.clone()).inspect_err(|e| error!("{:?}", e))
+    lambda_runtime::run(service_fn(|input: LambdaEvent<Input>| {
+        handler(input, http_client.clone())
     }))
     .await
 }
 
-async fn handler(input: Input, http_client: Client) -> Result<Output> {
-    debug!("{:?}", input);
+async fn handler(input: LambdaEvent<Input>, http_client: Client) -> Result<Output> {
+    debug!("{:?}", input.payload);
 
     let ep = input
+        .payload
         .endpoint
         .unwrap_or_else(|| env::var("HEARTBEAT_ENDPOINT").expect("HEARTBEAT_ENDPOINT not found"));
 
@@ -66,6 +66,7 @@ async fn handler(input: Input, http_client: Client) -> Result<Output> {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use lambda_runtime::Context as LambdaContext;
     use pretty_assertions::assert_eq;
     use wiremock::matchers::method;
     use wiremock::{Mock, MockServer, ResponseTemplate};
@@ -81,10 +82,13 @@ mod tests {
             .await;
 
         let resp = handler(
-            Input {
-                endpoint: Some(server.uri()),
-                extra: HashMap::new(),
-            },
+            LambdaEvent::new(
+                Input {
+                    endpoint: Some(server.uri()),
+                    extra: HashMap::new(),
+                },
+                LambdaContext::default(),
+            ),
             Client::default(),
         )
         .await
@@ -111,10 +115,13 @@ mod tests {
             .await;
 
         handler(
-            Input {
-                endpoint: Some(server.uri()),
-                extra: HashMap::new(),
-            },
+            LambdaEvent::new(
+                Input {
+                    endpoint: Some(server.uri()),
+                    extra: HashMap::new(),
+                },
+                LambdaContext::default(),
+            ),
             Client::default(),
         )
         .await

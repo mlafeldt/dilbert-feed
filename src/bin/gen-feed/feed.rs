@@ -2,7 +2,7 @@ use anyhow::{anyhow, Context, Result};
 use aws_sdk_s3::Client;
 use chrono::{DateTime, Duration, NaiveDate, Utc};
 use derive_builder::Builder;
-use futures_util::future;
+use futures::future;
 use rss::{ChannelBuilder, GuidBuilder, Item, ItemBuilder};
 
 #[derive(Builder, Debug)]
