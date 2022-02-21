@@ -66,7 +66,6 @@ async fn handler(input: LambdaEvent<Input>, http_client: Client) -> Result<Outpu
 #[cfg(test)]
 mod tests {
     use super::*;
-    use lambda_runtime::Context as LambdaContext;
     use pretty_assertions::assert_eq;
     use wiremock::matchers::method;
     use wiremock::{Mock, MockServer, ResponseTemplate};
@@ -85,11 +84,11 @@ mod tests {
             LambdaEvent::new(
                 Input {
                     endpoint: Some(server.uri()),
-                    extra: HashMap::new(),
+                    extra: Default::default(),
                 },
-                LambdaContext::default(),
+                Default::default(),
             ),
-            Client::default(),
+            Default::default(),
         )
         .await
         .unwrap();
@@ -118,11 +117,11 @@ mod tests {
             LambdaEvent::new(
                 Input {
                     endpoint: Some(server.uri()),
-                    extra: HashMap::new(),
+                    extra: Default::default(),
                 },
-                LambdaContext::default(),
+                Default::default(),
             ),
-            Client::default(),
+            Default::default(),
         )
         .await
         .unwrap();
