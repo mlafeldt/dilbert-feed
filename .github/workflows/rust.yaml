@@ -9,6 +9,7 @@ on:
 
 env:
   CARGO_TERM_COLOR: always
+  RUST_CACHE_VERSION: 1
 
 jobs:
   rust:
@@ -27,7 +28,14 @@ jobs:
           override: true
 
       - name: Set up Rust caching
-        uses: Swatinem/rust-cache@v1
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.cargo
+            target
+          key: ${{ runner.os }}-${{ runner.arch }}-${{ github.job }}-${{ env.RUST_CACHE_VERSION }}-${{ hashFiles('Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-${{ runner.arch }}-${{ github.job }}-${{ env.RUST_CACHE_VERSION }}-
 
       - name: Check formatting
         uses: actions-rs/cargo@v1
