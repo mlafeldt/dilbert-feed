@@ -6,9 +6,8 @@ use std::env;
 use anyhow::{Context, Result};
 use aws_sdk_s3::ByteStream;
 use chrono::NaiveDate;
-use futures_util::TryFutureExt;
-use lambda_runtime::{handler_fn, Context as LambdaContext, Error};
-use log::{debug, error, info};
+use lambda_runtime::{service_fn, Error, LambdaEvent};
+use log::{debug, info};
 use serde::{Deserialize, Serialize};
 
 mod dilbert;
@@ -46,20 +45,17 @@ async fn main() -> Result<(), Error> {
     };
     debug!("{:?}", h);
 
-    lambda_runtime::run(handler_fn(|input: Input, _: LambdaContext| {
-        h.handle(input).inspect_err(|e| error!("{:?}", e))
-    }))
-    .await
+    lambda_runtime::run(service_fn(|input: LambdaEvent<Input>| h.handle(input))).await
 }
 
 impl<'a> Handler<'a> {
-    async fn handle(&'a self, input: Input) -> Result<Output> {
-        debug!("{:?}", input);
+    async fn handle(&'a self, input: LambdaEvent<Input>) -> Result<Output> {
+        debug!("{:?}", input.payload);
 
         let comic = ClientBuilder::default()
             .http_client(self.http_client.clone())
             .build()?
-            .scrape_comic(input.date)
+            .scrape_comic(input.payload.date)
             .await?;
 
         info!("Scraping done: {:?}", comic);

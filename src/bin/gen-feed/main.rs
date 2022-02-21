@@ -6,9 +6,8 @@ use std::env;
 use anyhow::{Context, Result};
 use aws_sdk_s3::{ByteStream, Client};
 use chrono::Utc;
-use futures_util::TryFutureExt;
-use lambda_runtime::{handler_fn, Context as LambdaContext, Error};
-use log::{debug, error, info};
+use lambda_runtime::{service_fn, Error, LambdaEvent};
+use log::{debug, info};
 use serde::{Deserialize, Serialize};
 
 mod feed;
@@ -42,10 +41,7 @@ async fn main() -> Result<(), Error> {
     };
     debug!("{:?}", h);
 
-    lambda_runtime::run(handler_fn(|_: Input, _: LambdaContext| {
-        h.handle().inspect_err(|e| error!("{:?}", e))
-    }))
-    .await
+    lambda_runtime::run(service_fn(|_: LambdaEvent<Input>| h.handle())).await
 }
 
 impl<'a> Handler<'a> {
