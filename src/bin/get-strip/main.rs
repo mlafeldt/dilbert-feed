@@ -4,7 +4,7 @@
 use std::env;
 
 use anyhow::{Context, Result};
-use aws_sdk_s3::ByteStream;
+use aws_sdk_s3::types::ByteStream;
 use chrono::NaiveDate;
 use lambda_runtime::{service_fn, Error, LambdaEvent};
 use log::{debug, info};
