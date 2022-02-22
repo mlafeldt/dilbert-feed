@@ -45,17 +45,17 @@ async fn main() -> Result<(), Error> {
     };
     debug!("{:?}", h);
 
-    lambda_runtime::run(service_fn(|input: LambdaEvent<Input>| h.handle(input))).await
+    lambda_runtime::run(service_fn(|input: LambdaEvent<Input>| h.handle(input.payload))).await
 }
 
 impl<'a> Handler<'a> {
-    async fn handle(&'a self, input: LambdaEvent<Input>) -> Result<Output> {
-        debug!("{:?}", input.payload);
+    async fn handle(&'a self, input: Input) -> Result<Output> {
+        debug!("{:?}", input);
 
         let comic = ClientBuilder::default()
             .http_client(self.http_client.clone())
             .build()?
-            .scrape_comic(input.payload.date)
+            .scrape_comic(input.date)
             .await?;
 
         info!("Scraping done: {:?}", comic);

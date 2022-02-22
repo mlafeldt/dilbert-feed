@@ -36,16 +36,15 @@ async fn main() -> Result<(), Error> {
         .build()?;
 
     lambda_runtime::run(service_fn(|input: LambdaEvent<Input>| {
-        handler(input, http_client.clone())
+        handler(input.payload, http_client.clone())
     }))
     .await
 }
 
-async fn handler(input: LambdaEvent<Input>, http_client: Client) -> Result<Output> {
-    debug!("{:?}", input.payload);
+async fn handler(input: Input, http_client: Client) -> Result<Output> {
+    debug!("{:?}", input);
 
     let ep = input
-        .payload
         .endpoint
         .unwrap_or_else(|| env::var("HEARTBEAT_ENDPOINT").expect("HEARTBEAT_ENDPOINT not found"));
 
@@ -81,13 +80,10 @@ mod tests {
             .await;
 
         let resp = handler(
-            LambdaEvent::new(
-                Input {
-                    endpoint: Some(server.uri()),
-                    extra: Default::default(),
-                },
-                Default::default(),
-            ),
+            Input {
+                endpoint: Some(server.uri()),
+                extra: Default::default(),
+            },
             Default::default(),
         )
         .await
@@ -114,13 +110,10 @@ mod tests {
             .await;
 
         handler(
-            LambdaEvent::new(
-                Input {
-                    endpoint: Some(server.uri()),
-                    extra: Default::default(),
-                },
-                Default::default(),
-            ),
+            Input {
+                endpoint: Some(server.uri()),
+                extra: Default::default(),
+            },
             Default::default(),
         )
         .await
