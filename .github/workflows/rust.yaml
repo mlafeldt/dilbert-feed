@@ -9,7 +9,6 @@ on:
 
 env:
   CARGO_TERM_COLOR: always
-  RUST_CACHE_VERSION: 1
 
 jobs:
   rust:
@@ -33,9 +32,7 @@ jobs:
           path: |
             ~/.cargo
             target
-          key: ${{ runner.os }}-${{ runner.arch }}-${{ github.job }}-${{ env.RUST_CACHE_VERSION }}-${{ hashFiles('Cargo.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-${{ runner.arch }}-${{ github.job }}-${{ env.RUST_CACHE_VERSION }}-
+          key: ${{ runner.os }}-${{ runner.arch }}-${{ github.job }}-${{ hashFiles('Cargo.toml', 'Cargo.lock') }}
 
       - name: Check formatting
         uses: actions-rs/cargo@v1
