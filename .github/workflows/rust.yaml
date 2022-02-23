@@ -9,6 +9,8 @@ on:
 
 env:
   CARGO_TERM_COLOR: always
+  ZIG_VERSION: 0.9.1
+  CARGO_ZIGBUILD_VERSION: 0.5.3
 
 jobs:
   rust:
@@ -51,15 +53,13 @@ jobs:
         with:
           command: test
 
-      - name: Set up ARM cross compiler
-        run: sudo apt-get install --assume-yes --no-install-recommends g++-aarch64-linux-gnu libc6-dev-arm64-cross
+      - name: Install zig & cargo-zigbuild for cross-compiling
+        run: |
+          pip3 install ziglang==${ZIG_VERSION}
+          curl -fSsL https://github.com/messense/cargo-zigbuild/releases/download/v${CARGO_ZIGBUILD_VERSION}/cargo-zigbuild-v${CARGO_ZIGBUILD_VERSION}.x86_64-unknown-linux-musl.tar.gz | tar -xzvf- -C "$HOME/.cargo/bin"
 
       - name: Build Lambda functions
         uses: actions-rs/cargo@v1
         with:
-          command: build
-          args: --target aarch64-unknown-linux-gnu --release
-        env:
-          CARGO_TARGET_AARCH64_UNKNOWN_LINUX_GNU_LINKER: aarch64-linux-gnu-gcc
-          CC_aarch64_unknown_linux_gnu: aarch64-linux-gnu-gcc
-          CXX_aarch64_unknown_linux_gnu: aarch64-linux-gnu-g+
+          command: zigbuild
+          args: --target aarch64-unknown-linux-gnu.2.17
