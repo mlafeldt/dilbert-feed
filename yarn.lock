@@ -255,9 +255,9 @@ aws-cdk@2.13.0:
     yargs "^16.2.0"
 
 aws-sdk@^2.848.0, aws-sdk@^2.979.0:
-  version "2.1079.0"
-  resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.1079.0.tgz#41ede54aa4ba5ce77d4ffe202f9a1ee7869da2a8"
-  integrity sha512-WHYWiye9f2XYQ33Rj/uVw4VF/Qq/xrB9NDnGlRhgK8Ga7T20+8/iZD5/Z8wICVNZTsfUZ3g6LfkeZ1l+LZhHKw==
+  version "2.1082.0"
+  resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.1082.0.tgz#f6e107cc1473f17292386e7b9f79a5b8bf2a3350"
+  integrity sha512-aDrUZ63O/ocuC827ursDqFQAm3jhqsJu1DvMCCFg73y+FK9pXXNHp2mwdi3UeeHvtfxISCLCjuyO3VFd/tpVfA==
   dependencies:
     buffer "4.9.2"
     events "1.1.1"
@@ -1027,9 +1027,9 @@ mime@^2.6.0:
   integrity sha512-USPkMeET31rOMiarsBNIHZKLGgvKc/LrjofAnBlOttf5ajRvqiRA8QsenbcooctK6d6Ts6aqZXBA+XbkKthiQg==
 
 minimatch@>=3.1:
-  version "5.0.0"
-  resolved "https://registry.yarnpkg.com/minimatch/-/minimatch-5.0.0.tgz#281d8402aaaeed18a9e8406ad99c46a19206c6ef"
-  integrity sha512-EU+GCVjXD00yOUf1TwAHVP7v3fBD3A8RkkPYsWWKGWesxM/572sL53wJQnHxquHlRhYUV36wHkqrN8cdikKc2g==
+  version "5.0.1"
+  resolved "https://registry.yarnpkg.com/minimatch/-/minimatch-5.0.1.tgz#fb9022f7528125187c92bd9e9b6366be1cf3415b"
+  integrity sha512-nLDxIFRyhDblz3qMuq+SoRZED4+miJ/G+tdDrjkkkRnjAsBexeGpgjLEQ0blJy7rHhR2b93rhQY4SvyWu9v03g==
   dependencies:
     brace-expansion "^2.0.1"
 
@@ -1519,9 +1519,9 @@ v8-compile-cache-lib@^3.0.0:
   integrity sha512-mpSYqfsFvASnSn5qMiwrr4VKfumbPyONLCOPmsR3A6pTY/r0+tSaVbgPWSAIuzbk3lCTa+FForeTiO+wBQGkjA==
 
 vm2@^3.9.8:
-  version "3.9.8"
-  resolved "https://registry.yarnpkg.com/vm2/-/vm2-3.9.8.tgz#e99c000db042735cd2f94d8db6c42163a17be04e"
-  integrity sha512-/1PYg/BwdKzMPo8maOZ0heT7DLI0DAFTm7YQaz/Lim9oIaFZsJs3EdtalvXuBfZwczNwsYhju75NW4d6E+4q+w==
+  version "3.9.9"
+  resolved "https://registry.yarnpkg.com/vm2/-/vm2-3.9.9.tgz#c0507bc5fbb99388fad837d228badaaeb499ddc5"
+  integrity sha512-xwTm7NLh/uOjARRBs8/95H0e8fT3Ukw5D/JJWhxMbhKzNh1Nu981jQKvkep9iKYNxzlVrdzD0mlBGkDKZWprlw==
   dependencies:
     acorn "^8.7.0"
     acorn-walk "^8.2.0"

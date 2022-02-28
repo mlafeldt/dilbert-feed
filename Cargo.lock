@@ -33,12 +33,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "159bb86af3a200e19a068f4224eae4c8bb2d0fa054c7e5d1cacd5cef95e684cd"
 
 [[package]]
-name = "arrayvec"
-version = "0.5.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "23b62fc65de8e4e7f52534fb52b0f3ed04746ae267519eef2a83941e8085068b"
-
-[[package]]
 name = "assert-json-diff"
 version = "2.0.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -504,17 +498,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "config"
-version = "0.10.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "19b076e143e1d9538dde65da30f8481c2a6c44040edb8e02b9bf1351edb92ce3"
-dependencies = [
- "lazy_static",
- "nom 5.1.2",
- "serde",
-]
-
-[[package]]
 name = "core-foundation"
 version = "0.9.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -544,16 +527,6 @@ name = "crossbeam-channel"
 version = "0.5.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e54ea8bc3fb1ee042f5aace6e3c6e025d3874866da222930f70ce62aceba0bfa"
-dependencies = [
- "cfg-if",
- "crossbeam-utils",
-]
-
-[[package]]
-name = "crossbeam-queue"
-version = "0.3.4"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4dd435b205a4842da59efd07628f921c096bc1cc0a156835b4fa0bcb9a19bcce"
 dependencies = [
  "cfg-if",
  "crossbeam-utils",
@@ -625,17 +598,21 @@ dependencies = [
 
 [[package]]
 name = "deadpool"
-version = "0.7.0"
+version = "0.9.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "3d126179d86aee4556e54f5f3c6bf6d9884e7cc52cef82f77ee6f90a7747616d"
+checksum = "3bf0c5365c0925c80a838a6810a1bf38d3304ca6b4eb25829e29e33da12de786"
 dependencies = [
  "async-trait",
- "config",
- "crossbeam-queue",
+ "deadpool-runtime",
  "num_cpus",
- "serde",
  "tokio",
 ]
+
+[[package]]
+name = "deadpool-runtime"
+version = "0.1.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "eaa37046cc0f6c3cc6090fbdbf73ef0b8ef4cfcc37f6befc0020f63e8cf121e1"
 
 [[package]]
 name = "derive_builder"
@@ -951,7 +928,7 @@ dependencies = [
  "byteorder",
  "crossbeam-channel",
  "flate2",
- "nom 7.1.0",
+ "nom",
  "num-traits",
 ]
 
@@ -1200,19 +1177,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e2abad23fbc42b3700f2f279844dc832adb2b2eb069b2df918f455c4e18cc646"
 
 [[package]]
-name = "lexical-core"
-version = "0.7.6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "6607c62aa161d23d17a9072cc5da0be67cdfc89d3afb1e8d9c842bebc2525ffe"
-dependencies = [
- "arrayvec",
- "bitflags",
- "cfg-if",
- "ryu",
- "static_assertions",
-]
-
-[[package]]
 name = "libc"
 version = "0.2.119"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1341,17 +1305,6 @@ name = "new_debug_unreachable"
 version = "1.0.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e4a24736216ec316047a1fc4252e27dabb04218aa4a3f37c6e7ddbf1f9782b54"
-
-[[package]]
-name = "nom"
-version = "5.1.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ffb4262d26ed83a1c0a33a38fe2bb15797329c85770da05e6b828ddb782627af"
-dependencies = [
- "lexical-core",
- "memchr",
- "version_check",
-]
 
 [[package]]
 name = "nom"
@@ -1998,12 +1951,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "6e63cff320ae2c57904679ba7cb63280a3dc4613885beafb148ee7bf9aa9042d"
 
 [[package]]
-name = "static_assertions"
-version = "1.1.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a2eb9349b6444b326872e140eb1cf5e7c522154d69e7a0ffb0fb81c06b37543f"
-
-[[package]]
 name = "string_cache"
 version = "0.8.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2497,9 +2444,9 @@ dependencies = [
 
 [[package]]
 name = "wiremock"
-version = "0.5.10"
+version = "0.5.11"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "70f7b70ff8dc8f85e456feb581ee05720f87a5bd4f868c018191d997994cabed"
+checksum = "359a3231e905044f3993eb5f85dbc99f8b88e078c376f0f2c7bd2d7d729301da"
 dependencies = [
  "assert-json-diff",
  "async-trait",
@@ -2536,6 +2483,6 @@ checksum = "114ba2b24d2167ef6d67d7d04c8cc86522b87f490025f39f0303b7db5bf5e3d8"
 
 [[package]]
 name = "zeroize"
-version = "1.5.2"
+version = "1.5.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7c88870063c39ee00ec285a2f8d6a966e5b6fb2becc4e8dac77ed0d370ed6006"
+checksum = "50344758e2f40e3a1fcfc8f6f91aa57b5f8ebd8d27919fe6451f15aaaf9ee608"
