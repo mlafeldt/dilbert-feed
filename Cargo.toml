@@ -10,8 +10,8 @@ edition = "2021"
 
 [dependencies]
 anyhow = "1"
-aws-config = { version = "0.7", features = ["rustls"] }
-aws-sdk-s3 = { version = "0.7", features = ["rustls"] }
+aws-config = { version = "0.8", features = ["rustls"] }
+aws-sdk-s3 = { version = "0.8", features = ["rustls"] }
 chrono = { version = "0.4", features = ["serde"] }
 derive_builder = "0.10"
 env_logger = { version = "0.9", default-features = false, features = ["humantime"] }
