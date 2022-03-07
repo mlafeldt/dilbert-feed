@@ -1,39 +1,39 @@
 use anyhow::{anyhow, bail, Result};
 use chrono::{NaiveDate, Utc};
 use derive_builder::Builder;
-use select::document::Document;
-use select::predicate::Class;
+use select::{document::Document, predicate::Class};
 use serde::{Deserialize, Serialize};
+use url::Url;
 
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 pub struct Comic {
     pub date: NaiveDate,
     pub title: String,
-    pub image_url: String,
-    pub strip_url: String,
+    pub image_url: Url,
+    pub strip_url: Url,
 }
 
 #[derive(Builder, Debug)]
 pub struct Client {
-    #[builder(default = "String::from(\"https://dilbert.com\")")]
-    base_url: String,
+    #[builder(default = "Url::parse(\"https://dilbert.com\").expect(\"hardcoded URL is valid\")")]
+    base_url: Url,
     #[builder(default)]
     http_client: reqwest::Client,
 }
 
 impl Default for Client {
     fn default() -> Self {
-        ClientBuilder::default().build().expect("failed to build client")
+        ClientBuilder::default().build().expect("default client is valid")
     }
 }
 
 impl Client {
     pub async fn scrape_comic(&self, date: Option<NaiveDate>) -> Result<Comic> {
         let date = date.unwrap_or_else(|| Utc::today().naive_utc());
-        let strip_url = self.strip_url(date);
+        let strip_url = self.base_url.join(&format!("strip/{}", date))?;
         let body = self
             .http_client
-            .get(&strip_url)
+            .get(strip_url.clone())
             .send()
             .await?
             .error_for_status()?
@@ -61,7 +61,7 @@ impl Client {
             .attr("data-image")
             .ok_or_else(|| anyhow!("image URL not found"))?
             .trim()
-            .to_string();
+            .parse()?;
 
         Ok(Comic {
             date,
@@ -70,32 +70,32 @@ impl Client {
             strip_url,
         })
     }
-
-    fn strip_url(&self, date: NaiveDate) -> String {
-        format!("{}/strip/{}", self.base_url, date)
-    }
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
     use pretty_assertions::assert_eq;
-    use wiremock::matchers::{method, path};
-    use wiremock::{Mock, MockServer, ResponseTemplate};
+    use wiremock::{
+        matchers::{method, path},
+        {Mock, MockServer, ResponseTemplate},
+    };
 
     struct Test {
         comic: Comic,
         html: &'static str,
     }
 
-    fn tests(base_url: &str) -> Vec<Test> {
+    fn tests(base_url: Url) -> Vec<Test> {
         vec![
             Test {
                 comic: Comic {
                     date: NaiveDate::from_ymd(2000, 1, 1),
                     title: "Dilbert Comic for 2000-01-01".to_string(),
-                    image_url: "https://assets.amuniversal.com/bdc8a4d06d6401301d80001dd8b71c47".to_string(),
-                    strip_url: format!("{}/strip/2000-01-01", base_url),
+                    image_url: "https://assets.amuniversal.com/bdc8a4d06d6401301d80001dd8b71c47"
+                        .parse()
+                        .unwrap(),
+                    strip_url: base_url.join("strip/2000-01-01").unwrap(),
                 },
                 html: include_str!("testdata/strip/2000-01-01"),
             },
@@ -103,8 +103,10 @@ mod tests {
                 comic: Comic {
                     date: NaiveDate::from_ymd(2018, 10, 30),
                     title: "Intentionally Underbidding".to_string(),
-                    image_url: "https://assets.amuniversal.com/cda546d0a88c01365b26005056a9545d".to_string(),
-                    strip_url: format!("{}/strip/2018-10-30", base_url),
+                    image_url: "https://assets.amuniversal.com/cda546d0a88c01365b26005056a9545d"
+                        .parse()
+                        .unwrap(),
+                    strip_url: base_url.join("strip/2018-10-30").unwrap(),
                 },
                 html: include_str!("testdata/strip/2018-10-30"),
             },
@@ -112,8 +114,10 @@ mod tests {
                 comic: Comic {
                     date: NaiveDate::from_ymd(2019, 11, 2),
                     title: "Multiple Choice".to_string(),
-                    image_url: "https://assets.amuniversal.com/ce7ec130d6480137c832005056a9545d".to_string(),
-                    strip_url: format!("{}/strip/2019-11-02", base_url),
+                    image_url: "https://assets.amuniversal.com/ce7ec130d6480137c832005056a9545d"
+                        .parse()
+                        .unwrap(),
+                    strip_url: base_url.join("strip/2019-11-02").unwrap(),
                 },
                 html: include_str!("testdata/strip/2019-11-02"),
             },
@@ -121,8 +125,10 @@ mod tests {
                 comic: Comic {
                     date: NaiveDate::from_ymd(2020, 11, 11),
                     title: "Elbonian Words".to_string(),
-                    image_url: "https://assets.amuniversal.com/f25312c0fb5b01382ef9005056a9545d".to_string(),
-                    strip_url: format!("{}/strip/2020-11-11", base_url),
+                    image_url: "https://assets.amuniversal.com/f25312c0fb5b01382ef9005056a9545d"
+                        .parse()
+                        .unwrap(),
+                    strip_url: base_url.join("strip/2020-11-11").unwrap(),
                 },
                 html: include_str!("testdata/strip/2020-11-11"),
             },
@@ -130,8 +136,10 @@ mod tests {
                 comic: Comic {
                     date: NaiveDate::from_ymd(2021, 10, 10),
                     title: "Sunday Data Looks Two Ways".to_string(),
-                    image_url: "https://assets.amuniversal.com/4b9300d0f2400139769e005056a9545d".to_string(),
-                    strip_url: format!("{}/strip/2021-10-10", base_url),
+                    image_url: "https://assets.amuniversal.com/4b9300d0f2400139769e005056a9545d"
+                        .parse()
+                        .unwrap(),
+                    strip_url: base_url.join("strip/2021-10-10").unwrap(),
                 },
                 html: include_str!("testdata/strip/2021-10-10"),
             },
@@ -142,7 +150,7 @@ mod tests {
     async fn test_scrape_comic() {
         let server = MockServer::start().await;
 
-        for t in tests(&server.uri()).iter() {
+        for t in tests(server.uri().parse().unwrap()).iter() {
             let resp = ResponseTemplate::new(200).set_body_raw(t.html, "text/html");
 
             Mock::given(method("GET"))
@@ -153,7 +161,7 @@ mod tests {
                 .await;
 
             let comic = ClientBuilder::default()
-                .base_url(server.uri())
+                .base_url(server.uri().parse().unwrap())
                 .build()
                 .unwrap()
                 .scrape_comic(Some(t.comic.date))

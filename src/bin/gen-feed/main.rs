@@ -9,6 +9,7 @@ use chrono::Utc;
 use lambda_runtime::{service_fn, Error, LambdaEvent};
 use log::{debug, info};
 use serde::{Deserialize, Serialize};
+use url::Url;
 
 mod feed;
 use feed::FeedBuilder;
@@ -18,7 +19,7 @@ struct Input {}
 
 #[derive(Serialize, PartialEq, Debug)]
 struct Output {
-    feed_url: String,
+    feed_url: Url,
 }
 
 #[derive(Debug)]
@@ -74,7 +75,7 @@ impl<'a> Handler<'a> {
             .await
             .with_context(|| format!("failed to put object {}", self.feed_path))?;
 
-        let feed_url = format!("https://{}.s3.amazonaws.com/{}", self.bucket_name, self.feed_path);
+        let feed_url = format!("https://{}.s3.amazonaws.com/{}", self.bucket_name, self.feed_path).parse()?;
 
         info!("Upload completed: {}", feed_url);
 

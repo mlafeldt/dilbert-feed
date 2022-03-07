@@ -66,8 +66,10 @@ async fn handler(input: Input, http_client: Client) -> Result<Output> {
 mod tests {
     use super::*;
     use pretty_assertions::assert_eq;
-    use wiremock::matchers::method;
-    use wiremock::{Mock, MockServer, ResponseTemplate};
+    use wiremock::{
+        matchers::method,
+        {Mock, MockServer, ResponseTemplate},
+    };
 
     #[tokio::test]
     async fn test_handler_200() {

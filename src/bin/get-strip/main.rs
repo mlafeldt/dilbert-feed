@@ -9,6 +9,7 @@ use chrono::NaiveDate;
 use lambda_runtime::{service_fn, Error, LambdaEvent};
 use log::{debug, info};
 use serde::{Deserialize, Serialize};
+use url::Url;
 
 mod dilbert;
 use dilbert::{ClientBuilder, Comic};
@@ -22,7 +23,7 @@ struct Input {
 struct Output {
     #[serde(flatten)]
     comic: Comic,
-    upload_url: String,
+    upload_url: Url,
 }
 
 #[derive(Debug)]
@@ -63,7 +64,7 @@ impl<'a> Handler<'a> {
 
         let image = self
             .http_client
-            .get(&comic.image_url)
+            .get(comic.image_url.clone())
             .send()
             .await?
             .error_for_status()?
@@ -85,7 +86,7 @@ impl<'a> Handler<'a> {
             .await
             .with_context(|| format!("failed to put object {}", &key))?;
 
-        let upload_url = format!("https://{}.s3.amazonaws.com/{}", self.bucket_name, key);
+        let upload_url = format!("https://{}.s3.amazonaws.com/{}", self.bucket_name, key).parse()?;
 
         info!("Upload completed: {}", upload_url);
 

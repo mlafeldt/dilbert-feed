@@ -4,6 +4,7 @@ use chrono::{DateTime, Duration, NaiveDate, Utc};
 use derive_builder::Builder;
 use futures::future;
 use rss::{ChannelBuilder, GuidBuilder, Item, ItemBuilder};
+use url::Url;
 
 #[derive(Builder, Debug)]
 #[builder(setter(into))]
@@ -23,13 +24,14 @@ impl Feed {
             (0..self.feed_length)
                 .map(|i| self.start_date - Duration::days(i.into()))
                 .map(|date| async move {
-                    let url = format!(
+                    let url: Url = format!(
                         "https://{}.s3.amazonaws.com/{}/{}.gif",
                         self.bucket_name, self.strips_dir, date
-                    );
+                    )
+                    .parse()?;
                     let item = ItemBuilder::default()
                         .title(self.title(date).await?)
-                        .link(url.clone())
+                        .link(url.to_string())
                         .description(format!(r#"<img src="{}">"#, url))
                         .guid(GuidBuilder::default().value(url).build())
                         .pub_date(DateTime::<Utc>::from_utc(date.and_hms(0, 0, 0), Utc).to_rfc2822())

@@ -24,6 +24,7 @@ select = "0.5"
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 tokio = { version = "1", features = ["rt-multi-thread", "macros"] }
+url = { version = "2", features = ["serde"] }
 
 [dev-dependencies]
 pretty_assertions = "1"
