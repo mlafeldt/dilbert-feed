@@ -48,18 +48,27 @@ async fn main() -> Result<(), Error> {
 impl<'a> Handler<'a> {
     async fn handle(&'a self) -> Result<Output> {
         let today = Utc::today().naive_utc();
+        let body = self.generate_feed(today).await?;
+        let url = self.upload_feed(body).await?;
 
-        info!("Generating feed for date {} ...", today);
+        Ok(Output { feed_url: url })
+    }
 
-        let xml = FeedBuilder::default()
+    async fn generate_feed(&'a self, date: chrono::NaiveDate) -> Result<ByteStream> {
+        info!("Generating feed for date {} ...", date);
+
+        FeedBuilder::default()
             .bucket_name(self.bucket_name)
             .strips_dir(self.strips_dir)
-            .start_date(today)
+            .start_date(date)
             .s3_client(self.s3_client.clone())
             .build()?
             .xml()
-            .await?;
+            .await
+            .map(|xml| ByteStream::from(xml.into_bytes()))
+    }
 
+    async fn upload_feed(&'a self, body: ByteStream) -> Result<Url> {
         info!(
             "Uploading feed to bucket {} with path {} ...",
             self.bucket_name, self.feed_path
@@ -69,7 +78,7 @@ impl<'a> Handler<'a> {
             .put_object()
             .bucket(self.bucket_name)
             .key(self.feed_path)
-            .body(ByteStream::from(xml.into_bytes()))
+            .body(body)
             .content_type("text/xml; charset=utf-8")
             .send()
             .await
@@ -79,6 +88,6 @@ impl<'a> Handler<'a> {
 
         info!("Upload completed: {}", feed_url);
 
-        Ok(Output { feed_url })
+        Ok(feed_url)
     }
 }
