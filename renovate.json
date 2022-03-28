@@ -4,5 +4,10 @@
     "group:allNonMajor",
     "schedule:monthly"
   ],
-  "lockFileMaintenance": { "enabled": true }
+  "lockFileMaintenance": {
+    "enabled": true,
+    "schedule": [
+      "monthly"
+    ]
+  }
 }
