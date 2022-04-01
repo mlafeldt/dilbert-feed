@@ -64,10 +64,10 @@ at-least-node@^1.0.0:
   resolved "https://registry.yarnpkg.com/at-least-node/-/at-least-node-1.0.0.tgz#602cd4b46e844ad4effc92a8011a3c46e0238dc2"
   integrity sha512-+q/t7Ekv1EDY2l6Gda6LLiX14rU9TV20Wa3ofeQmwPFZbOMo9DXrLbOjFaaclkXKWidIaopwAObQDqwWtGUjqg==
 
-aws-cdk-lib@2.17.0:
-  version "2.17.0"
-  resolved "https://registry.yarnpkg.com/aws-cdk-lib/-/aws-cdk-lib-2.17.0.tgz#822b397fbc1a44f647abbdb31d6a85f18bd89043"
-  integrity sha512-bga2HptbGx3rMdSkIKxBS13miogj/DHB2VPfQZAoKoCOAanOot+M3mHhYqe5aNdxhrppaRjG2eid2p1/MvRnvg==
+aws-cdk-lib@2.19.0:
+  version "2.19.0"
+  resolved "https://registry.yarnpkg.com/aws-cdk-lib/-/aws-cdk-lib-2.19.0.tgz#80c3054dc925c4bc95639c4a2911a8aa6058ca4c"
+  integrity sha512-zt0lAsTpYfrDitjJXp1smEi4o1EYtAAj4fb0WW4GYBW+P6FqymXyAF5mUT8YWPkMJTnSP8d4FeDUyatQVWYRJA==
   dependencies:
     "@balena/dockerignore" "^1.0.2"
     case "1.6.3"
@@ -79,10 +79,10 @@ aws-cdk-lib@2.17.0:
     semver "^7.3.5"
     yaml "1.10.2"
 
-aws-cdk@2.17.0:
-  version "2.17.0"
-  resolved "https://registry.yarnpkg.com/aws-cdk/-/aws-cdk-2.17.0.tgz#cb9149c55f1bec54eacfe0242d3454faf4292e2e"
-  integrity sha512-gRPPpTONOjtQ40A8sc2SzXPGDzFlVbSPPts1pjOx4VBJ2S91A0ON3Fkby+XX/Xqdo1GITTWAk5Va4PnoYyUhmA==
+aws-cdk@2.19.0:
+  version "2.19.0"
+  resolved "https://registry.yarnpkg.com/aws-cdk/-/aws-cdk-2.19.0.tgz#b5d03bb1e0f08f62e73e84c0f0f1f4903820ff53"
+  integrity sha512-qOwxDKd1xKsiBW3laYrFBiAF510okJvslEeHViO08SKIyhitUe/HTn2iqfdVBb/zF6wSdm/sRsj2WNHpiKFcBQ==
   optionalDependencies:
     fsevents "2.3.2"
 
@@ -114,10 +114,10 @@ concat-map@0.0.1:
   resolved "https://registry.yarnpkg.com/concat-map/-/concat-map-0.0.1.tgz#d8a96bd77fd68df7793a73036a3ba0d5405d477b"
   integrity sha1-2Klr13/Wjfd5OnMDajug1UBdR3s=
 
-constructs@10.0.91:
-  version "10.0.91"
-  resolved "https://registry.yarnpkg.com/constructs/-/constructs-10.0.91.tgz#ec1e34d7aca3ce034b17e3003ee8f2903e0cdf77"
-  integrity sha512-4sDyF/vMNZywVcOpo+ZrJt4F7X0iLVE+D6KxHn+/UnsmUr4ICa4KzXHVvCtoReyM8G1Q4aOFK+AWQICn+QSK0w==
+constructs@10.0.102:
+  version "10.0.102"
+  resolved "https://registry.yarnpkg.com/constructs/-/constructs-10.0.102.tgz#9ce3986ecc4e175bf0dc16b1fc6fc2c371c5cfed"
+  integrity sha512-2qvF0e1g/IT3CRyc2MOYDWNLw/ARNByRDJWT+6uunXNq3emWIHzhehnBXtDsyqpZjP5FXmvHzKyVwcAviv0gVQ==
 
 create-require@^1.1.0:
   version "1.1.1"
@@ -231,10 +231,10 @@ ts-node@10.7.0:
     v8-compile-cache-lib "^3.0.0"
     yn "3.1.1"
 
-typescript@4.6.2:
-  version "4.6.2"
-  resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.6.2.tgz#fe12d2727b708f4eef40f51598b3398baa9611d4"
-  integrity sha512-HM/hFigTBHZhLXshn9sN37H085+hQGeJHJ/X7LpBWLID/fbc2acUMfU+lGD98X81sKP+pFa9f0DZmCwB9GnbAg==
+typescript@4.6.3:
+  version "4.6.3"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.6.3.tgz#eefeafa6afdd31d725584c67a0eaba80f6fc6c6c"
+  integrity sha512-yNIatDa5iaofVozS/uQJEl3JRWLKKGJKh6Yaiv0GLGSuhpFJe7P3SbHZ8/yjAHRQwKRoA6YZqlfjXWmVzoVSMw==
 
 universalify@^2.0.0:
   version "2.0.0"
