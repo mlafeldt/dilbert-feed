@@ -29,7 +29,7 @@ jobs:
           override: true
 
       - name: Set up Rust caching
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: |
             ~/.cargo
