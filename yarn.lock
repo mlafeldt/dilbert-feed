@@ -64,10 +64,10 @@ at-least-node@^1.0.0:
   resolved "https://registry.yarnpkg.com/at-least-node/-/at-least-node-1.0.0.tgz#602cd4b46e844ad4effc92a8011a3c46e0238dc2"
   integrity sha512-+q/t7Ekv1EDY2l6Gda6LLiX14rU9TV20Wa3ofeQmwPFZbOMo9DXrLbOjFaaclkXKWidIaopwAObQDqwWtGUjqg==
 
-aws-cdk-lib@2.19.0:
-  version "2.19.0"
-  resolved "https://registry.yarnpkg.com/aws-cdk-lib/-/aws-cdk-lib-2.19.0.tgz#80c3054dc925c4bc95639c4a2911a8aa6058ca4c"
-  integrity sha512-zt0lAsTpYfrDitjJXp1smEi4o1EYtAAj4fb0WW4GYBW+P6FqymXyAF5mUT8YWPkMJTnSP8d4FeDUyatQVWYRJA==
+aws-cdk-lib@2.20.0:
+  version "2.20.0"
+  resolved "https://registry.yarnpkg.com/aws-cdk-lib/-/aws-cdk-lib-2.20.0.tgz#bb22702cc3748d8ed7eb42646f473ff740311bfe"
+  integrity sha512-jACK/1UJxtWWl6QH+I1V8Oc8F1EEL6aFQYk24DIrzNyB1Aj9LIs9/NyDu5zN00QFKrR6aDE7WAv1VG3sa6wWdg==
   dependencies:
     "@balena/dockerignore" "^1.0.2"
     case "1.6.3"
@@ -79,10 +79,10 @@ aws-cdk-lib@2.19.0:
     semver "^7.3.5"
     yaml "1.10.2"
 
-aws-cdk@2.19.0:
-  version "2.19.0"
-  resolved "https://registry.yarnpkg.com/aws-cdk/-/aws-cdk-2.19.0.tgz#b5d03bb1e0f08f62e73e84c0f0f1f4903820ff53"
-  integrity sha512-qOwxDKd1xKsiBW3laYrFBiAF510okJvslEeHViO08SKIyhitUe/HTn2iqfdVBb/zF6wSdm/sRsj2WNHpiKFcBQ==
+aws-cdk@2.20.0:
+  version "2.20.0"
+  resolved "https://registry.yarnpkg.com/aws-cdk/-/aws-cdk-2.20.0.tgz#e3b00ecd1589777bebd1d003e32479cbfad735e1"
+  integrity sha512-rs9LTpvrlbsMcenZ3t7TuLDGbHhbnDocrE63Xb2PT++VptR/A8svllK8k1W7hPl77L9QS75GNK5gh+ShkEzsnw==
   optionalDependencies:
     fsevents "2.3.2"
 
@@ -114,10 +114,10 @@ concat-map@0.0.1:
   resolved "https://registry.yarnpkg.com/concat-map/-/concat-map-0.0.1.tgz#d8a96bd77fd68df7793a73036a3ba0d5405d477b"
   integrity sha1-2Klr13/Wjfd5OnMDajug1UBdR3s=
 
-constructs@10.0.102:
-  version "10.0.102"
-  resolved "https://registry.yarnpkg.com/constructs/-/constructs-10.0.102.tgz#9ce3986ecc4e175bf0dc16b1fc6fc2c371c5cfed"
-  integrity sha512-2qvF0e1g/IT3CRyc2MOYDWNLw/ARNByRDJWT+6uunXNq3emWIHzhehnBXtDsyqpZjP5FXmvHzKyVwcAviv0gVQ==
+constructs@10.0.115:
+  version "10.0.115"
+  resolved "https://registry.yarnpkg.com/constructs/-/constructs-10.0.115.tgz#f077848b33d001ac9e804111f5f8e1d0f6df1771"
+  integrity sha512-BZfiDjilEzfq+y8hNGRbh5yIYa+mK6ZAO172Q03pvN47Fe2a2PxzA1Y6dNCP+AKcajAiyzHjYg/hw98XheZh5A==
 
 create-require@^1.1.0:
   version "1.1.1"
