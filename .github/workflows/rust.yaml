@@ -9,8 +9,7 @@ on:
 
 env:
   CARGO_TERM_COLOR: always
-  ZIG_VERSION: 0.9.1
-  CARGO_ZIGBUILD_VERSION: 0.5.3
+  CARGO_ZIGBUILD_VERSION: 0.8.6
 
 jobs:
   rust:
@@ -55,8 +54,7 @@ jobs:
 
       - name: Install zig & cargo-zigbuild for cross-compiling
         run: |
-          pip3 install ziglang==${ZIG_VERSION}
-          curl -fSsL https://github.com/messense/cargo-zigbuild/releases/download/v${CARGO_ZIGBUILD_VERSION}/cargo-zigbuild-v${CARGO_ZIGBUILD_VERSION}.x86_64-unknown-linux-musl.tar.gz | tar -xzvf- -C "$HOME/.cargo/bin"
+          pip install cargo-zigbuild==${CARGO_ZIGBUILD_VERSION}
 
       - name: Build Lambda functions
         uses: actions-rs/cargo@v1
