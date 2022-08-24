@@ -9,7 +9,7 @@ on:
 
 env:
   CARGO_TERM_COLOR: always
-  CARGO_ZIGBUILD_VERSION: "0.11.0"
+  CARGO_ZIGBUILD_VERSION: "0.12.0"
 
 jobs:
   rust:
@@ -27,13 +27,8 @@ jobs:
           components: rustfmt, clippy
           override: true
 
-      - name: Set up Rust caching
-        uses: actions/cache@v3
-        with:
-          path: |
-            ~/.cargo
-            target
-          key: ${{ runner.os }}-${{ runner.arch }}-${{ github.job }}-${{ hashFiles('Cargo.toml', 'Cargo.lock') }}
+      - name: Install cargo zigbuild for cross-compiling
+        run: pip install cargo-zigbuild==${CARGO_ZIGBUILD_VERSION}
 
       - name: Check formatting
         uses: actions-rs/cargo@v1
@@ -51,10 +46,6 @@ jobs:
         uses: actions-rs/cargo@v1
         with:
           command: test
-
-      - name: Install zig & cargo-zigbuild for cross-compiling
-        run: |
-          pip install cargo-zigbuild==${CARGO_ZIGBUILD_VERSION}
 
       - name: Build Lambda functions
         uses: actions-rs/cargo@v1
