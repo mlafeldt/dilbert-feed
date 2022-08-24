@@ -5,7 +5,7 @@ use select::{document::Document, predicate::Class};
 use serde::{Deserialize, Serialize};
 use url::Url;
 
-#[derive(Serialize, Deserialize, PartialEq, Debug)]
+#[derive(Serialize, Deserialize, PartialEq, Eq, Debug)]
 pub struct Comic {
     pub date: NaiveDate,
     pub title: String,
