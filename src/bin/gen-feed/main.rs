@@ -1,6 +1,3 @@
-#![deny(clippy::all, clippy::nursery)]
-#![deny(nonstandard_style, rust_2018_idioms)]
-
 use std::env;
 
 use anyhow::{Context, Result};
