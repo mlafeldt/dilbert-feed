@@ -7,8 +7,8 @@ use anyhow::{Context, Result};
 use aws_sdk_s3::{types::ByteStream, Client};
 use chrono::Utc;
 use lambda_runtime::{service_fn, Error, LambdaEvent};
-use log::{debug, info};
 use serde::{Deserialize, Serialize};
+use tracing::{info, instrument};
 use url::Url;
 
 mod feed;
@@ -32,7 +32,10 @@ struct Handler<'a> {
 
 #[tokio::main]
 async fn main() -> Result<(), Error> {
-    env_logger::try_init()?;
+    tracing_subscriber::fmt()
+        .with_max_level(tracing_subscriber::filter::LevelFilter::INFO)
+        .compact()
+        .try_init()?;
 
     let h = Handler {
         bucket_name: &env::var("BUCKET_NAME").expect("BUCKET_NAME not found"),
@@ -40,16 +43,16 @@ async fn main() -> Result<(), Error> {
         feed_path: &env::var("FEED_PATH").expect("FEED_PATH not found"),
         s3_client: Client::new(&aws_config::load_from_env().await),
     };
-    debug!("{:?}", h);
 
     lambda_runtime::run(service_fn(|_: LambdaEvent<Input>| h.handle())).await
 }
 
 impl<'a> Handler<'a> {
+    #[instrument]
     async fn handle(&'a self) -> Result<Output> {
         let today = Utc::today().naive_utc();
 
-        info!("Generating feed for date {} ...", today);
+        info!("Generating feed for date {today} ...");
 
         let xml = FeedBuilder::default()
             .bucket_name(self.bucket_name)
@@ -77,7 +80,7 @@ impl<'a> Handler<'a> {
 
         let feed_url = format!("https://{}.s3.amazonaws.com/{}", self.bucket_name, self.feed_path).parse()?;
 
-        info!("Upload completed: {}", feed_url);
+        info!("Upload completed: {feed_url}");
 
         Ok(Output { feed_url })
     }

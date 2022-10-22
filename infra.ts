@@ -51,7 +51,6 @@ class DilbertFeedStack extends cdk.Stack {
       environment: {
         BUCKET_NAME: bucket.bucketName,
         STRIPS_DIR: stripsDir,
-        RUST_LOG: 'info,get_strip=debug',
       },
     })
     bucket.grantPut(getStrip)
@@ -64,7 +63,6 @@ class DilbertFeedStack extends cdk.Stack {
         BUCKET_NAME: bucket.bucketName,
         STRIPS_DIR: stripsDir,
         FEED_PATH: feedPath,
-        RUST_LOG: 'info,gen_feed=debug',
       },
     })
     bucket.grantReadWrite(genFeed)
@@ -76,7 +74,6 @@ class DilbertFeedStack extends cdk.Stack {
       code: lambda.Code.fromAsset('bin/heartbeat'),
       environment: {
         HEARTBEAT_ENDPOINT: heartbeatEndpoint,
-        RUST_LOG: 'info,heartbeat=debug',
       },
     })
 

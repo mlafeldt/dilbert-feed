@@ -6,10 +6,10 @@ use std::env;
 
 use anyhow::{bail, Result};
 use lambda_runtime::{service_fn, Error, LambdaEvent};
-use log::{debug, info};
 use reqwest::{redirect, Client};
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
+use tracing::{info, instrument};
 
 #[derive(Deserialize, Debug)]
 struct Input {
@@ -28,7 +28,10 @@ struct Output {
 
 #[tokio::main]
 async fn main() -> Result<(), Error> {
-    env_logger::try_init()?;
+    tracing_subscriber::fmt()
+        .with_max_level(tracing_subscriber::filter::LevelFilter::INFO)
+        .compact()
+        .try_init()?;
 
     let http_client = Client::builder()
         .user_agent("dilbert-feed")
@@ -41,14 +44,13 @@ async fn main() -> Result<(), Error> {
     .await
 }
 
+#[instrument]
 async fn handler(input: Input, http_client: Client) -> Result<Output> {
-    debug!("{:?}", input);
-
     let ep = input
         .endpoint
         .unwrap_or_else(|| env::var("HEARTBEAT_ENDPOINT").expect("HEARTBEAT_ENDPOINT not found"));
 
-    info!("Sending ping to {}", ep);
+    info!("Sending ping to {ep}");
 
     let resp = http_client.get(&ep).send().await?;
 
