@@ -41,7 +41,7 @@ async fn main() -> Result<(), Error> {
     .await
 }
 
-#[instrument]
+#[instrument(ret)]
 async fn handler(input: Input, http_client: Client) -> Result<Output> {
     let ep = input
         .endpoint

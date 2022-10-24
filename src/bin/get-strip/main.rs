@@ -49,7 +49,7 @@ async fn main() -> Result<(), Error> {
 }
 
 impl<'a> Handler<'a> {
-    #[instrument]
+    #[instrument(ret)]
     async fn handle(&'a self, input: Input) -> Result<Output> {
         let comic = ClientBuilder::default()
             .http_client(self.http_client.clone())
