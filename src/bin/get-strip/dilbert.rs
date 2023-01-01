@@ -29,7 +29,7 @@ impl Default for Client {
 
 impl Client {
     pub async fn scrape_comic(&self, date: Option<NaiveDate>) -> Result<Comic> {
-        let date = date.unwrap_or_else(|| Utc::today().naive_utc());
+        let date = date.unwrap_or_else(|| Utc::now().date_naive());
         let strip_url = self.base_url.join(&format!("strip/{}", date))?;
         let body = self
             .http_client
@@ -90,7 +90,7 @@ mod tests {
         vec![
             Test {
                 comic: Comic {
-                    date: NaiveDate::from_ymd(2000, 1, 1),
+                    date: NaiveDate::from_ymd_opt(2000, 1, 1).unwrap(),
                     title: "Dilbert Comic for 2000-01-01".to_string(),
                     image_url: "https://assets.amuniversal.com/bdc8a4d06d6401301d80001dd8b71c47"
                         .parse()
@@ -101,7 +101,7 @@ mod tests {
             },
             Test {
                 comic: Comic {
-                    date: NaiveDate::from_ymd(2018, 10, 30),
+                    date: NaiveDate::from_ymd_opt(2018, 10, 30).unwrap(),
                     title: "Intentionally Underbidding".to_string(),
                     image_url: "https://assets.amuniversal.com/cda546d0a88c01365b26005056a9545d"
                         .parse()
@@ -112,7 +112,7 @@ mod tests {
             },
             Test {
                 comic: Comic {
-                    date: NaiveDate::from_ymd(2019, 11, 2),
+                    date: NaiveDate::from_ymd_opt(2019, 11, 2).unwrap(),
                     title: "Multiple Choice".to_string(),
                     image_url: "https://assets.amuniversal.com/ce7ec130d6480137c832005056a9545d"
                         .parse()
@@ -123,7 +123,7 @@ mod tests {
             },
             Test {
                 comic: Comic {
-                    date: NaiveDate::from_ymd(2020, 11, 11),
+                    date: NaiveDate::from_ymd_opt(2020, 11, 11).unwrap(),
                     title: "Elbonian Words".to_string(),
                     image_url: "https://assets.amuniversal.com/f25312c0fb5b01382ef9005056a9545d"
                         .parse()
@@ -134,7 +134,7 @@ mod tests {
             },
             Test {
                 comic: Comic {
-                    date: NaiveDate::from_ymd(2021, 10, 10),
+                    date: NaiveDate::from_ymd_opt(2021, 10, 10).unwrap(),
                     title: "Sunday Data Looks Two Ways".to_string(),
                     image_url: "https://assets.amuniversal.com/4b9300d0f2400139769e005056a9545d"
                         .parse()
