@@ -3,11 +3,5 @@
     "config:base",
     "group:allNonMajor",
     "schedule:monthly"
-  ],
-  "lockFileMaintenance": {
-    "enabled": true,
-    "schedule": [
-      "monthly"
-    ]
-  }
+  ]
 }
