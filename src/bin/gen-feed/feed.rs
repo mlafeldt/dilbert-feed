@@ -30,11 +30,13 @@ impl Feed {
                     )
                     .parse()?;
                     let item = ItemBuilder::default()
-                        .title(self.title(date).await?)
-                        .link(url.to_string())
-                        .description(format!(r#"<img src="{}">"#, url))
-                        .guid(GuidBuilder::default().value(url).build())
-                        .pub_date(DateTime::<Utc>::from_utc(date.and_hms(0, 0, 0), Utc).to_rfc2822())
+                        .title(Some(self.title(date).await?))
+                        .link(Some(url.to_string()))
+                        .description(Some(format!(r#"<img src="{url}">"#)))
+                        .guid(Some(GuidBuilder::default().value(url).build()))
+                        .pub_date(Some(
+                            DateTime::<Utc>::from_utc(date.and_hms_opt(0, 0, 0).unwrap(), Utc).to_rfc2822(),
+                        ))
                         .build();
                     Ok(item) as Result<Item>
                 }),
@@ -42,9 +44,9 @@ impl Feed {
         .await?;
 
         let channel = ChannelBuilder::default()
-            .title("Dilbert")
-            .link("https://dilbert.com")
-            .description("Dilbert Daily Strip")
+            .title("Dilbert".to_string())
+            .link("https://dilbert.com".to_string())
+            .description("Dilbert Daily Strip".to_string())
             .items(items)
             .build();
 
@@ -90,7 +92,7 @@ mod tests {
         let feed = FeedBuilder::default()
             .bucket_name("dilbert-feed-test")
             .strips_dir("strips")
-            .start_date(NaiveDate::from_ymd(2018, 10, 1))
+            .start_date(NaiveDate::from_ymd_opt(2018, 10, 1).unwrap())
             .feed_length(3)
             .build()
             .unwrap();

@@ -47,7 +47,7 @@ async fn main() -> Result<(), Error> {
 impl<'a> Handler<'a> {
     #[instrument(ret)]
     async fn handle(&'a self) -> Result<Output> {
-        let today = Utc::today().naive_utc();
+        let today = Utc::now().date_naive();
 
         info!("Generating feed for date {today} ...");
 
