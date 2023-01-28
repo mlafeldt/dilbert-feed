@@ -10,8 +10,8 @@ edition = "2021"
 
 [dependencies]
 anyhow = "1"
-aws-config = { version = "0.52", features = ["rustls"] }
-aws-sdk-s3 = { version = "0.22", features = ["rustls"] }
+aws-config = { version = "0.54", features = ["rustls"] }
+aws-sdk-s3 = { version = "0.24", features = ["rustls"] }
 chrono = { version = "0.4", features = ["serde"] }
 derive_builder = "0.12"
 futures = "0.3"
