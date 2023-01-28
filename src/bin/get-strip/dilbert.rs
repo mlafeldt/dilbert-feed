@@ -30,7 +30,7 @@ impl Default for Client {
 impl Client {
     pub async fn scrape_comic(&self, date: Option<NaiveDate>) -> Result<Comic> {
         let date = date.unwrap_or_else(|| Utc::now().date_naive());
-        let strip_url = self.base_url.join(&format!("strip/{}", date))?;
+        let strip_url = self.base_url.join(&format!("strip/{date}"))?;
         let body = self
             .http_client
             .get(strip_url.clone())
@@ -47,7 +47,7 @@ impl Client {
             .ok_or_else(|| anyhow!("comic metadata not found"))?;
 
         if container.attr("data-id").unwrap_or_default() != date.to_string() {
-            bail!("no comic found for date {}", date);
+            bail!("no comic found for date {date}");
         }
 
         let title = container

@@ -75,7 +75,7 @@ impl Feed {
 
                 Ok(title.into())
             }
-            None => Ok(format!("Dilbert - {}", date)),
+            None => Ok(format!("Dilbert - {date}")),
         }
     }
 }
