@@ -2,20 +2,20 @@
 # yarn lockfile v1
 
 
-"@aws-cdk/asset-awscli-v1@^2.2.30":
-  version "2.2.47"
-  resolved "https://registry.yarnpkg.com/@aws-cdk/asset-awscli-v1/-/asset-awscli-v1-2.2.47.tgz#4c512c96d462876408a3f93b8d784b44f7aefe80"
-  integrity sha512-cjLeevt9tVwc5/2nGrxREIEKeTmWKEPSASSrWz8XkLUAT53jcu8ugP0+or0km8twe1ifnSwinUjlLCymyNEDOA==
+"@aws-cdk/asset-awscli-v1@^2.2.52":
+  version "2.2.52"
+  resolved "https://registry.yarnpkg.com/@aws-cdk/asset-awscli-v1/-/asset-awscli-v1-2.2.52.tgz#716aaa02b0cca8ba6d0318a0d8702bcf0023cdc3"
+  integrity sha512-9dBPrvByWrUOcs5Rjwv08FWSummo1Uk/EgE3dCFDqvIqlSTudEmu6TGU3zrs00rfcAjqDv6gBuSttzG5f9tfdQ==
 
 "@aws-cdk/asset-kubectl-v20@^2.1.1":
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/@aws-cdk/asset-kubectl-v20/-/asset-kubectl-v20-2.1.1.tgz#d01c1efb867fb7f2cfd8c8b230b8eae16447e156"
   integrity sha512-U1ntiX8XiMRRRH5J1IdC+1t5CE89015cwyt5U63Cpk0GnMlN5+h9WsWMlKlPXZR4rdq/m806JRlBMRpBUB2Dhw==
 
-"@aws-cdk/asset-node-proxy-agent-v5@^2.0.38":
-  version "2.0.38"
-  resolved "https://registry.yarnpkg.com/@aws-cdk/asset-node-proxy-agent-v5/-/asset-node-proxy-agent-v5-2.0.38.tgz#6765bef55f95220c52decb4adba8f75c1817b0f7"
-  integrity sha512-BBwAjORhuUkTGO3CxGS5Evcp5n20h9v06Sftn2R1DuSm8zIoUlPsNlI1HUk8XqYuoEI4aD7IKRQBLglv09ciJQ==
+"@aws-cdk/asset-node-proxy-agent-v5@^2.0.42":
+  version "2.0.42"
+  resolved "https://registry.yarnpkg.com/@aws-cdk/asset-node-proxy-agent-v5/-/asset-node-proxy-agent-v5-2.0.42.tgz#e0833c219ba866eb2232a63dfc96c2a6db2f7394"
+  integrity sha512-PxvP1UU2xa4k3Ea78DxAYY8ADvwWZ/nPu+xsjQLsT+MP+aB3RZ3pGc/fNlH7Rg56Zyb/j3GSdihAy4Oi5xa+TQ==
 
 "@balena/dockerignore@^1.0.2":
   version "1.0.2"
@@ -92,28 +92,28 @@ at-least-node@^1.0.0:
   resolved "https://registry.yarnpkg.com/at-least-node/-/at-least-node-1.0.0.tgz#602cd4b46e844ad4effc92a8011a3c46e0238dc2"
   integrity sha512-+q/t7Ekv1EDY2l6Gda6LLiX14rU9TV20Wa3ofeQmwPFZbOMo9DXrLbOjFaaclkXKWidIaopwAObQDqwWtGUjqg==
 
-aws-cdk-lib@2.58.1:
-  version "2.58.1"
-  resolved "https://registry.yarnpkg.com/aws-cdk-lib/-/aws-cdk-lib-2.58.1.tgz#f70349b09ea03e28902423c2c76785b96248853c"
-  integrity sha512-Cb7gUYeOVGPana7AOo+1LU6b1sHhHf+Ssyj/aQKWCwAhJkSciF/WWquR6e9FqSbT85LoQWjjJaqcWMqyprW/Rw==
+aws-cdk-lib@2.63.0:
+  version "2.63.0"
+  resolved "https://registry.yarnpkg.com/aws-cdk-lib/-/aws-cdk-lib-2.63.0.tgz#edc3ede69bbdbe56e87cfb4b834a7e2241e9dc04"
+  integrity sha512-+thToi/7coSufwaEafgofTaZERXxFUeEwEIp0SGU0wHz6IbPll5yAzoEIkE51kM8AMCMfqwJddYOjM3qs43cPg==
   dependencies:
-    "@aws-cdk/asset-awscli-v1" "^2.2.30"
+    "@aws-cdk/asset-awscli-v1" "^2.2.52"
     "@aws-cdk/asset-kubectl-v20" "^2.1.1"
-    "@aws-cdk/asset-node-proxy-agent-v5" "^2.0.38"
+    "@aws-cdk/asset-node-proxy-agent-v5" "^2.0.42"
     "@balena/dockerignore" "^1.0.2"
     case "1.6.3"
     fs-extra "^9.1.0"
-    ignore "^5.2.1"
+    ignore "^5.2.4"
     jsonschema "^1.4.1"
     minimatch "^3.1.2"
-    punycode "^2.1.1"
+    punycode "^2.3.0"
     semver "^7.3.8"
     yaml "1.10.2"
 
-aws-cdk@2.58.1:
-  version "2.58.1"
-  resolved "https://registry.yarnpkg.com/aws-cdk/-/aws-cdk-2.58.1.tgz#c274dfb1257eba2fe40f8a48e5d278cc69089dc3"
-  integrity sha512-XIme5a8cC4vX4KiAHKzX1jEXqvQb8sK1lbL9Zeq2CuXV0+QWRK1dJeeekADi4rA8dN+0HjAMdlP3UQuXYq/qgg==
+aws-cdk@2.63.0:
+  version "2.63.0"
+  resolved "https://registry.yarnpkg.com/aws-cdk/-/aws-cdk-2.63.0.tgz#4d5282e288f32c0a62e90b8c16cae1be854eab89"
+  integrity sha512-2bv/egScdBxWnzcGkWT21Evi+20Qt356H4SqxQLskjhcjc+zvN9nsDNTJvI58BI/pkyU/K8cemHCKnBjBVdXkg==
   optionalDependencies:
     fsevents "2.3.2"
 
@@ -145,10 +145,10 @@ concat-map@0.0.1:
   resolved "https://registry.yarnpkg.com/concat-map/-/concat-map-0.0.1.tgz#d8a96bd77fd68df7793a73036a3ba0d5405d477b"
   integrity sha512-/Srv4dswyQNBfohGpz9o6Yb3Gz3SrUDqBH5rTuhGR7ahtlbYKnVxw2bCFMRljaA7EXHaXZ8wsHdodFvbkhKmqg==
 
-constructs@10.1.206:
-  version "10.1.206"
-  resolved "https://registry.yarnpkg.com/constructs/-/constructs-10.1.206.tgz#221d56b9eb1b180d0bc651de8dbe163cc5b08ff2"
-  integrity sha512-jjeA7reb3+GsyR49Yb8X+KmzkYVi6074Lbn3GZVSj4Xy9mELcooQGFO41OvxkQ2FM/hZ42sfAF1Y7kcwXw8Vcg==
+constructs@10.1.237:
+  version "10.1.237"
+  resolved "https://registry.yarnpkg.com/constructs/-/constructs-10.1.237.tgz#cec68cbd8726c6463298566a11a5e84d50e098ca"
+  integrity sha512-Y8HH/d5opBmp97C0BM8Ib24wIbA1nP6xzewnMlRilth/B1p29tvI+bR/o981z7gdgwLdVgs6kBrUXCHg+OQ/tQ==
 
 create-require@^1.1.0:
   version "1.1.1"
@@ -180,7 +180,7 @@ graceful-fs@^4.1.6, graceful-fs@^4.2.0:
   resolved "https://registry.yarnpkg.com/graceful-fs/-/graceful-fs-4.2.10.tgz#147d3a006da4ca3ce14728c7aefc287c367d7a6c"
   integrity sha512-9ByhssR2fPVsNZj478qUUbKfmL0+t5BDVyjShtyZZLiK7ZDAArFFfopyOTj0M05wE2tJPisA4iTnnXl2YoPvOA==
 
-ignore@^5.2.1:
+ignore@^5.2.4:
   version "5.2.4"
   resolved "https://registry.yarnpkg.com/ignore/-/ignore-5.2.4.tgz#a291c0c6178ff1b960befe47fcdec301674a6324"
   integrity sha512-MAb38BcSbH0eHNBxn7ql2NH/kX33OkB3lZ1BNdh7ENeRChHTYsTvWrMubiIAMNS2llXEEgZ1MUOBtXChP3kaFQ==
@@ -218,10 +218,10 @@ minimatch@^3.1.2:
   dependencies:
     brace-expansion "^1.1.7"
 
-punycode@^2.1.1:
-  version "2.1.1"
-  resolved "https://registry.yarnpkg.com/punycode/-/punycode-2.1.1.tgz#b58b010ac40c22c5657616c8d2c2c02c7bf479ec"
-  integrity sha512-XRsRjdf+j5ml+y/6GKHPZbrF/8p2Yga0JPtdqTIY2Xe5ohJPD9saDJJLPvp9+NSBprVvevdXZybnj2cv8OEd0A==
+punycode@^2.3.0:
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/punycode/-/punycode-2.3.0.tgz#f67fa67c94da8f4d0cfff981aee4118064199b8f"
+  integrity sha512-rRV+zQD8tVFys26lAGR9WUuS4iUAngJScM+ZRSKtvl5tKeZ2t5bvdNFdNHBW9FWR4guGHlgmsZ1G7BSm2wTbuA==
 
 semver@^7.3.8:
   version "7.3.8"
@@ -262,10 +262,10 @@ ts-node@10.9.1:
     v8-compile-cache-lib "^3.0.1"
     yn "3.1.1"
 
-typescript@4.9.4:
-  version "4.9.4"
-  resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.9.4.tgz#a2a3d2756c079abda241d75f149df9d561091e78"
-  integrity sha512-Uz+dTXYzxXXbsFpM86Wh3dKCxrQqUcVMxwU54orwlJjOpO3ao8L7j5lH+dWfTwgCwIuM9GQ2kvVotzYJMXTBZg==
+typescript@4.9.5:
+  version "4.9.5"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.9.5.tgz#095979f9bcc0d09da324d58d03ce8f8374cbe65a"
+  integrity sha512-1FXk9E2Hm+QzZQ7z+McJiHL4NW1F2EzMu9Nq9i3zAaGqibafqYwCVU6WyWAuyQRRzOlxou8xZSyXLEN8oKj24g==
 
 universalify@^2.0.0:
   version "2.0.0"
