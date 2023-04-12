@@ -1,5 +1,7 @@
 # dilbert-feed
 
+## Note: The discontinuation of the Dilbert comic strip on March 12, 2023 has made the project futile in its current form.
+
 [![CI](https://github.com/mlafeldt/dilbert-feed/workflows/Rust/badge.svg)](https://github.com/mlafeldt/dilbert-feed/actions)
 
 Enjoy [Dilbert](https://dilbert.com/) in your RSS feed reader without any ads!
