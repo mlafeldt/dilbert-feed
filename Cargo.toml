@@ -10,12 +10,12 @@ edition = "2021"
 
 [dependencies]
 anyhow = "1"
-aws-config = { version = "0.54", features = ["rustls"] }
-aws-sdk-s3 = { version = "0.24", features = ["rustls"] }
+aws-config = { version = "0.55", features = ["rustls"] }
+aws-sdk-s3 = { version = "0.26", features = ["rustls"] }
 chrono = { version = "0.4", features = ["serde"] }
 derive_builder = "0.12"
 futures = "0.3"
-lambda_runtime = "0.7"
+lambda_runtime = "0.8"
 reqwest = { version = "0.11", default-features = false, features = [
     "rustls-tls",
 ] }
