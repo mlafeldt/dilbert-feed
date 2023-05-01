@@ -3,5 +3,6 @@
     "config:base",
     "group:allNonMajor",
     "schedule:monthly"
-  ]
+  ],
+  "enabled": false
 }
